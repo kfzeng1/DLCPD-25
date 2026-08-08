@@ -1,2 +1,7 @@
-data
-a.txt
+data/*
+!data/README.md
+/research/
+artifacts/
+__pycache__/
+*.py[cod]
+.venv/
