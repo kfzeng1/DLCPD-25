@@ -20,11 +20,11 @@ docs/       项目计划、职责和本开发文档
 
 ```bash
 cd project
-/home/zkf/pytorch-env/bin/pip install -e '.[dev,app]'
+/home/zkf/pytorch-env/bin/pip install -e '.[dev]'
 /home/zkf/pytorch-env/bin/python -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0))"
 ```
 
-已实测 CUDA 可用并识别到 RTX 4070 Laptop GPU，显存为 7.62 GiB。当前环境缺少 pytest、scikit-learn 和 Gradio；安装项目 extras 时补齐，不改变现有 PyTorch/CUDA 版本。训练使用 AMP 和最多 6 个数据加载 worker。算法工程师完成环境后必须导出实际依赖版本，避免只依赖本机隐式状态。
+已实测 CUDA 可用并识别到 RTX 4070 Laptop GPU，显存为 7.62 GiB。`pytest`、`scikit-learn` 和工程 editable 包已安装；Gradio 留到 P2 应用阶段通过 `pip install -e '.[app]'` 安装。环境状态可能变化，工程师必须用 `pip show`、CUDA 探测和测试命令现场确认，并导出实际依赖版本，不能只引用文档记录。训练使用 AMP 和最多 6 个数据加载 worker。
 
 ## 3. 数据契约
 
@@ -58,6 +58,39 @@ logits -> class_id 178 -> tomato bacterial spot
 
 应用页面至少显示：原图、宿主作物、四大类、详细类别、置信度、Top-5 列表和模型版本。Grad-CAM 只能作为可解释性热力图，不得标记为检测框。
 
+### 模型包契约
+
+算法工程师在 A5 交付不可覆盖的版本目录：
+
+```text
+artifacts/releases/<model-version>/
+  best.pt
+  manifest.json
+  resolved-config.yaml
+  preprocessing.json
+  taxonomy.json
+  metrics.json
+  model-card.md
+  checksums.sha256
+```
+
+`manifest.json` 至少记录 schema、模型/数据版本、Git commit、架构、`num_classes=203`、taxonomy SHA-256、图像尺寸、RGB、resize/crop、mean/std、torch/torchvision 版本和置信度阈值。缺失文件、hash 不匹配或输出维度错误时，应用必须拒绝启动，而不是猜测参数。
+
+数据与实验产物使用固定路径：`artifacts/data/v1/` 保存 manifest、重复组、split 和数据交接证据；`artifacts/training/<run-id>/` 保存单次训练配置、日志、权重和验证结果；`artifacts/releases/<model-version>/` 只保存冻结模型包。所有目录均禁止原地覆盖。
+
+### 推理接口契约
+
+P0 需实现并测试下列语义；此处是计划接口，当前模块骨架尚未实现：
+
+```python
+predictor = Predictor.from_bundle(bundle_path, device="auto")
+result = predictor.predict(image)
+```
+
+结果至少包含 `schema_version`、`model_version`、`data_version`、`class_id`、`official_name`、`host_zh`、`category_zh`、`detail_name`、`confidence`、`top_k`、`low_confidence` 和 `inference_ms`。算法和应用共用同一个 Predictor 与预处理实现，应用层不得复制或修改预处理。
+
+规划中的统一命令为 `python -m dlcpd25_classifier.training.train`、`training.evaluate` 和 `inference.smoke`。这些入口必须在对应阶段实现后才能作为验收命令，不能在当前状态宣称可用。
+
 ## 7. 版本与验收
 
 数据版本、模型版本、配置 SHA-256 和代码 Git commit 必须写入推理结果。冻结后不可覆盖旧模型；修订使用新版本目录。最终执行：
@@ -67,3 +100,5 @@ python3 scripts/audit_dataset.py
 python3 scripts/build_dataset_taxonomy.py
 cd project && /home/zkf/pytorch-env/bin/pytest
 ```
+
+工程师的具体调用顺序见 `workflow.md`，总负责人按 `acceptance-checklist.md` 独立复验。任何阶段未通过时，不执行其下游真实数据或真实模型集成。

@@ -29,6 +29,10 @@ docs/
   project-plan.md              # 20 天实施计划和硬件决策
   development-guide.md         # 完整开发、训练和验收文档
   team-responsibilities.md     # 总负责人和三位 AI 工程师职责
+  workflow.md                  # 用户逐阶段调用和工程师汇报流程
+  acceptance-checklist.md      # 总负责人维护的动态验收状态
+  prompts/                     # 三位 AI 工程师固定启动提示词
+  worklogs/                    # 工程实施和总负责人验收日志
 project/
   pyproject.toml               # 分类工程依赖和打包配置
   configs/                     # 训练和应用配置
