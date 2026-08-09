@@ -38,15 +38,16 @@ def taxonomy_appendix(path: Path) -> str:
         "",
         "# 当前官方 203 类中英对照与项目分组",
         "",
-        "论文附录 A1 自称是完整类别表，但经提取只有 204 行、19 个作物组，且名称和数量与论文表 1、当前官方云盘目录均不一致。因此下表不冒充附录 A1 的逐字翻译，而是以当前官方云盘实际枚举的 203 个目录为基准，给出可用于本项目训练的中英对照和上位分组。官方原始拼写完整保存在随项目提供的 JSON 和 CSV 中。",
+        "论文附录 A1 自称是完整类别表，但经提取只有 204 行、19 个作物组，且名称和数量与论文表 1、当前官方云盘目录均不一致。因此下表不冒充附录 A1 的逐字翻译，而是以当前官方云盘实际枚举的 203 个目录为基准，给出可用于本项目训练的宿主、五大类属性和中英对照标签。官方原始拼写完整保存在随项目提供的 JSON 和 CSV 中。",
         "",
-        "| ID | 项目分组 | 中英对照类别名 | 图片数 |",
+        "| ID | 宿主 / 五大类 | 中英对照类别名 | 图片数 |",
         "|---:|---|---|---:|",
     ]
     for item in classes:
         lines.append(
-            "| {class_id} | {category_zh} | {local_directory} | {image_count:,} |".format(
+            "| {class_id} | {host_zh} / {category_zh} | {local_directory} | {image_count:,} |".format(
                 class_id=int(item["class_id"]),
+                host_zh=escape_cell(item["host_zh"]),
                 category_zh=escape_cell(item["category_zh"]),
                 local_directory=escape_cell(item["local_directory"]),
                 image_count=int(item["image_count"]),

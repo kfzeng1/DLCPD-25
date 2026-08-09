@@ -17,7 +17,7 @@ DEFAULT_ALIASES = REPO_ROOT / "metadata" / "class-directory-aliases.json"
 DEFAULT_DATA = REPO_ROOT / "data" / "raw" / "dlcpd25-203"
 DEFAULT_JSON = REPO_ROOT / "metadata" / "class-taxonomy.json"
 DEFAULT_CSV = REPO_ROOT / "metadata" / "class-taxonomy.csv"
-DEFAULT_VIEW = REPO_ROOT / "data" / "views" / "by-category"
+DEFAULT_VIEW = REPO_ROOT / "data" / "views" / "by-host"
 
 CATEGORY_INFO = {
     "pest": ("农业有害生物", "01_pest_农业有害生物"),
@@ -25,6 +25,70 @@ CATEGORY_INFO = {
     "healthy": ("健康", "03_healthy_健康"),
     "disorder": ("非生物或生理缺陷", "04_disorder_非生物或生理缺陷"),
     "mixed": ("混合或歧义类别", "05_mixed_混合或歧义"),
+}
+
+HOST_GROUPS = {
+    "economic_crop": ("经济作物", "01_economic_crop_经济作物"),
+    "food_crop": ("粮食作物", "02_food_crop_粮食作物"),
+}
+
+# Host order follows paper Table 1, excluding cucumber, which is absent from the
+# current official 203-directory release.
+HOST_INFO = {
+    "citrus": ("economic_crop", "柑橘", "01_citrus_柑橘"),
+    "tomato": ("economic_crop", "番茄", "02_tomato_番茄"),
+    "grape": ("economic_crop", "葡萄", "03_grape_葡萄"),
+    "apple": ("economic_crop", "苹果", "04_apple_苹果"),
+    "soybean": ("economic_crop", "大豆", "05_soybean_大豆"),
+    "peach": ("economic_crop", "桃", "06_peach_桃"),
+    "mango": ("economic_crop", "芒果", "07_mango_芒果"),
+    "alfalfa": ("economic_crop", "苜蓿", "08_alfalfa_苜蓿"),
+    "bell_pepper": ("economic_crop", "甜椒", "09_bell_pepper_甜椒"),
+    "strawberry": ("economic_crop", "草莓", "10_strawberry_草莓"),
+    "cherry": ("economic_crop", "樱桃", "11_cherry_樱桃"),
+    "cotton": ("economic_crop", "棉花", "12_cotton_棉花"),
+    "squash": ("economic_crop", "南瓜", "13_squash_南瓜"),
+    "blueberry": ("economic_crop", "蓝莓", "14_blueberry_蓝莓"),
+    "raspberry": ("economic_crop", "树莓", "15_raspberry_树莓"),
+    "beet": ("economic_crop", "甜菜", "16_beet_甜菜"),
+    "pepper": ("economic_crop", "辣椒", "17_pepper_辣椒"),
+    "garlic": ("economic_crop", "大蒜", "18_garlic_大蒜"),
+    "corn": ("food_crop", "玉米", "19_corn_玉米"),
+    "rice": ("food_crop", "水稻", "20_rice_水稻"),
+    "potato": ("food_crop", "马铃薯", "21_potato_马铃薯"),
+    "wheat": ("food_crop", "小麦", "22_wheat_小麦"),
+}
+
+HOST_ALIASES = {
+    "bell pepper": "bell_pepper",
+    "citrus": "citrus",
+    "citru": "citrus",
+    "tomato": "tomato",
+    "vitis": "grape",
+    "grape": "grape",
+    "apple": "apple",
+    "soybean": "soybean",
+    "peach": "peach",
+    "mango": "mango",
+    "alfalfa": "alfalfa",
+    "strawberry": "strawberry",
+    "cherry": "cherry",
+    "cotton": "cotton",
+    "squash": "squash",
+    "blueberry": "blueberry",
+    "raspberry": "raspberry",
+    "beet": "beet",
+    "pepper": "pepper",
+    "garlic": "garlic",
+    "corn": "corn",
+    "maize": "corn",
+    "rice": "rice",
+    "potato": "potato",
+    "wheat": "wheat",
+}
+
+HOST_OVERRIDES = {
+    "puccinia polysora": "corn",
 }
 
 # These sets use the official directory names, not translated local aliases.
@@ -140,6 +204,24 @@ def category_for(name: str) -> str:
     return "pest"
 
 
+def host_for(name: str) -> str:
+    if name in HOST_OVERRIDES:
+        return HOST_OVERRIDES[name]
+    normalized = name.lower().replace("（", "(").replace("）", ")")
+    checks = (
+        lambda alias: f"({alias})" in normalized or f"({alias} " in normalized,
+        lambda alias: normalized.startswith(alias + " ") or normalized.startswith(alias + "(") or normalized == alias,
+        lambda alias: alias in normalized.replace("(", " ").replace(")", " ").split(),
+    )
+    for check in checks:
+        matches = {host_id for alias, host_id in HOST_ALIASES.items() if check(alias)}
+        if len(matches) == 1:
+            return matches.pop()
+        if len(matches) > 1:
+            raise ValueError(f"class resolves to multiple hosts: {name!r} -> {sorted(matches)}")
+    raise ValueError(f"class does not resolve to a host: {name!r}")
+
+
 def load_inputs(classes_path: Path, aliases_path: Path) -> tuple[list[str], dict[str, str]]:
     classes = [line.strip() for line in classes_path.read_text(encoding="utf-8").splitlines() if line.strip()]
     aliases = json.loads(aliases_path.read_text(encoding="utf-8"))
@@ -166,11 +248,16 @@ def build_records(data_dir: Path, classes: list[str], aliases: dict[str, str]) -
         if not class_dir.is_dir():
             raise FileNotFoundError(f"class directory not found: {class_dir}")
         category = category_for(official_name)
+        host_id = host_for(official_name)
+        host_group, host_zh, _ = HOST_INFO[host_id]
         records.append(
             {
                 "class_id": class_id,
                 "official_name": official_name,
                 "local_directory": local_name,
+                "host_group": host_group,
+                "host_id": host_id,
+                "host_zh": host_zh,
                 "category": category,
                 "category_zh": CATEGORY_INFO[category][0],
                 "image_count": count_files(class_dir),
@@ -181,14 +268,35 @@ def build_records(data_dir: Path, classes: list[str], aliases: dict[str, str]) -
 
 def write_metadata(records: list[dict[str, object]], json_path: Path, csv_path: Path) -> None:
     counts = Counter(str(item["category"]) for item in records)
+    host_class_counts = Counter(str(item["host_id"]) for item in records)
+    host_image_counts = Counter()
+    for item in records:
+        host_image_counts[str(item["host_id"])] += int(item["image_count"])
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "class_id_rule": "Zero-based order in metadata/official-class-names.txt.",
-        "taxonomy_scope": "Project-level grouping reviewed from official class semantics; not an official DLCPD-25 hierarchy.",
+        "hierarchy": "host -> label_category -> class_label",
+        "taxonomy_scope": "Host hierarchy follows paper Table 1 where compatible with the current official 203-directory release; label categories are project-reviewed attributes.",
+        "host_groups": [
+            {"id": key, "name_zh": value[0]}
+            for key, value in HOST_GROUPS.items()
+        ],
+        "hosts": [
+            {
+                "id": host_id,
+                "name_zh": values[1],
+                "group": values[0],
+                "view_directory": values[2],
+                "class_count": host_class_counts[host_id],
+                "image_count": host_image_counts[host_id],
+            }
+            for host_id, values in HOST_INFO.items()
+        ],
         "categories": [
             {
                 "id": key,
                 "name_zh": value[0],
+                "view_directory": value[1],
                 "class_count": counts[key],
             }
             for key, value in CATEGORY_INFO.items()
@@ -205,20 +313,24 @@ def write_metadata(records: list[dict[str, object]], json_path: Path, csv_path: 
 
 def build_view(view_root: Path, data_dir: Path, records: list[dict[str, object]]) -> None:
     expected: set[Path] = set()
-    for _, (_, directory) in CATEGORY_INFO.items():
-        group_dir = view_root / directory
-        group_dir.mkdir(parents=True, exist_ok=True)
-        for entry in group_dir.iterdir():
-            if entry.is_symlink():
-                entry.unlink()
-            else:
-                raise ValueError(f"refusing to replace non-symlink view entry: {entry}")
+    for _, (_, _, host_directory) in HOST_INFO.items():
+        host_dir = view_root / host_directory
+        for _, (_, category_directory) in CATEGORY_INFO.items():
+            category_dir = host_dir / category_directory
+            category_dir.mkdir(parents=True, exist_ok=True)
+            for entry in category_dir.iterdir():
+                if entry.is_symlink():
+                    entry.unlink()
+                else:
+                    raise ValueError(f"refusing to replace non-symlink view entry: {entry}")
     for record in records:
-        group_dir = view_root / CATEGORY_INFO[str(record["category"])][1]
-        link = group_dir / str(record["local_directory"])
+        _, _, host_directory = HOST_INFO[str(record["host_id"])]
+        category_directory = CATEGORY_INFO[str(record["category"])][1]
+        category_dir = view_root / host_directory / category_directory
+        link = category_dir / str(record["local_directory"])
         target = os.path.relpath(
             data_dir / str(record["local_directory"]),
-            start=group_dir,
+            start=category_dir,
         )
         link.symlink_to(target, target_is_directory=True)
         expected.add(link)
@@ -238,7 +350,7 @@ def main() -> int:
         print(f"error: {exc}")
         return 1
     counts = Counter(str(item["category"]) for item in records)
-    print(json.dumps({"classes": len(records), "images": sum(int(item["image_count"]) for item in records), "categories": counts}, ensure_ascii=False))
+    print(json.dumps({"classes": len(records), "hosts": len({item['host_id'] for item in records}), "images": sum(int(item["image_count"]) for item in records), "categories": counts}, ensure_ascii=False))
     return 0
 
 
