@@ -26,7 +26,7 @@ def parse_args() -> argparse.Namespace:
         "data_dir",
         nargs="?",
         type=Path,
-        default=REPO_ROOT / "data",
+        default=REPO_ROOT / "data" / "raw" / "dlcpd25-203",
         help="directory containing the class folders",
     )
     parser.add_argument(

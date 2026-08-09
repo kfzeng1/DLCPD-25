@@ -47,7 +47,7 @@
 
 ## 本项目版本规则
 
-1. 以 [official-class-names.txt](../../metadata/official-class-names.txt) 为类别完整性基准，通过 [class-directory-aliases.json](../../metadata/class-directory-aliases.json) 兼容当前中文目录名。
+1. 以 [official-class-names.txt](../metadata/official-class-names.txt) 为类别完整性基准，通过 [class-directory-aliases.json](../metadata/class-directory-aliases.json) 兼容当前中文目录名。
 2. 当前物理目录不再批量改名；训练时生成带校验和的显式 ID 映射，不把目录排序直接当作长期稳定 ID。
 3. 总样本量、每类数量、扩展名和坏图数必须由当前本地数据审计得出。
 4. 报告中使用“DLCPD-25 的 203 类、221,396 图像本地子集”，并附审计日期和 manifest 校验和。
