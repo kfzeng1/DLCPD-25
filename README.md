@@ -26,6 +26,13 @@ data/
   views/by-host/               # 宿主/四大类/具体标签软链接视图
 docs/
   dataset-taxonomy.md          # 本地分组定义与边界
+  project-plan.md              # 20 天实施计划和硬件决策
+  development-guide.md         # 完整开发、训练和验收文档
+  team-responsibilities.md     # 总负责人和三位 AI 工程师职责
+project/
+  pyproject.toml               # 分类工程依赖和打包配置
+  configs/                     # 训练和应用配置
+  src/                         # 分类、训练和推理代码
 research/
   dataset-card.md              # 数据卡
   source-audit.md              # 来源检索与论文勘误

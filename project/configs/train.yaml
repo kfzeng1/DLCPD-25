@@ -1,0 +1,29 @@
+seed: 20260809
+data_root: ../data/raw/dlcpd25-203
+taxonomy: ../metadata/class-taxonomy.json
+split_dir: ../artifacts/splits/v1
+output_dir: ../artifacts/training
+
+model:
+  name: convnext_tiny
+  pretrained: true
+  num_classes: 203
+  image_size: 224
+
+training:
+  epochs: 25
+  warmup_epochs: 2
+  batch_size: 16
+  workers: 6
+  amp: true
+  optimizer: adamw
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  label_smoothing: 0.1
+  class_weighting: compare
+  early_stopping_patience: 6
+
+evaluation:
+  metrics: [accuracy, top5_accuracy, macro_f1, balanced_accuracy]
+  save_confusion_matrix: true
+  save_error_cases: 30

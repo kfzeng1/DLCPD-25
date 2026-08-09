@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dlcpd25-classifier"
+version = "0.1.0"
+description = "Hierarchical 203-class DLCPD-25 image classification system"
+requires-python = ">=3.10"
+dependencies = [
+  "Pillow>=10.0,<12",
+  "PyYAML>=6.0,<7",
+  "torch>=2.2,<3",
+  "torchvision>=0.17,<1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0,<9"]
+app = ["gradio>=4.0,<6"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

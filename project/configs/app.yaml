@@ -1,0 +1,6 @@
+model_path: ../artifacts/training/convnext_tiny/best.pt
+taxonomy_path: ../metadata/class-taxonomy.json
+device: auto
+image_size: 224
+confidence_threshold: 0.55
+top_k: 5

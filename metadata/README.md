@@ -9,3 +9,5 @@
 来源：<https://github.com/hwzhanng/DLCPD-25-Dataset>。
 
 `class-directory-aliases.json` 保存官方原始目录名到当前本地“英文 + 中文”目录名的一一映射。它只用于兼容当前文件布局；其中中文译名属于项目元数据，尚未经过植保和昆虫分类专家逐项确认。
+
+`class-taxonomy.json` 和 `class-taxonomy.csv` 保存 203 类的固定 ID、宿主作物、经济/粮食作物组、四大标签属性和本地图片数量。训练与推理必须读取这个文件，不要根据目录遍历顺序临时生成类别 ID。
