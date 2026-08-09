@@ -18,7 +18,7 @@
 
 ## 3. 硬件与模型决策
 
-当前电脑：Intel Core i7-13700H、20 线程、15 GiB RAM、NVIDIA RTX 4070 Laptop 8 GiB 显存。磁盘空间足够保存原图、缓存、模型和实验结果，但不应复制数据集。
+当前电脑：Intel Core i7-13700H、20 线程、15 GiB RAM、NVIDIA RTX 4070 Laptop，实际可用显存 7.62 GiB。已有 `/home/zkf/pytorch-env`，包含 Python 3.12.3、PyTorch 2.11.0+cu128 和 torchvision 0.26.0+cu128，CUDA 已实测可用。磁盘空间足够保存原图、缓存、模型和实验结果，但不应复制数据集。
 
 主线采用 ImageNet 预训练的 `ConvNeXt-Tiny`，输入 224 x 224，AMP 混合精度，batch size 从 16 开始测试；显存不足时降到 8 或使用梯度累积。`ResNet-50` 作为稳定基线和故障回退。
 

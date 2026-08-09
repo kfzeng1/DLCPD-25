@@ -8,8 +8,9 @@ version = "0.1.0"
 description = "Hierarchical 203-class DLCPD-25 image classification system"
 requires-python = ">=3.10"
 dependencies = [
-  "Pillow>=10.0,<12",
+  "Pillow>=10.0,<13",
   "PyYAML>=6.0,<7",
+  "scikit-learn>=1.4,<2",
   "torch>=2.2,<3",
   "torchvision>=0.17,<1",
 ]

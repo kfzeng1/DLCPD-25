@@ -38,7 +38,7 @@
 
 ### 必须完成
 
-- 安装与 CUDA 匹配的 PyTorch 环境；
+- 复用并验证 `/home/zkf/pytorch-env`，补齐项目依赖但不重装 PyTorch；
 - 实现 ImageNet 预训练 ResNet-50 基线；
 - 实现 ImageNet 预训练 ConvNeXt-Tiny 主模型；
 - 比较普通交叉熵、加权交叉熵和一种采样策略；

@@ -16,19 +16,15 @@ docs/       项目计划、职责和本开发文档
 
 ## 2. 环境
 
+本机已有专用环境 `/home/zkf/pytorch-env`，当前为 Python 3.12.3、PyTorch 2.11.0+cu128、torchvision 0.26.0+cu128。项目直接复用该环境，不重复创建或安装 PyTorch：
+
 ```bash
 cd project
-python3 -m venv .venv
-.venv/bin/pip install -e '.[dev]'
+/home/zkf/pytorch-env/bin/pip install -e '.[dev,app]'
+/home/zkf/pytorch-env/bin/python -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0))"
 ```
 
-训练电脑使用 CUDA、AMP 和最多 6 个数据加载 worker。首次训练前确认：
-
-```bash
-.venv/bin/python -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0))"
-```
-
-当前系统尚未安装 PyTorch，算法工程师负责在 `project/` 虚拟环境内按 CUDA 版本安装，不把系统 Python 环境当作项目依赖。
+已实测 CUDA 可用并识别到 RTX 4070 Laptop GPU，显存为 7.62 GiB。当前环境缺少 pytest、scikit-learn 和 Gradio；安装项目 extras 时补齐，不改变现有 PyTorch/CUDA 版本。训练使用 AMP 和最多 6 个数据加载 worker。算法工程师完成环境后必须导出实际依赖版本，避免只依赖本机隐式状态。
 
 ## 3. 数据契约
 
@@ -69,5 +65,5 @@ logits -> class_id 178 -> tomato bacterial spot
 ```bash
 python3 scripts/audit_dataset.py
 python3 scripts/build_dataset_taxonomy.py
-cd project && .venv/bin/pytest
+cd project && /home/zkf/pytorch-env/bin/pytest
 ```

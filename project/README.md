@@ -14,4 +14,6 @@ project/
 
 主线模型为 ImageNet 预训练 ConvNeXt-Tiny，ResNet-50 是基线。当前电脑的 RTX 4070 Laptop 8 GiB 显存适合微调，不适合在本项目周期内从零完成论文级 MAE、SimCLR v2 或 MoCo v3 预训练。
 
+本机已有 `/home/zkf/pytorch-env`：PyTorch 2.11.0+cu128、torchvision 0.26.0+cu128，CUDA 可用。工程直接复用这个环境，仅通过 `pip install -e '.[dev,app]'` 补齐项目依赖。
+
 开发流程、硬件限制、三位工程师职责和验收标准见 `../docs/project-plan.md`、`../docs/development-guide.md` 和 `../docs/team-responsibilities.md`。
