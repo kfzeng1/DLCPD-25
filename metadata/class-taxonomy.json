@@ -202,7 +202,7 @@
       "id": "disease",
       "name_zh": "植物病害",
       "view_directory": "02_disease_植物病害",
-      "class_count": 56
+      "class_count": 57
     },
     {
       "id": "healthy",
@@ -215,12 +215,6 @@
       "name_zh": "非生物或生理缺陷",
       "view_directory": "04_disorder_非生物或生理缺陷",
       "class_count": 3
-    },
-    {
-      "id": "mixed",
-      "name_zh": "混合或歧义类别",
-      "view_directory": "05_mixed_混合或歧义",
-      "class_count": 1
     }
   ],
   "classes": [
@@ -1474,8 +1468,8 @@
       "host_group": "economic_crop",
       "host_id": "garlic",
       "host_zh": "大蒜",
-      "category": "mixed",
-      "category_zh": "混合或歧义类别",
+      "category": "disease",
+      "category_zh": "植物病害",
       "image_count": 279
     },
     {

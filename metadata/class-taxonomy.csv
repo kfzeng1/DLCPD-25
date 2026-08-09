@@ -112,7 +112,7 @@ class_id,official_name,local_directory,host_group,host_id,host_zh,category,categ
 110,corn（maize） northern leaf blight,corn（maize） northern leaf blight 玉米大斑病（玉米）,food_crop,corn,玉米,disease,植物病害,1908
 111,flax budworm(alfalfa),flax budworm 苜蓿夜蛾(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,639
 112,flea beetle(potato),flea beetle 跳甲(马铃薯),food_crop,potato,马铃薯,pest,农业有害生物,473
-113,garlic pest and diseases,garlic pest and diseases 大蒜病虫害,economic_crop,garlic,大蒜,mixed,混合或歧义类别,279
+113,garlic pest and diseases,garlic pest and diseases 大蒜病虫害,economic_crop,garlic,大蒜,disease,植物病害,279
 114,grain spreader thrips(rice),grain spreader thrips 稻管蓟马(水稻),food_crop,rice,水稻,pest,农业有害生物,103
 115,grape black rot（fungus）,grape black rot 葡萄黑腐病（真菌）,economic_crop,grape,葡萄,disease,植物病害,2479
 116,grape esca (black measles)(fungus),grape esca 葡萄轮斑病(black measles 黑麻疹)(真菌),economic_crop,grape,葡萄,disease,植物病害,2541

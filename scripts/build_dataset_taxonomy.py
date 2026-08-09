@@ -24,7 +24,6 @@ CATEGORY_INFO = {
     "disease": ("植物病害", "02_disease_植物病害"),
     "healthy": ("健康", "03_healthy_健康"),
     "disorder": ("非生物或生理缺陷", "04_disorder_非生物或生理缺陷"),
-    "mixed": ("混合或歧义类别", "05_mixed_混合或歧义"),
 }
 
 HOST_GROUPS = {
@@ -110,6 +109,7 @@ DISEASES = {
     "grape black rot（fungus）",
     "grape esca (black measles)(fungus)",
     "grape leaf blight(fungus)",
+    "garlic pest and diseases",
     "large wheat crown and root rot",
     "maize dwarf mosaic virus",
     "maize grey leaf spot(cercospora zeae-maydis tehon and daniels)",
@@ -177,9 +177,6 @@ DISORDERS = {
     "Leaf Variegation（cotton）",
 }
 
-MIXED = {"garlic pest and diseases"}
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, default=DEFAULT_DATA)
@@ -199,8 +196,6 @@ def category_for(name: str) -> str:
         return "healthy"
     if name in DISORDERS:
         return "disorder"
-    if name in MIXED:
-        return "mixed"
     return "pest"
 
 
@@ -229,7 +224,7 @@ def load_inputs(classes_path: Path, aliases_path: Path) -> tuple[list[str], dict
         raise ValueError("official class list must contain 203 unique names")
     if not isinstance(aliases, dict) or set(aliases) != set(classes):
         raise ValueError("alias map must match the official class list exactly")
-    reviewed = DISEASES | HEALTHY | DISORDERS | MIXED
+    reviewed = DISEASES | HEALTHY | DISORDERS
     unknown = reviewed - set(classes)
     if unknown:
         raise ValueError(f"taxonomy contains unknown official classes: {sorted(unknown)}")
