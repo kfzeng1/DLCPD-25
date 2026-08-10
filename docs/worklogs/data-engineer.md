@@ -1,8 +1,24 @@
 # AI 数据工程师工作日志
 
-当前状态：D2-R2、D3-R2 已通过；D4-R1 已完成自验并待总负责人验收；D5 仍退回；未执行 A0。
+当前状态：D2-R2、D3-R2、D4-R1 已通过；D5-R1 已完成自验并待总负责人验收；未执行 A0。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
+
+## 2026-08-10 D5-R1 冻结并交接 data-v1
+
+- 状态：待验收
+- 指挥者指令：以 D2-R2、D3-R2、D4-R1 为正式链路冻结 data-v1，生成最终 release、taxonomy 快照、数据交接文档和校验清单；完成后停止，不启动 A0。
+- 前置版本：Git commit `e8b2d639d5c5540f48c760248a9fb9b658468d18`；D0-D4 已由总负责人验收通过；正式 taxonomy SHA-256 为 `5cfa1a261b1a9fbb80adf24f299bca0883a42dd523914a70234f31dbf748bd31`。
+- 允许范围：新增 D5-R1 冻结脚本、对应测试、`artifacts/data/v1/d5-r1/` 和本日志。D0-D4 代码/产物、原图、taxonomy、其他角色日志和验收清单保持只读；不得执行 A0、训练或应用开发。
+- 实际修改：新增 `scripts/freeze_data_v1_d5_r1.py` 和 `project/tests/test_handoff_d5_r1.py`；更新本日志。旧退回的 D5 脚本、测试和产物未修改。D5-R1 只引用正式 `d2-r2/`、`d3-r2/`、`d4-r1/` 路径，并把本阶段脚本和测试纳入源码校验闭包。
+- 生成产物：在 `artifacts/data/v1/d5-r1/` 新增 `d5-r1-config.json`、`data-v1-release.json`、`data-handoff-v1.md`、`taxonomy-v1.json`、`d5-r1-summary.json` 和 `checksums.sha256`，共 6 个文件、约 120 KiB。配置 SHA-256 为 `135d6bed198c4cc04a42ed90d39b8ff9f9dbacca65ae844759e3e7f2ff2ed2bf`，release 为 `a4a9e865429c8d60d67321971342395feedc0378cbc8b92b74d8832cc7eade8f`，交接文档为 `5ea4037cf7d78cb58af53ee678c0d74a2da6d59bbd61e6bf6e8214250e466d05`，taxonomy 快照为 `5cfa1a261b1a9fbb80adf24f299bca0883a42dd523914a70234f31dbf748bd31`，摘要为 `addacd2ce697fb66eb63d37fc2ef607419771908d86a57182a6bae998845fd57`，checksum 文件自身为 `d996e4ecdb75f24c469d3412d9392ab9e86da187fa21b0bb913a8e0a2775ad71`。
+- 执行命令：`py_compile` 退出 0；D5-R1 轻量测试退出 0，`2 passed, 1 deselected`；D0/D1/D2-R2/D3-R2/D4-R1 五条上游 checksum 预检均退出 0；`/home/zkf/pytorch-env/bin/python scripts/freeze_data_v1_d5_r1.py` 退出 0、耗时 18.17 秒；同脚本 `--verify-only` 退出 0、耗时 12.56 秒；`sha256sum -c artifacts/data/v1/d5-r1/checksums.sha256` 退出 0，39 项全部 OK；taxonomy 源文件与快照 `cmp` 退出 0；项目全量测试退出 0，`50 passed in 497.13s`；正式 D2-R2/D3-R2/D4-R1 verifier 分别退出 0、耗时 272.03/13.92/72.28 秒；`git diff --check` 退出 0。
+- 验收证据：release 固定正式链 `D0 -> D1 -> D2-R2 -> D3-R2 -> D4-R1 -> D5-R1`，索引 34 个关键上游产物、数据加载源码和受控阶段脚本；固定合同直接记录 manifest、重复组、train/val/test 和 taxonomy snapshot 的路径、大小与 SHA-256。交接文档明确算法工程师只读取 `d3-r2` 固定 CSV 的相对路径、`class_id`、SHA-256、`duplicate_group_id` 和 D5 taxonomy 快照，不得重新扫描、推断标签、重分组或重切分。文档采用总负责人修正措辞：D4 hardlink 兼容视图“由 D3 只读使用”，不声称文件权限本身只读；D3 的 D2-R1 名称仅为字节兼容引用，正式 release 来源为 D2-R2。
+- 关键统计：原始文件 221,396，可用图片 221,377，坏图 19；完全重复 SHA 组 26,705，近重复组 32,731，最终非单例组 47,900，跨类别组 10,714，非单例文件 112,425，最大组 21。train/val/test 为 177,021/22,178/22,178，均覆盖 203 类且重复组泄漏和路径重叠为 0；可用图片少于 100 的长尾类别为 19 类。release 状态为 `frozen_pending_project_lead_acceptance`，`a0_executed=false`。
+- 偏差、风险和阻塞：无 D5-R1 阻塞。已知限制完整写入交接文档：19 张坏图、702 张扩展名/编码错配、complete-link 漏召回风险、10,714 个跨类别组、长尾、D3-R1 兼容命名、D4 只实际解码 9 张以及数据许可未明确。D5-R1 通过 release 索引引用大文件，不复制 manifest 或 split；taxonomy 另存字节一致快照。release 在总负责人验收前保持 pending 状态。
+- Git 状态：`main` 相对 `origin/main` ahead 14；本阶段新增 D5-R1 脚本和测试并修改本日志，D5-R1 artifacts 被 Git 忽略。进入本阶段前已有的旧 D2-R0、D3-R0/R1、D4-R0、D5-R0 未提交文件保持原样。未提交或推送。
+- 下一步建议：由总负责人独立复验 D5-R1 verifier、39 项 checksum、34 项关键索引、taxonomy 快照、正式 split SHA 和交接文档；验收通过后再由用户决定是否调用算法工程师执行 A0。
+- 边界声明：未执行 A0、训练或应用开发
 
 ## 2026-08-10 D4-R1 两轮独立复现与 Dataset 加载验证（解除阻塞后重启）
 

@@ -133,3 +133,18 @@
 - 剩余风险：Dataset 只实际解码固定 9 张，全量解码结论继承 D1；加载时不逐张重算 SHA-256，内容完整性由两轮 D2 重算和 D4 checksum 保证。D4 约 504 MiB 复现产物被 Git 忽略，属于可再生产物
 - 验收清单更新：D4-R1 标记为通过，并勾选两轮复现和三个 split Dataset 加载两项；D5 保持退回，A0 仍未开始
 - 建议下一阶段：调用 AI 数据工程师执行 `D5-R1`，以 D2-R2、D3-R2、D4-R1 为正式链路冻结 data-v1，生成最终 release、taxonomy 快照、交接文档和校验清单，完成后停止交验
+
+## 2026-08-10 D5-R1 验收
+
+- 结论：通过；D0-D5 数据工程链全部完成，data-v1 正式冻结，A0 数据前置条件解除但尚未执行
+- 验收输入：commit `e8b2d639d5c5540f48c760248a9fb9b658468d18`、D5-R1 冻结脚本与测试、数据工程师日志及 `artifacts/data/v1/d5-r1/`
+- 独立自动复验：`freeze_data_v1_d5_r1.py --verify-only` 退出 0；项目测试 `50 passed in 493.35s`；D5-R1 校验清单 39 项全部为 `OK`；`git diff --check` 通过
+- Release 完整性：正式链固定为 `D0 -> D1 -> D2-R2 -> D3-R2 -> D4-R1 -> D5-R1`；独立重算 34 项关键索引的路径、文件大小和 SHA-256，差异 0；固定 manifest、duplicate groups、train/val/test 和 taxonomy snapshot 均指向已通过版本
+- taxonomy 与契约：`taxonomy-v1.json` 与 `metadata/class-taxonomy.json` 逐字节一致，SHA-256 为 `5cfa1a261b1a9fbb80adf24f299bca0883a42dd523914a70234f31dbf748bd31`；算法工程师入口固定使用 D3-R2 CSV 和 D5 taxonomy 快照，不得重扫目录、推断标签、重分组或重切分
+- 交接文档：明确这是 203 类图像分类而非目标检测；记录 221,396 个原始文件、221,377 张可用图片、19 张坏图、47,900 个非单例组、10,714 个跨类别组、177,021/22,178/22,178 split、19 个长尾类别和九项已知限制
+- 关键校验和：release 为 `a4a9e865429c8d60d67321971342395feedc0378cbc8b92b74d8832cc7eade8f`；交接文档为 `5ea4037cf7d78cb58af53ee678c0d74a2da6d59bbd61e6bf6e8214250e466d05`；配置为 `135d6bed198c4cc04a42ed90d39b8ff9f9dbacca65ae844759e3e7f2ff2ed2bf`
+- 冻结状态解释：产物中的 `frozen_pending_project_lead_acceptance` 是生成时不可变状态；本验收记录、验收清单和对应 Git 提交共同构成项目负责人正式接受证据，不回写已冻结产物
+- 范围检查：工程师只执行 D5-R1，未执行 A0、训练或应用开发；未修改原图、taxonomy 和 D0-D4 产物。旧 D2-R0、D3-R0/R1、D4-R0、D5-R0 工作区文件不属于本次通过范围
+- 剩余风险：数据许可尚不明确；complete-link 可能漏召回变化较大的近重复；跨类别组可能存在标签冲突；长尾类别指标方差较大；D4 只实际解码 9 张。这些限制均已进入正式交接文档
+- 验收清单更新：D5-R1 标记为通过并勾选 D5 两项；A0 保持未开始，但前置条件已满足
+- 建议下一阶段：由用户调用算法工程师执行 `A0` 数据准入，只读取 D5-R1 交接文档、D3-R2 固定 split、D5 taxonomy 快照和受控 Dataset；完成后停止交验
