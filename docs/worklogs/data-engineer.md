@@ -1,8 +1,40 @@
 # AI 数据工程师工作日志
 
-当前状态：D2-D5 已退回；D2-R1 已完成自验并待总负责人验收；未执行 D3-R1 或 A0。
+当前状态：D2-R1 已通过；D3-R1 因隐式源码依赖退回；D3-R2 已完成自验并待总负责人验收；D4-D5 仍退回；未执行 A0。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
+
+## 2026-08-10 D3-R2 独立可复现 split 返工
+
+- 状态：待验收
+- 指挥者指令：消除 D3-R1 对未跟踪旧 D3-R0 脚本的运行时依赖，将全部依赖源码纳入 checksum，重新生成并验证 split，然后停止交验。
+- 前置版本：Git commit `23db3b3eef49f83f73d963204dbb29698ab56132`；D2-R1 已通过；D3-R1 数据质量门通过但因不可独立复现被退回。
+- 允许范围：新增 D3-R2 独立脚本、对应测试、`artifacts/data/v1/d3-r2/` 和本日志。D2-R1、D3-R1、旧 D3 及原图保持只读。
+- 实际修改：新增 `scripts/build_splits_d3_r2.py` 和 `project/tests/test_splits_d3_r2.py`；更新本日志。未修改 D2-R1、D3-R1、旧 D3 产物、原图、taxonomy、其他角色日志或验收清单。
+- 生成产物：在 `artifacts/data/v1/d3-r2/` 新增 `train.csv`、`val.csv`、`test.csv`、`group-assignments.csv`、`excluded-bad-images.csv`、`d3-r2-config.json`、`d3-r2-summary.json` 和 `checksums.sha256`。train/val/test SHA-256 分别为 `af457fcd9c49af93b9929585175aa68f973113d43895e5a035db61bbe7f7d778`、`a5db45590dd3dd97e46564046fc32c0223dab144e826854ea2a0e5aa3aec0833`、`23897e0a1a1b2209d1390845c6261ee48a1f94d935fc0173f3a71d18facc1dc8`；group assignments 为 `db68c397b52bf4c789f4c2b679d575cf4954c799d6f1ba628b6db936b074aa2e`；摘要为 `ba2a5f17ea0dded81c7f0b15e661c549b34765c3451271f6dce44f71f44b933d`；配置为 `1cca0fd31e82c34628617914a9d7807d822930d5760aef6675d1f94905c211c9`；checksums 文件自身为 `91bd054b73088e777efdbb04b4fdc351151a554fbb8ba2d877640b6d2c4f68bd`。
+- 执行命令：`/home/zkf/pytorch-env/bin/python -m py_compile scripts/build_splits_d3_r2.py`，退出码 0；`cd project && /home/zkf/pytorch-env/bin/python -m pytest tests/test_splits_d3_r2.py -q -k 'not full_d3_r2_artifact and not checksum_has'`，退出码 0，`2 passed, 2 deselected`；`rg` 静态检查旧 D3 导入，退出码 0，仅命中 verifier 的禁止依赖文本；`/home/zkf/pytorch-env/bin/python scripts/build_splits_d3_r2.py`，退出码 0，耗时 134.74 秒；同脚本 `--verify-only`，退出码 0，耗时 12.56 秒；`sha256sum -c artifacts/data/v1/d3-r2/checksums.sha256`，退出码 0，13 项均为 `OK`；`cmp` 比较 D3-R1/R2 的 train、val、test、group assignments 和坏图清单，五项均退出 0；`cd project && /home/zkf/pytorch-env/bin/python -m pytest -q`，退出码 0，`31 passed in 176.86s`；`git diff --check`，退出码 0。
+- 验收证据：D3-R2 是仅使用 Python 标准库的单文件实现，源码中不导入任何仓库内模块。隔离回归测试只把 D3-R2 脚本复制到临时 `scripts/`，明确确认旧 `build_splits_d3.py` 和 `build_splits_d3_r1.py` 不存在，再独立导入脚本并执行分组算法，退出码 0。配置固化唯一运行时源码路径及 SHA-256；13 项 checksum 同时覆盖 D2-R1 manifest/摘要/checksum、taxonomy、D3-R2 脚本、D3-R2 测试及全部 R2 输出，不包含被退回的 D3-R0/R1 脚本。正式 verifier 仍对 221,377 条 split 路径与 D2-R1 做集合和逐字段比对，并重算坏图、group assignment、class coverage 和泄漏。
+- 关键统计：train 177,021（79.9636%）、val 22,178（10.0182%）、test 22,178（10.0182%）；group 数分别为 125,404、15,725、15,723；路径重叠 0，duplicate group 泄漏 0，坏图排除 19，三个 split 均覆盖 203 类。class 162 为唯一少于 10 个 group 的类别，5 张/5 组按 3/1/1 覆盖。D3-R1 与 D3-R2 的五个核心数据文件逐字节一致，证明依赖收敛未改变已通过的数据划分。
+- 偏差、风险和阻塞：无阻塞。D3-R2 消除了 D3-R1 的隐式运行时依赖；其源码和测试仍需由总负责人纳入后续 Git 提交，当前 checksum 已固定二者内容。D2-R1 保守分组可能漏召回变化较大的真实近重复，因此零 group 泄漏只针对已识别的 R1 group。跨类别 group 被整组切分，未修改标签。
+- Git 状态：`main` 相对 `origin/main` ahead 10；旧 D2-R0、D3-R0/R1、D4-D5 未提交代码仍保留，本阶段新增 D3-R2 脚本和测试并更新本日志；`artifacts/data/v1/d3-r2/` 被 Git 忽略。未提交或推送。
+- 下一步建议：完成后交总负责人独立验收；通过前不得执行 D4-R1。
+- 边界声明：未执行 D4-R1 或 A0
+
+## 2026-08-10 D3-R1 基于 D2-R1 重建固定 split
+
+- 状态：待验收
+- 指挥者指令：只基于 `artifacts/data/v1/d2-r1/` 重建固定 train/val/test split；完成 D3-R1 自验和日志后停止，不得进入 D4-R1 或 A0。
+- 前置版本：Git commit `c4b56211319a42cf65aba11cc1163f82c9f13841`；总负责人已验收通过 D2-R1；输入 manifest SHA-256 为 `177e785b0cffd53ad0de7eb5aa3f2a2899127ca77558a774297929c2e2b80828`。
+- 允许范围：新增 D3-R1 数据脚本、对应测试、`artifacts/data/v1/d3-r1/` 和本日志。D2-R1、旧 D3 及原图保持只读。
+- 实际修改：新增 `scripts/build_splits_d3_r1.py` 和 `project/tests/test_splits_d3_r1.py`；更新本日志。未修改 D2-R1、旧 D3 产物、原图、taxonomy、其他角色日志或验收清单。
+- 生成产物：在 `artifacts/data/v1/d3-r1/` 新增 `train.csv`、`val.csv`、`test.csv`、`group-assignments.csv`、`excluded-bad-images.csv`、`d3-r1-config.json`、`d3-r1-summary.json` 和 `checksums.sha256`。train/val/test SHA-256 分别为 `af457fcd9c49af93b9929585175aa68f973113d43895e5a035db61bbe7f7d778`、`a5db45590dd3dd97e46564046fc32c0223dab144e826854ea2a0e5aa3aec0833`、`23897e0a1a1b2209d1390845c6261ee48a1f94d935fc0173f3a71d18facc1dc8`；group assignments 为 `db68c397b52bf4c789f4c2b679d575cf4954c799d6f1ba628b6db936b074aa2e`；摘要为 `f577e49aea6e056b0cb47c65bcf33d8898a63d56c41e585f0ea4fe4b250e46d5`；配置为 `6b89b1837699f610652b580ad82c7709045f8eb427cd0698244daa09ae4c8295`；checksums 文件自身为 `f5c275cc43168529ba66376afb178c5d1cd31f15635878c0a909433aad51813b`。
+- 执行命令：`/home/zkf/pytorch-env/bin/python -m py_compile scripts/build_splits_d3_r1.py`，退出码 0；`cd project && /home/zkf/pytorch-env/bin/python -m pytest tests/test_splits_d3_r1.py -q -k 'not full_d3_r1_artifact'`，退出码 0，`2 passed, 1 deselected`；`/home/zkf/pytorch-env/bin/python scripts/build_splits_d3_r1.py`，退出码 0，耗时 133.79 秒；同脚本 `--verify-only`，退出码 0，耗时 12.65 秒；`sha256sum -c artifacts/data/v1/d3-r1/checksums.sha256`，退出码 0，12 项均为 `OK`；`cd project && /home/zkf/pytorch-env/bin/python -m pytest -q`，退出码 0，`27 passed in 157.57s`；`git diff --check`，退出码 0。
+- 验收证据：输入加载器强制要求 D2-R1 的 pHash、旧 group 追溯字段和 `dg-r1-` group ID，并先验证 D2-R1 checksum 链。正式 verifier 将三个 split 的全部 221,377 条路径与 D2-R1 manifest 做集合和逐字段比对，class_id、SHA-256 和 duplicate group ID 差异均为 0；19 张坏图与 D2-R1 排除集合及字段完全一致。路径只出现一次、绝对路径和 `data/views/` 引用均为 0；156,852 个可用 group 全部只分配到一个 split，group assignments 的 split 和 size 与 CSV 重算一致；三个 split 均覆盖 203 类。
+- 关键统计：train 177,021（79.9636%）、val 22,178（10.0182%）、test 22,178（10.0182%）；group 数分别为 125,404、15,725、15,723；路径重叠 0，duplicate group 泄漏 0，坏图排除 19。唯一少于 10 个独立 group 的类别为 class 162，共 5 张/5 组，按 train/val/test 3/1/1 覆盖。
+- 偏差、风险和阻塞：无阻塞。固定沿用已记录的 `sparse-group-stratified-greedy-v1`、seed `20260809` 和 80/10/10 目标比例；duplicate group 完整性优先于精确比例。D2-R1 的保守分组仍可能漏召回变化较大的真实近重复，因此零 group 泄漏只针对已识别的 R1 group，不等价于证明不存在所有视觉近重复泄漏。跨类别 group 被整组切分，未修改标签。
+- Git 状态：`main` 相对 `origin/main` ahead 9；旧 D2-R0、D3-D5 未提交代码仍保留，本阶段新增 D3-R1 脚本和测试并更新本日志；`artifacts/data/v1/d3-r1/` 被 Git 忽略。未提交或推送。
+- 下一步建议：完成后交总负责人独立验收；通过前不得执行 D4-R1。
+- 边界声明：未执行 D4-R1 或 A0
 
 ## 2026-08-10 D2-R1 重复组返工
 
