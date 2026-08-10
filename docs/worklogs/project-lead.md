@@ -160,3 +160,14 @@
 - 最终验证：D2 verifier、D3 重建、D4 重建、D5 冻结均退出 0；单版本全量测试 `31 passed in 206.67s`；D2/D3/D4/D5 checksum 分别为 25/13/95/39 项
 - 版本边界：测试数从 50 减少到 31 是因为移除了退回版本测试；当前测试集只覆盖唯一正式链。历史日志保留，用于说明返工过程，不代表旧版文件仍存在
 - 下一阶段：由用户调用算法工程师执行 A0，只读取 D3-R2 固定 split、D5-R1 taxonomy 快照和受控 Dataset
+
+## 2026-08-10 A0 data-v1 准入验收
+
+- 结论：退回；数据准入结果正确，但冻结产物无法跨验收提交稳定复验，A1 不得开始
+- 验收输入：基线 commit `f4ee10fb6bddabdd3b708a0679b85ec0d518cf57`、`training/admission.py`、专用测试、算法工程师日志和 `artifacts/training/a0-data-v1-f4ee10f/`
+- 通过项：A0 `--verify-only` 退出 0；专用测试 `4 passed in 11.31s`；全量测试 `35 passed in 215.46s`；D5 的 39 项 checksum、203 类 taxonomy、177,021/22,178/22,178 split、221,377 条唯一路径、零路径重叠和零 duplicate group 泄漏均通过
+- 阻断问题：`run_admission()` 每次用当前 `git rev-parse HEAD` 生成 `a0_git_commit`，`verify_artifacts()` 又要求新报告与已保存报告完全相等。A0 产物保存的是 `f4ee10f`；按项目规则提交验收后 HEAD 必然变化，随后 `--verify-only` 会稳定失败
+- 独立复现：保持其他输入不变，仅模拟 HEAD 变为另一 40 位 commit，`verify_artifacts()` 抛出 `AdmissionError: stored A0 report differs from a fresh admission check`
+- 返工要求：把“生成 A0 产物时的受控基线 commit”作为冻结输入从 config/report 读取或显式传入；验证时校验源码、测试和输入数据 SHA-256，不得用当前 HEAD 覆盖冻结字段；增加“HEAD 变化后 verify-only 仍通过”的自动化回归测试
+- 范围检查：算法工程师只执行 A0，未执行 A1、训练或应用开发；数据、taxonomy 和固定 split 未修改。总负责人本次仅记录验收结论，未修改算法交付
+- 下一阶段：算法工程师执行 A0-R1 返工，完成后停止交验；A0-R1 通过前不得开始 A1
