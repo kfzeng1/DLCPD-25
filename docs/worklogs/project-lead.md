@@ -171,3 +171,13 @@
 - 返工要求：把“生成 A0 产物时的受控基线 commit”作为冻结输入从 config/report 读取或显式传入；验证时校验源码、测试和输入数据 SHA-256，不得用当前 HEAD 覆盖冻结字段；增加“HEAD 变化后 verify-only 仍通过”的自动化回归测试
 - 范围检查：算法工程师只执行 A0，未执行 A1、训练或应用开发；数据、taxonomy 和固定 split 未修改。总负责人本次仅记录验收结论，未修改算法交付
 - 下一阶段：算法工程师执行 A0-R1 返工，完成后停止交验；A0-R1 通过前不得开始 A1
+
+## 2026-08-10 A1 训练链路验收
+
+- 结论：通过；A1 完成，允许进入 A2，未读取 val/test 指标。
+- 范围：新增 ResNet-50、共享 transform、checkpoint、A1 冒烟 CLI 与测试；只更新训练配置和算法日志，未修改冻结数据、taxonomy 或 split。
+- 复验：8 项定向测试通过；独立加载 A1 checkpoint 并在 RTX 4070 Laptop 上得到有限 `[2,203]` logits；6 项 artifact checksum 全部通过；工程师全量测试为 `39 passed in 209.61s`。
+- 指标：固定 train 子集 32 张、8 类，3 epoch 后 accuracy 从 6.25% 升至 96.875%，loss 从 5.2343 降至 0.1697，峰值显存约 1.02 GiB。
+- 修正：checkpoint 加载改为 `weights_only=True`，现有 A1 checkpoint 兼容，降低后续加载不可信 pickle 的风险。
+- 已知限制：A1 artifact 的 commit 字段记录开发前基线 `4143fc8`，不是本次实现提交；该产物仅作可再生链路冒烟，不作为 A3 冻结模型包。
+- 下一阶段：算法工程师执行 A2 完整训练；应用工程师可并行执行 P1。

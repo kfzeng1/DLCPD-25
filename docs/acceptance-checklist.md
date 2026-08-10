@@ -7,7 +7,7 @@
 | 阶段 | 状态 | 日期 | 结论 |
 |---|---|---|---|
 | D0-D5 | 通过 | 2026-08-10 | `data-v1` 已冻结；203 类，221,377 张可用图片，固定 split 无路径或重复组泄漏 |
-| A1 | 未开始 | - | 包含训练前 preflight、Dataset、模型冒烟和小样本过拟合 |
+| A1 | 通过 | 2026-08-10 | preflight、Dataset、预处理、ResNet-50 冒烟、checkpoint 和小样本过拟合均通过 |
 | A2 | 未开始 | - | 等待 A1；完整训练、验证和不平衡策略对照 |
 | A3 | 未开始 | - | 等待 A2；最终测试、评估报告和模型包 |
 | P1 | 未开始 | - | 可开始；推理内核、契约和假模型页面 |
@@ -27,12 +27,12 @@
 
 ## A1 训练链路
 
-- [ ] preflight 验证 D5 checksum、203 类、split 数量、路径和 duplicate group 契约。
-- [ ] Dataset 和 transform 使用固定 CSV 与 taxonomy，不从目录排序推断 class ID。
-- [ ] ResNet-50 输出为 `[N, 203]`，loss 和概率有限。
-- [ ] checkpoint 可重载，CPU/CUDA 冒烟通过。
-- [ ] 32-64 张固定小样本能够明显过拟合。
-- [ ] 全量测试通过。
+- [x] preflight 验证 D5 checksum、203 类、split 数量、路径和 duplicate group 契约。
+- [x] Dataset 和 transform 使用固定 CSV 与 taxonomy，不从目录排序推断 class ID。
+- [x] ResNet-50 输出为 `[N, 203]`，loss 和概率有限。
+- [x] checkpoint 可重载，CPU/CUDA 冒烟通过。
+- [x] 32-64 张固定小样本能够明显过拟合。
+- [x] 全量测试通过。
 
 ## A2 完整训练
 

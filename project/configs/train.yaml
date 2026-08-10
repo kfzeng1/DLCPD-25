@@ -1,6 +1,6 @@
 seed: 20260809
 data_root: ../data/raw/dlcpd25-203
-taxonomy: ../metadata/class-taxonomy.json
+taxonomy: ../artifacts/data/v1/d5-r1/taxonomy-v1.json
 split_dir: ../artifacts/data/v1/d3-r2
 output_dir: ../artifacts/training
 

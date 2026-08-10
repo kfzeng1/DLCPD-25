@@ -1,6 +1,6 @@
 # AI 算法工程师工作日志
 
-当前状态：A0 已取消并合并到 A1，等待执行 A1。
+当前状态：A1 已通过，等待执行 A2。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
 
@@ -24,3 +24,13 @@
 
 - 独立 A0 已取消；有效的数据契约检查改为无状态 preflight，并入 A1。
 - 后续算法阶段压缩为 A1-A3，按 `docs/workflow.md` 的 7 行模板记录。
+
+## 2026-08-10 A1 训练链路
+
+- 阶段：A1，状态待验收；输入 commit `4143fc80d03bfb220ce2b2deb4417f2a7ce8eb50`、data-v1 D5-R1、taxonomy SHA-256 `5cfa1a261b1a9fbb80adf24f299bca0883a42dd523914a70234f31dbf748bd31`。
+- 修改文件：新增 `models/classifier.py`、`training/{transforms,checkpoint,train}.py` 和 `test_training_a1.py`，更新模型导出、训练配置与本日志；生成 `artifacts/training/a1-smoke-4143fc8/`，其 checksum 清单 SHA-256 为 `fb3ecb81654402fc2b75015abb7112afa00ebce75976b1effec1384b7cc6e0dd`。
+- 运行命令：运行无状态 preflight、A1 定向 pytest、`training.train --a1-smoke`、产物 `sha256sum -c`、独立 checkpoint 重载、项目全量 pytest 和 `git diff --check`，均退出 0。
+- 测试结果：定向测试 `8 passed in 13.45s`；全量测试 `39 passed in 209.61s`；A1 产物 6 项 checksum 全部 OK；CPU checkpoint 严格重载通过。
+- 关键指标：ImageNet V2 预训练 ResNet-50，固定 train 子集 32 张（8 类各 4 张），224 输入、batch 16、AMP；初始/final loss `5.2343/0.1697`，初始/final accuracy `6.25%/96.875%`，3 epoch、14.33 秒，峰值显存 `1,098,122,240` bytes；CUDA `[16,203]`、CPU `[2,203]` logits 有限。
+- 遗留问题：无 A1 阻塞；小样本使用确定性 eval transform 诊断链路，不代表泛化指标；未读取 val/test 指标，A2 完整训练尚未执行；改动与忽略的 artifacts 尚未提交或推送。
+- 是否进入下一阶段：否。
