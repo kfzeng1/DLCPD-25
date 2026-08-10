@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build standalone, deterministic D3-R2 train/val/test splits from D2-R1."""
+"""Build standalone, deterministic D3-R2 train/val/test splits from D2-R2."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_D2_R1 = REPO_ROOT / "artifacts" / "data" / "v1" / "d2-r1"
+DEFAULT_D2 = REPO_ROOT / "artifacts" / "data" / "v1" / "d2-r2"
 DEFAULT_OUTPUT = REPO_ROOT / "artifacts" / "data" / "v1" / "d3-r2"
 DEFAULT_TAXONOMY = REPO_ROOT / "metadata" / "class-taxonomy.json"
 TEST_SOURCE = REPO_ROOT / "project" / "tests" / "test_splits_d3_r2.py"
@@ -26,7 +26,7 @@ SEED = 20260809
 SPLITS = ("train", "val", "test")
 RATIOS = {"train": 0.8, "val": 0.1, "test": 0.1}
 ALGORITHM_VERSION = "sparse-group-stratified-greedy-v1"
-IMPLEMENTATION_VERSION = "standalone-d3-r2-v1"
+IMPLEMENTATION_VERSION = "standalone-d3-r2-v2"
 CSV_FIELDS = ("relative_path", "class_id", "sha256", "duplicate_group_id", "split")
 EXCLUDED_FIELDS = ("relative_path", "class_id", "sha256", "decode_error_type", "decode_error")
 
@@ -46,7 +46,7 @@ class GroupInfo:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--d2-r1-dir", type=Path, default=DEFAULT_D2_R1)
+    parser.add_argument("--d2-dir", type=Path, default=DEFAULT_D2)
     parser.add_argument("--taxonomy", type=Path, default=DEFAULT_TAXONOMY)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--verify-only", action="store_true")
@@ -94,26 +94,26 @@ def verify_checksum_file(path: Path) -> None:
             raise SplitError(f"checksum mismatch: {name}")
 
 
-def load_d2_r1_records(d2_r1_dir: Path) -> list[dict[str, Any]]:
-    verify_checksum_file(d2_r1_dir / "checksums.sha256")
+def load_d2_records(d2_dir: Path) -> list[dict[str, Any]]:
+    verify_checksum_file(d2_dir / "checksums.sha256")
     records = []
-    with (d2_r1_dir / "manifest-hashed.jsonl").open(encoding="utf-8") as stream:
+    with (d2_dir / "manifest-hashed.jsonl").open(encoding="utf-8") as stream:
         for line in stream:
             records.append(json.loads(line))
     if len(records) != 221396:
-        raise SplitError("D2-R1 manifest row count differs")
+        raise SplitError("D2-R2 manifest row count differs")
     seen_paths = set()
     for record in records:
         path = str(record["relative_path"])
         if path in seen_paths:
-            raise SplitError(f"D2-R1 path is duplicated: {path}")
+            raise SplitError(f"D2-R2 path is duplicated: {path}")
         seen_paths.add(path)
         if "phash64" not in record or "d2_r0_duplicate_group_id" not in record:
-            raise SplitError("input is not a D2-R1 manifest")
+            raise SplitError("input is not a D2-R2 manifest")
         if not str(record["duplicate_group_id"]).startswith("dg-r1-"):
             raise SplitError("input contains a non-R1 duplicate group ID")
     if sum(record["decode_status"] == "ok" for record in records) != 221377:
-        raise SplitError("D2-R1 usable image count differs")
+        raise SplitError("D2-R2 usable image count differs")
     return records
 
 
@@ -286,11 +286,11 @@ def csv_payload(rows: list[dict[str, Any]], split: str) -> bytes:
         return stream.read().encode("utf-8")
 
 
-def build_d3_r2(d2_r1_dir: Path, taxonomy_path: Path, output_dir: Path) -> dict[str, Any]:
-    d2_r1_dir = d2_r1_dir.resolve()
+def build_d3_r2(d2_dir: Path, taxonomy_path: Path, output_dir: Path) -> dict[str, Any]:
+    d2_dir = d2_dir.resolve()
     taxonomy_path = taxonomy_path.resolve()
     output_dir = output_dir.resolve()
-    records = load_d2_r1_records(d2_r1_dir)
+    records = load_d2_records(d2_dir)
     taxonomy = load_json(taxonomy_path)
     class_count = len(taxonomy["classes"])
     if class_count != 203:
@@ -348,11 +348,11 @@ def build_d3_r2(d2_r1_dir: Path, taxonomy_path: Path, output_dir: Path) -> dict[
         "git_commit": subprocess.run(
             ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, check=True, capture_output=True, text=True
         ).stdout.strip(),
-        "input_stage": "D2-R1",
-        "input_manifest": repo_relative(d2_r1_dir / "manifest-hashed.jsonl"),
-        "input_manifest_sha256": sha256_file(d2_r1_dir / "manifest-hashed.jsonl"),
-        "input_checksums": repo_relative(d2_r1_dir / "checksums.sha256"),
-        "input_checksums_sha256": sha256_file(d2_r1_dir / "checksums.sha256"),
+        "input_stage": "D2-R2",
+        "input_manifest": repo_relative(d2_dir / "manifest-hashed.jsonl"),
+        "input_manifest_sha256": sha256_file(d2_dir / "manifest-hashed.jsonl"),
+        "input_checksums": repo_relative(d2_dir / "checksums.sha256"),
+        "input_checksums_sha256": sha256_file(d2_dir / "checksums.sha256"),
         "taxonomy": repo_relative(taxonomy_path),
         "taxonomy_sha256": sha256_file(taxonomy_path),
         "algorithm_version": ALGORITHM_VERSION,
@@ -370,7 +370,7 @@ def build_d3_r2(d2_r1_dir: Path, taxonomy_path: Path, output_dir: Path) -> dict[
         "group_field": "duplicate_group_id",
         "required_group_prefix": "dg-r1-",
         "group_integrity_priority": "group leakage must remain zero even when ratios or class balance deviate",
-        "ordering": "D2-R1 manifest order within each split",
+        "ordering": "D2-R2 manifest order within each split",
         "csv_fields": list(CSV_FIELDS),
         "rare_class_strategy": rare_strategy["required_split_policy"],
     }
@@ -399,8 +399,8 @@ def build_d3_r2(d2_r1_dir: Path, taxonomy_path: Path, output_dir: Path) -> dict[
         "schema_version": 3,
         "stage": "D3-R2",
         "data_version": "data-v1-candidate-r2",
-        "source_d2_stage": "D2-R1",
-        "source_manifest_sha256": sha256_file(d2_r1_dir / "manifest-hashed.jsonl"),
+        "source_d2_stage": "D2-R2",
+        "source_manifest_sha256": sha256_file(d2_dir / "manifest-hashed.jsonl"),
         "implementation_version": IMPLEMENTATION_VERSION,
         "usable_files": len(usable),
         "excluded_bad_files": len(excluded),
@@ -421,9 +421,9 @@ def build_d3_r2(d2_r1_dir: Path, taxonomy_path: Path, output_dir: Path) -> dict[
     summary["config_sha256"] = sha256_file(output_dir / "d3-r2-config.json")
     write_bytes_idempotent(output_dir / "d3-r2-summary.json", canonical_json(summary))
     checksum_paths = [
-        d2_r1_dir / "manifest-hashed.jsonl",
-        d2_r1_dir / "d2-r1-summary.json",
-        d2_r1_dir / "checksums.sha256",
+        d2_dir / "manifest-hashed.jsonl",
+        d2_dir / "d2-r2-summary.json",
+        d2_dir / "checksums.sha256",
         taxonomy_path,
         *runtime_sources,
         *traceability_sources,
@@ -439,7 +439,7 @@ def build_d3_r2(d2_r1_dir: Path, taxonomy_path: Path, output_dir: Path) -> dict[
     write_bytes_idempotent(
         output_dir / "checksums.sha256", ("\n".join(lines) + "\n").encode("utf-8")
     )
-    verify_d3_r2(d2_r1_dir, output_dir, taxonomy_path)
+    verify_d3_r2(d2_dir, output_dir, taxonomy_path)
     return summary
 
 
@@ -459,11 +459,11 @@ def read_excluded(path: Path) -> list[dict[str, str]]:
         return list(reader)
 
 
-def verify_d3_r2(d2_r1_dir: Path, output_dir: Path, taxonomy_path: Path) -> dict[str, Any]:
-    d2_r1_dir = d2_r1_dir.resolve()
+def verify_d3_r2(d2_dir: Path, output_dir: Path, taxonomy_path: Path) -> dict[str, Any]:
+    d2_dir = d2_dir.resolve()
     output_dir = output_dir.resolve()
     taxonomy_path = taxonomy_path.resolve()
-    records = load_d2_r1_records(d2_r1_dir)
+    records = load_d2_records(d2_dir)
     expected_usable = {
         str(record["relative_path"]): {
             "class_id": str(record["class_id"]),
@@ -499,13 +499,13 @@ def verify_d3_r2(d2_r1_dir: Path, output_dir: Path, taxonomy_path: Path) -> dict
                 raise SplitError(f"path appears more than once: {path}")
             expected = expected_usable.get(path)
             if expected is None or any(row[field] != expected[field] for field in expected):
-                raise SplitError(f"split row differs from D2-R1: {path}")
+                raise SplitError(f"split row differs from D2-R2: {path}")
             observed_paths[path] = split
             group_splits[row["duplicate_group_id"]].add(split)
             group_sizes[row["duplicate_group_id"]] += 1
             class_coverage[split].add(int(row["class_id"]))
     if set(observed_paths) != set(expected_usable):
-        raise SplitError("split path set differs from D2-R1 usable path set")
+        raise SplitError("split path set differs from D2-R2 usable path set")
     group_leakage = sum(len(values) > 1 for values in group_splits.values())
     if group_leakage:
         raise SplitError(f"duplicate group leakage detected: {group_leakage}")
@@ -516,7 +516,7 @@ def verify_d3_r2(d2_r1_dir: Path, output_dir: Path, taxonomy_path: Path) -> dict
         raise SplitError("one or more splits do not cover all taxonomy classes")
     excluded = read_excluded(output_dir / "excluded-bad-images.csv")
     if len(excluded) != 19 or {row["relative_path"] for row in excluded} != set(expected_bad):
-        raise SplitError("excluded bad-image set differs from D2-R1")
+        raise SplitError("excluded bad-image set differs from D2-R2")
     for row in excluded:
         expected = expected_bad[row["relative_path"]]
         if any(row[field] != expected[field] for field in expected):
@@ -545,9 +545,9 @@ def verify_d3_r2(d2_r1_dir: Path, output_dir: Path, taxonomy_path: Path) -> dict
     ]:
         raise SplitError("D3-R2 runtime source index differs")
     summary = load_json(output_dir / "d3-r2-summary.json")
-    if summary["source_d2_stage"] != "D2-R1" or summary["implementation_version"] != IMPLEMENTATION_VERSION:
+    if summary["source_d2_stage"] != "D2-R2" or summary["implementation_version"] != IMPLEMENTATION_VERSION:
         raise SplitError("D3-R2 summary source or implementation differs")
-    if summary["source_manifest_sha256"] != sha256_file(d2_r1_dir / "manifest-hashed.jsonl"):
+    if summary["source_manifest_sha256"] != sha256_file(d2_dir / "manifest-hashed.jsonl"):
         raise SplitError("D3-R2 source manifest SHA-256 differs")
     if summary["split_counts"] != split_counts:
         raise SplitError("D3-R2 summary split counts differ")
@@ -568,7 +568,7 @@ def verify_d3_r2(d2_r1_dir: Path, output_dir: Path, taxonomy_path: Path) -> dict
         "duplicate_group_leakage_count": group_leakage,
         "class_coverage": {split: len(values) for split, values in class_coverage.items()},
         "excluded_bad_files": len(excluded),
-        "source_d2_stage": "D2-R1",
+        "source_d2_stage": "D2-R2",
         "implementation_version": IMPLEMENTATION_VERSION,
         "runtime_source_count": len(config["runtime_sources"]),
     }
@@ -578,9 +578,9 @@ def main() -> int:
     args = parse_args()
     try:
         if args.verify_only:
-            result = verify_d3_r2(args.d2_r1_dir, args.output_dir, args.taxonomy)
+            result = verify_d3_r2(args.d2_dir, args.output_dir, args.taxonomy)
         else:
-            result = build_d3_r2(args.d2_r1_dir, args.taxonomy, args.output_dir)
+            result = build_d3_r2(args.d2_dir, args.taxonomy, args.output_dir)
     except (SplitError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1

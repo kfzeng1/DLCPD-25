@@ -101,8 +101,8 @@ def test_no_runtime_dependency_on_repository_scripts() -> None:
     )
 
 
-def test_core_reference_matches_r1_artifacts() -> None:
-    reference_dir = ROOT / "artifacts" / "data" / "v1" / "d2-r1"
+def test_frozen_d2_core_matches_accepted_hashes() -> None:
+    reference_dir = D2_R2.DEFAULT_OUTPUT
     assert {
         name: D2_R2.sha256_file(reference_dir / name)
         for name in D2_R2.CORE_COMPATIBILITY_SHA256

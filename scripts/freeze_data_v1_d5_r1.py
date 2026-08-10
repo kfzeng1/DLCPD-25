@@ -154,7 +154,7 @@ def render_handoff(release: dict[str, Any]) -> str:
         "- 正式 split 来自 `artifacts/data/v1/d3-r2/`。",
         "- 算法工程师只读取固定 split CSV 中的相对路径、`class_id`、SHA-256 和 `duplicate_group_id`。",
         "- 禁止重新扫描目录、按目录排序推断标签、重新随机切分或让 duplicate group 跨 split。",
-        "- D3-R2 配置中的 D2-R1 名称仅为已验收的字节兼容引用；正式 D2 实现和 release 来源均为 D2-R2。",
+        "- D3-R2 直接读取 D2-R2，不依赖任何 D2-R0/D2-R1 目录或脚本。",
         "",
         "## 数据统计",
         "",
@@ -291,10 +291,7 @@ def build_d5_r1(output_dir: Path) -> dict[str, Any]:
             "reproduction": "artifacts/data/v1/d4-r1",
             "release": "artifacts/data/v1/d5-r1",
         },
-        "d3_d2_r1_reference_semantics": (
-            "D3-R2 retains its accepted D2-R1 contract because D2-R2 core bytes are identical; "
-            "the formal release source is D2-R2"
-        ),
+        "dependency_contract": "D3-R2 directly reads the frozen D2-R2 release",
         "upstream_checksums": [repo_relative(path) for path in UPSTREAM_CHECKSUMS],
         "runtime_sources": [
             {"path": repo_relative(Path(__file__).resolve()), "sha256": sha256_file(Path(__file__).resolve())}
@@ -356,8 +353,7 @@ def build_d5_r1(output_dir: Path) -> dict[str, Any]:
             "D2-R2 使用 dHash<=5、pHash<=8 和 complete-link 直径门；保守规则可能漏召回变化较大的真实近重复。",
             "存在跨类别完全重复和近重复组，可能反映标签冲突；split 保持整组，未擅自修订标签。",
             "类别与独立 group 数量长尾明显，少样本类别指标方差会较大。",
-            "D3-R2 配置中的 D2-R1 名称是字节兼容引用；正式 D2 实现与 release 来源均为 D2-R2。",
-            "D4-R1 的 hardlink 兼容视图由 D3 只读使用；这描述使用方式，不表示文件权限本身为只读。",
+            "D3-R2 直接读取 D2-R2；旧 D2-R0/D2-R1 不属于正式链，也不是运行时依赖。",
             "D4-R1 的 Dataset 冒烟实际解码固定 9 张；全量图片解码结论继承 D1。",
             "数据仓库没有明确 LICENSE 文件，论文 CC BY 4.0 不自动等同于数据文件许可。",
         ],

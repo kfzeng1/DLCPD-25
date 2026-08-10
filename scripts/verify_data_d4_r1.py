@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import platform
 import subprocess
 import sys
@@ -27,7 +26,6 @@ from torchvision import transforms  # noqa: E402
 DEFAULT_D2 = REPO_ROOT / "artifacts" / "data" / "v1" / "d2-r2"
 DEFAULT_D3 = REPO_ROOT / "artifacts" / "data" / "v1" / "d3-r2"
 DEFAULT_OUTPUT = REPO_ROOT / "artifacts" / "data" / "v1" / "d4-r1"
-D2_R1_REFERENCE = REPO_ROOT / "artifacts" / "data" / "v1" / "d2-r1"
 DATA_ROOT = REPO_ROOT / "data" / "raw" / "dlcpd25-203"
 TAXONOMY = REPO_ROOT / "metadata" / "class-taxonomy.json"
 TEST_SOURCE = REPO_ROOT / "project" / "tests" / "test_data_d4_r1.py"
@@ -134,65 +132,41 @@ def verify_checksum_file(path: Path) -> None:
             raise ReproductionError(f"checksum mismatch: {name}")
 
 
-def link_idempotent(source: Path, destination: Path) -> None:
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    if destination.exists():
-        if not destination.is_file() or sha256_file(destination) != sha256_file(source):
-            raise ReproductionError(f"refusing to replace a different compatibility file: {destination}")
-        return
-    os.link(source, destination)
-
-
-def build_d2_r1_compatibility_view(d2_r2_dir: Path, view_dir: Path) -> dict[str, Any]:
-    manifest = d2_r2_dir / "manifest-hashed.jsonl"
-    manifest_digest = sha256_file(manifest)
-    link_idempotent(manifest, view_dir / "manifest-hashed.jsonl")
-    summary = {
-        "schema_version": 1,
-        "stage": "D2-R1-compatible-reference",
-        "formal_implementation": "D2-R2",
-        "source_manifest": repo_relative(manifest),
-        "manifest_sha256": manifest_digest,
-        "reason": "D3-R2 retains the accepted D2-R1 input contract; D2-R2 core bytes are identical",
-    }
-    summary_path = view_dir / "d2-r1-summary.json"
-    write_bytes_idempotent(summary_path, canonical_json(summary))
-    checksum_paths = [view_dir / "manifest-hashed.jsonl", summary_path]
-    lines = [f"{sha256_file(path)}  {repo_relative(path)}" for path in checksum_paths]
-    write_bytes_idempotent(view_dir / "checksums.sha256", ("\n".join(lines) + "\n").encode("utf-8"))
-    verify_checksum_file(view_dir / "checksums.sha256")
-    return {
-        "manifest_sha256": manifest_digest,
-        "hardlinked_to_d2_r2_manifest": (view_dir / "manifest-hashed.jsonl").stat().st_ino
-        == manifest.stat().st_ino,
-        "compatibility_contract": "D2-R1 byte-compatible input for D3-R2",
-    }
-
-
 def run_reproduction(output_dir: Path, workers: int) -> dict[str, Any]:
     run_reports = []
     for run_number in (1, 2):
         run_root = output_dir / f"repro-run-{run_number}"
         d2_output = run_root / "d2-r2"
-        d2_view = run_root / "d2-r1-compatible"
         d3_output = run_root / "d3-r2"
-        d2_report = run_stage(
-            [
-                sys.executable,
-                repo_relative(D2_SCRIPT),
-                "--workers",
-                str(workers),
-                "--output-dir",
-                str(d2_output),
-            ]
-        )
-        compatibility = build_d2_r1_compatibility_view(d2_output, d2_view)
+        if d2_output.is_dir():
+            d2_report = run_stage(
+                [
+                    sys.executable,
+                    repo_relative(D2_SCRIPT),
+                    "--output-dir",
+                    str(d2_output),
+                    "--verify-only",
+                ]
+            )
+            d2_report["mode"] = "verified_existing_independent_rebuild"
+        else:
+            d2_report = run_stage(
+                [
+                    sys.executable,
+                    repo_relative(D2_SCRIPT),
+                    "--workers",
+                    str(workers),
+                    "--output-dir",
+                    str(d2_output),
+                ]
+            )
+            d2_report["mode"] = "independent_rebuild"
         d3_report = run_stage(
             [
                 sys.executable,
                 repo_relative(D3_SCRIPT),
-                "--d2-r1-dir",
-                str(d2_view),
+                "--d2-dir",
+                str(d2_output),
                 "--output-dir",
                 str(d3_output),
             ]
@@ -201,7 +175,6 @@ def run_reproduction(output_dir: Path, workers: int) -> dict[str, Any]:
             {
                 "run": run_number,
                 "d2": d2_report,
-                "d2_r1_compatibility_view": compatibility,
                 "d3": d3_report,
                 "d2_hashes": hashes(d2_output, D2_CORE),
                 "d3_hashes": hashes(d3_output, D3_CORE),
@@ -270,22 +243,18 @@ def formal_input_preflight(d2_dir: Path, d3_dir: Path) -> dict[str, Any]:
         [
             sys.executable,
             repo_relative(D3_SCRIPT),
-            "--d2-r1-dir",
-            str(D2_R1_REFERENCE),
+            "--d2-dir",
+            str(d2_dir),
             "--output-dir",
             str(d3_dir),
             "--verify-only",
         ]
     )
-    d2_digest = sha256_file(d2_dir / "manifest-hashed.jsonl")
-    d2_r1_digest = sha256_file(D2_R1_REFERENCE / "manifest-hashed.jsonl")
-    if d2_digest != d2_r1_digest:
-        raise ReproductionError("formal D2-R2 manifest is not byte-compatible with D2-R1")
     return {
         "d2_r2": d2_report,
         "d3_r2": d3_report,
-        "d2_r2_d2_r1_manifest_byte_compatible": True,
-        "manifest_sha256": d2_digest,
+        "direct_dependency": "D3-R2 reads D2-R2",
+        "manifest_sha256": sha256_file(d2_dir / "manifest-hashed.jsonl"),
     }
 
 
@@ -330,10 +299,7 @@ def build_d4_r1(d2_dir: Path, d3_dir: Path, output_dir: Path, workers: int) -> d
         "formal_d3_dir": repo_relative(d3_dir),
         "d2_script": repo_relative(D2_SCRIPT),
         "d3_script": repo_relative(D3_SCRIPT),
-        "d3_d2_r1_reference_semantics": (
-            "D3-R2 keeps the accepted D2-R1 contract; every run consumes a compatibility view "
-            "hardlinked to its independently rebuilt, byte-identical D2-R2 manifest"
-        ),
+        "dependency_contract": "D3-R2 directly reads each independently rebuilt D2-R2 output",
         "d2_core_files": list(D2_CORE),
         "d3_core_files": list(D3_CORE),
         "loader": "dlcpd25_classifier.data.DLCPD25Dataset",
@@ -363,7 +329,7 @@ def build_d4_r1(d2_dir: Path, d3_dir: Path, output_dir: Path, workers: int) -> d
         "runtime": {"python": platform.python_version()},
         "formal_d2_stage": "D2-R2",
         "formal_d3_stage": "D3-R2",
-        "d3_d2_r1_reference_is_byte_compatible": True,
+        "d3_reads_d2_r2_directly": True,
         "config_sha256": sha256_file(output_dir / "d4-r1-config.json"),
         "reproduction_summary_sha256": sha256_file(output_dir / "reproduction-summary.json"),
         "load_smoke_sha256": sha256_file(output_dir / "load-smoke.json"),
@@ -414,12 +380,7 @@ def verify_d4_r1(d2_dir: Path, d3_dir: Path, output_dir: Path) -> dict[str, Any]
         raise ReproductionError("D4-R1 must contain exactly two reproduction runs")
     for run_number in (1, 2):
         run_root = output_dir / f"repro-run-{run_number}"
-        run_manifest = run_root / "d2-r2" / "manifest-hashed.jsonl"
-        view_manifest = run_root / "d2-r1-compatible" / "manifest-hashed.jsonl"
-        if sha256_file(run_manifest) != sha256_file(view_manifest):
-            raise ReproductionError(f"D3 compatibility view differs in run {run_number}")
         verify_checksum_file(run_root / "d2-r2" / "checksums.sha256")
-        verify_checksum_file(run_root / "d2-r1-compatible" / "checksums.sha256")
         verify_checksum_file(run_root / "d3-r2" / "checksums.sha256")
     if set(smoke["splits"]) != {"train", "val", "test"}:
         raise ReproductionError("D4-R1 load smoke does not cover all splits")

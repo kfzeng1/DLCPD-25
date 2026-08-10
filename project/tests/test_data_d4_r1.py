@@ -82,18 +82,10 @@ def test_d4_r1_uses_only_accepted_stage_implementations() -> None:
     assert D4_R1.DEFAULT_OUTPUT.name == "d4-r1"
 
 
-def test_d2_r1_compatibility_view_uses_rebuilt_r2_manifest(tmp_path: Path) -> None:
-    d2_r2 = tmp_path / "d2-r2"
-    d2_r2.mkdir()
-    manifest = d2_r2 / "manifest-hashed.jsonl"
-    manifest.write_bytes(b'{"relative_path":"class/image.jpg"}\n')
-    view = tmp_path / "d2-r1-compatible"
-    report = D4_R1.build_d2_r1_compatibility_view(d2_r2, view)
-    assert report["hardlinked_to_d2_r2_manifest"] is True
-    assert (view / "manifest-hashed.jsonl").read_bytes() == manifest.read_bytes()
-    D4_R1.verify_checksum_file(view / "checksums.sha256")
-    summary = json.loads((view / "d2-r1-summary.json").read_text(encoding="utf-8"))
-    assert summary["formal_implementation"] == "D2-R2"
+def test_d4_passes_rebuilt_d2_directly_to_d3() -> None:
+    source = (ROOT / "scripts" / "verify_data_d4_r1.py").read_text(encoding="utf-8")
+    assert '"--d2-dir"' in source
+    assert "d2-r1-compatible" not in source
 
 
 def test_compare_reproduction_rejects_mismatch(tmp_path: Path) -> None:

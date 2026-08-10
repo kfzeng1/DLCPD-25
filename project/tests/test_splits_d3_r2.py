@@ -67,12 +67,12 @@ def test_standalone_script_imports_and_executes_without_old_scripts(tmp_path: Pa
 
 def test_full_d3_r2_artifact_and_source_checksums() -> None:
     result = D3_R2.verify_d3_r2(
-        D3_R2.DEFAULT_D2_R1,
+        D3_R2.DEFAULT_D2,
         D3_R2.DEFAULT_OUTPUT,
         D3_R2.DEFAULT_TAXONOMY,
     )
-    assert result["source_d2_stage"] == "D2-R1"
-    assert result["implementation_version"] == "standalone-d3-r2-v1"
+    assert result["source_d2_stage"] == "D2-R2"
+    assert result["implementation_version"] == "standalone-d3-r2-v2"
     assert result["runtime_source_count"] == 1
     assert result["rows"] == 221377
     assert result["excluded_bad_files"] == 19
