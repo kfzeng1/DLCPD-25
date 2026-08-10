@@ -119,3 +119,17 @@
 - D3 来源决策：D2-R2 与 D2-R1 的 manifest 和 duplicate groups 字节一致，因此 D3-R2 的既有 split 与算法验收继续有效，不要求 D3-R3。D4-R1 必须使用 D2-R2 作为正式 D2 实现，并在报告中注明 D3-R2 配置中的 D2-R1 是字节兼容引用；D5 最终 release 必须以 D2-R2 为正式来源
 - 验收清单更新：D2-R2 标记为通过并恢复 D2 源码追溯项；D3 保持通过；D4 从阻塞改为未开始；D5 保持退回，A0 仍等待 D5
 - 建议下一阶段：重新调用 AI 数据工程师执行完整 `D4-R1`，使用 D2-R2 和 D3-R2 完成两轮独立重建及三个 split 的 Dataset 加载验证，完成后停止交验
+
+## 2026-08-10 D4-R1 验收
+
+- 结论：通过；D4 由未开始改为通过，D5-R1 可以开始，A0 仍等待 D5
+- 验收输入：commit `b43e46e67f162a3da5c0fcdffdb0e6f989bd6cac`、D4-R1 复现脚本、Dataset 与测试、数据工程师日志及 `artifacts/data/v1/d4-r1/`
+- 独立自动复验：`verify_data_d4_r1.py --verify-only` 退出 0；项目测试 `47 passed in 498.78s`；D4-R1 校验清单 101 项全部为 `OK`；`git diff --check` 通过
+- 两轮复现证据：每轮均从 D1 和原图独立执行 D2-R2，再以该轮 manifest 运行 D3-R2；正式产物、run 1、run 2 的 D2 核心 19/19 和 D3 核心 5/5 三方 SHA 全部一致；独立 `cmp` 复核 D2 为 38/38、D3 为 10/10
+- Dataset 验证：初始化时全量检查 train 177,021、val 22,178、test 22,178 条记录的 schema、相对路径、class ID、taxonomy 目录映射和文件存在性；每个 split 解码首/中/末 3 张，共 9 张，均得到有限 `torch.float32 [3,224,224]` 张量且 target 与记录一致
+- 兼容视图判断：每轮 D3 输入 manifest 与对应 D2-R2 manifest 共享 inode，SHA-256 相同，运行后仍由 checksum 和三方比较复核。工程师日志和交付摘要称其为“只读 hardlink”，但实际权限为 `0600`，并非文件系统只读；准确表述应为“D3 只读使用的 hardlink 兼容视图”。该措辞偏差不影响已验证的内容完整性和复现结果
+- 关键产物：D4 配置 SHA-256 为 `46c47130e0ce2a41245b832a64de1153eed45f6b3fd86d3acc92705904f0103d`；复现摘要为 `5a2b7a52e0bf09b7ad5083eef95a3ef7e463eb5d3aaa9060655bcaebd508fcbe`；加载冒烟为 `c352bf3306a8d9eed5b94f8756946399f287eb574978e32145c1995407dcb343`
+- 范围检查：工程师停止在 D4-R1，未执行 D5-R1 或 A0；未修改原图、taxonomy 和 D0-D3 产物。旧 D2-R0、D3-R0/R1、D4-R0、D5 工作区文件不属于本次通过范围
+- 剩余风险：Dataset 只实际解码固定 9 张，全量解码结论继承 D1；加载时不逐张重算 SHA-256，内容完整性由两轮 D2 重算和 D4 checksum 保证。D4 约 504 MiB 复现产物被 Git 忽略，属于可再生产物
+- 验收清单更新：D4-R1 标记为通过，并勾选两轮复现和三个 split Dataset 加载两项；D5 保持退回，A0 仍未开始
+- 建议下一阶段：调用 AI 数据工程师执行 `D5-R1`，以 D2-R2、D3-R2、D4-R1 为正式链路冻结 data-v1，生成最终 release、taxonomy 快照、交接文档和校验清单，完成后停止交验

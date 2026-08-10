@@ -1,8 +1,24 @@
 # AI 数据工程师工作日志
 
-当前状态：D2-R2 已完成自验并待总负责人验收；D3-R2 已通过；D4-R1 等待 D2-R2 验收后重启；D5 仍退回；未执行 A0。
+当前状态：D2-R2、D3-R2 已通过；D4-R1 已完成自验并待总负责人验收；D5 仍退回；未执行 A0。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
+
+## 2026-08-10 D4-R1 两轮独立复现与 Dataset 加载验证（解除阻塞后重启）
+
+- 状态：待验收
+- 指挥者指令：D2-R2 验收通过后重新执行 D4-R1；使用 D2-R2 与 D3-R2 完成两轮独立重建，并验证 train/val/test 均可由项目 Dataset 正确加载。D3-R2 无需重建版本，其 D2-R1 配置名称仅作为字节兼容引用。
+- 前置版本：Git commit `b43e46e67f162a3da5c0fcdffdb0e6f989bd6cac`；D2-R2、D3-R2 已由总负责人验收通过；D2-R2 与 D2-R1 的 16 个兼容核心产物字节一致；taxonomy SHA-256 为 `5cfa1a261b1a9fbb80adf24f299bca0883a42dd523914a70234f31dbf748bd31`。
+- 允许范围：D4-R1 复现脚本、Dataset 加载器及包导出、对应测试、`artifacts/data/v1/d4-r1/` 和本日志。D0-D3 代码/产物、原图、taxonomy、其他角色日志和验收清单保持只读；不得进入 D5/A0。
+- 实际修改：新增 `scripts/verify_data_d4_r1.py` 和 `project/tests/test_data_d4_r1.py`；正式纳入 `project/src/dlcpd25_classifier/data/dataset.py` 及 `data/__init__.py` 的 Dataset 导出；更新本日志。旧退回的 `scripts/verify_data_d4.py`、旧测试及其他未提交文件未修改。D4-R1 只调用已受控的 `build_duplicates_d2_r2.py` 与 `build_splits_d3_r2.py`。
+- 生成产物：在 `artifacts/data/v1/d4-r1/` 新增两套独立的 `repro-run-{1,2}/d2-r2/`、`d2-r1-compatible/`、`d3-r2/`，以及顶层 `d4-r1-config.json`、`reproduction-summary.json`、`load-smoke.json`、`d4-r1-summary.json` 和 `checksums.sha256`，共 67 个文件、约 504 MiB。配置 SHA-256 为 `46c47130e0ce2a41245b832a64de1153eed45f6b3fd86d3acc92705904f0103d`，复现摘要为 `5a2b7a52e0bf09b7ad5083eef95a3ef7e463eb5d3aaa9060655bcaebd508fcbe`，加载冒烟为 `c352bf3306a8d9eed5b94f8756946399f287eb574978e32145c1995407dcb343`，D4 摘要为 `07643433d2eceafbb839a2ee2fe22333d09087c9fb09455c5a5b4f1d35f409da`，checksum 文件自身为 `4ded1d6bb6f1caba02465887eb08a43bd9b4601aeddd17fe74868f42e6212cbc`。
+- 执行命令：`py_compile` 退出 0；D4-R1 轻量预检退出 0，`5 passed, 1 deselected`；`/home/zkf/pytorch-env/bin/python scripts/verify_data_d4_r1.py --workers 6` 退出 0，总耗时 3905.79 秒；其正式输入 D2/D3 verifier 分别退出 0、耗时 184.250/9.444 秒；run 1 的 D2/D3 退出 0、耗时 1529.801/100.421 秒，run 2 为 1816.904/136.836 秒；同脚本 `--verify-only` 退出 0、耗时 70.85 秒；`sha256sum -c artifacts/data/v1/d4-r1/checksums.sha256` 退出 0，101 项全部 OK；独立 `cmp` 对两轮 D2 核心完成 38/38、D3 核心完成 10/10；项目全量测试退出 0，`47 passed in 493.57s`；`git diff --check` 退出 0。
+- 验收证据：每轮均从独立空目录调用 D2-R2，从 D1 与原图重新计算 221,396 个 SHA-256 和 221,377 个 dHash/pHash；D2 内置 verifier 与 R1 字节兼容门均通过。每轮随后为该轮 R2 manifest 创建单独的 D2-R1 兼容视图，视图 manifest 与该轮 R2 manifest 为同一 hardlink、由 D3 只读使用且 SHA-256 相同，再由未修改的 D3-R2 生成 split；这落实了“D3 配置中的 D2-R1 仅为字节兼容引用”。正式 D2-R2、run 1、run 2 的 19 个 D2 核心文件三方 SHA 全部一致；正式 D3-R2、run 1、run 2 的 5 个数据核心文件三方 SHA 全部一致。
+- 关键统计：复现运行 2/2；D2 核心匹配 19/19，D3 核心匹配 5/5。Dataset 初始化对 train 177,021、val 22,178、test 22,178 共 221,377 条记录检查相对路径、CSV schema、class_id 0-202、taxonomy 目录映射和文件存在性；各 split 解码首/中/末 3 张，共 9 张，均得到有限 `torch.float32 [3,224,224]` 张量，target 与记录一致，抽样覆盖 class 0、131、202。
+- 偏差、风险和阻塞：无 D4-R1 阻塞。D3-R2 源码和生成配置仍使用 `D2-R1` 字段/参数名，这是总负责人明确批准的兼容契约，不表示 D4 使用旧 D2 实现；D4 配置和报告明确正式实现为 D2-R2。兼容视图使用同文件系统 hardlink 以避免每轮额外复制约 184 MiB manifest，顶层 checksum 同时覆盖视图和源文件。Dataset 初始化检查全量路径和标签，但只实际解码固定 9 张，图片全量解码结论仍继承 D1；加载时不逐张重算 SHA-256，数据内容完整性由两轮 D2 重算和 D4 checksum 保证。
+- Git 状态：`main` 相对 `origin/main` ahead 13；本阶段新增 D4-R1 脚本、专用测试和 Dataset 文件，修改数据包 `__init__.py` 及本日志；D4-R1 artifacts 被 Git 忽略。进入本阶段前已有的旧 D2-R0、D3-R0/R1、D4-R0、D5 代码/测试保持原样。未提交或推送。
+- 下一步建议：由总负责人独立复验 D4-R1 的 101 项 checksum、19/5 核心三方匹配、两个兼容视图来源及三个 split Dataset 加载；验收通过前不执行 D5-R1。
+- 边界声明：未执行 D5-R1 或 A0
 
 ## 2026-08-10 D2-R2 独立重复组实现返工
 
