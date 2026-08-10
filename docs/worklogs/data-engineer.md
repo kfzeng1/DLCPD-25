@@ -1,8 +1,40 @@
 # AI 数据工程师工作日志
 
-当前状态：D2-R1 已通过；D3-R1 因隐式源码依赖退回；D3-R2 已完成自验并待总负责人验收；D4-D5 仍退回；未执行 A0。
+当前状态：D2-R2 已完成自验并待总负责人验收；D3-R2 已通过；D4-R1 等待 D2-R2 验收后重启；D5 仍退回；未执行 A0。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
+
+## 2026-08-10 D2-R2 独立重复组实现返工
+
+- 状态：待验收
+- 指挥者指令：消除 D2-R1 对未跟踪 D2-R0 脚本的依赖，保持 D2-R1 核心产物字节一致，完成后停止交验。
+- 前置版本：Git commit `0524a1f088513318dc1b82e62f89fed6f6d7448d`；D0-D1 已通过；D2-R1 分组内容通过但因隐式源码依赖被退回；taxonomy SHA-256 为 `5cfa1a261b1a9fbb80adf24f299bca0883a42dd523914a70234f31dbf748bd31`。
+- 允许范围：新增 D2-R2 独立脚本、对应测试、`artifacts/data/v1/d2-r2/` 和本日志。D2-R0/R1、D3-R2、原图、taxonomy、其他角色日志和验收清单保持只读。
+- 实际修改：新增 `scripts/build_duplicates_d2_r2.py` 和 `project/tests/test_duplicates_d2_r2.py`；更新本日志。R2 为不导入任何仓库模块的单文件运行时实现，直接从 D1 manifest 和原图重算 SHA-256、dHash、pHash，并在同一文件内重建仅用于追溯的旧 D2-R0 group ID；未修改 D2-R1 代码或产物。
+- 生成产物：在 `artifacts/data/v1/d2-r2/` 新增 manifest、重复组、回归报告、抽查索引与 12 张抽查页，以及 `d2-r2-config.json`、`d2-r2-summary.json`、`d2-r2-compatibility.json` 和 `checksums.sha256`。manifest SHA-256 为 `177e785b0cffd53ad0de7eb5aa3f2a2899127ca77558a774297929c2e2b80828`，重复组为 `58c50dcbe3bf40a21c58cd193c7bff08e2eefee7777ecdce95dc0ff7db910c0a`，配置为 `b9c576962f3a4159b61b7f19d5f8e049af88c5f5ee709a46442cb3b0ff706ef3`，摘要为 `480626519207b9803f200d0ce7aceb34a97bb380fff6b97aacd1173856e6b0af`，兼容报告为 `6f86c9617ce26e74e885574486475a68423662298ad1610cdfd31967cb491a2e`，checksum 文件自身为 `a2399e808e533f5899d82e6a168f908e9bdae83afaefaa84196f91881ebe5f5b`。
+- 执行命令：`py_compile` 退出 0；首次专用预检因合成测试第三个 dHash 实际只距前项 1-2 位而错误预期为不同组，结果 `1 failed, 8 passed, 1 deselected`，确认实现符合旧传递闭包规则后将夹具改为距离大于 5 的 `0xFFFF`，重跑为 `9 passed, 1 deselected`、退出 0；`/home/zkf/pytorch-env/bin/python scripts/build_duplicates_d2_r2.py --workers 6` 退出 0，耗时 1538.83 秒；同脚本 `--verify-only` 退出 0，耗时 187.26 秒；`sha256sum -c artifacts/data/v1/d2-r2/checksums.sha256` 退出 0，25 项全部 OK；逐项 `cmp` D2-R1/R2 的 16 个核心文件，全部退出 0；项目全量测试退出 0，`41 passed in 321.56s`；`git diff --check` 退出 0。
+- 验收证据：隔离测试只复制 D2-R2 脚本到临时 `scripts/`，明确不存在 `build_duplicates_d2.py`，仍可导入并执行 legacy group 和 R2 group 算法。R2 checksum 同时覆盖唯一运行时脚本和专用测试，其 SHA-256 分别为 `fb47db4b13ecfb51f46d9e0e2ecc972e0f84d42f597108fc3a45b6fc721886cd`、`5578f472663e368e09df8038c7d4a41564a56d10f7f7caed39aaf741e89391b5`，且不包含旧 D2-R0 脚本或 D2-R0 产物。脚本内固化 16 个 R1 核心文件预期 SHA-256，构建与 verifier 均强制逐项一致；manifest、重复组、抽查 JSON、回归 JSON 和 12 张抽查页全部逐字节相同。R1/R2 摘要 16 个核心统计字段差异为 0。
+- 关键统计：总文件 221,396；SHA-256 221,396；dHash/pHash 各 221,377；坏图无感知哈希 19。最终 group 156,871，其中单例 108,971、非单例 47,900，非单例文件 112,425；完全重复 SHA 组 26,705，近重复组 32,731，跨类别组 10,714，最大组 21；最大 dHash/pHash 组内直径 5/8；被退回旧组回归 2/2 通过；R1 字节兼容核心产物 16/16。
+- 偏差、风险和阻塞：无 D2-R2 阻塞。预检的一次失败属于测试夹具错误，已在正式生成前修正并全量回归。保守 complete-link 规则仍可能漏召回变化较大的真实近重复，10,714 个跨类别组仍提示潜在标签冲突，本阶段未改标签。D3-R2 当前配置仍以 D2-R1 路径和阶段名作为来源；虽然 R2 核心 manifest 字节一致，后续由总负责人决定是否仅更新 D4-R1 输入，或要求 D3 再生成新的来源元数据，本阶段不越权修改。
+- Git 状态：`main` 相对 `origin/main` ahead 12；本阶段新增 D2-R2 脚本和测试并修改本日志，D2-R2 artifacts 被 Git 忽略。进入本阶段前已有的旧 D2-R0、D3-R0/R1、D4-D5 与 Dataset 未提交文件保持原样。未提交或推送。
+- 下一步建议：由总负责人从干净受控源码独立复验 D2-R2 的导入、构建入口、25 项 checksum 和 16 项字节兼容门；通过前不重启 D4-R1。
+- 边界声明：未执行 D3 返工、D4-R1、D5 或 A0
+
+## 2026-08-10 D4-R1 两轮复现与 Dataset 加载验证
+
+- 状态：阻塞
+- 指挥者指令：基于 D2-R1 和 D3-R2 完成两轮独立复现，并验证 train/val/test 均可由项目 Dataset 正确加载；完成后停止交验。
+- 前置版本：Git commit `7f4205cfe94442b44734f195790c5f59c6d34349`；总负责人已验收通过 D2-R1 和 D3-R2。
+- 允许范围：D4-R1 复现脚本、Dataset 加载器、对应测试、`artifacts/data/v1/d4-r1/` 和本日志。不得返工未授权阶段或进入 D5/A0。
+- 实际修改：仅更新本日志。未新增或修改 D4-R1 代码和产物，未修改原图、taxonomy、上游产物、其他角色日志或验收清单。
+- 生成产物：无；在任何 D4-R1 正式产物生成前识别到上游复现入口阻断并停止。
+- 执行命令：检查 Git 基线、受控文件和 D2-R1/D3-R2 入口，均为只读；从 commit `c4b56211319a42cf65aba11cc1163f82c9f13841` 使用 `git archive` 创建系统临时目录干净快照，确认其中不存在 `scripts/build_duplicates_d2.py`，再通过 Python `importlib` 导入快照内 `scripts/build_duplicates_d2_r1.py`，退出码 1，报 `FileNotFoundError: .../scripts/build_duplicates_d2.py`。
+- 验收证据：`scripts/build_duplicates_d2_r1.py` 第 29-35 行在模块加载时运行时导入 `scripts/build_duplicates_d2.py`；后者不在 `git ls-files`，也不在已通过 D2-R1 的 commit `c4b5621` 中。当前工作树存在该未跟踪旧脚本，所以就地运行可能成功；干净 Git 快照无法导入，更无法进行两轮独立 D2-R1 重建。该问题与 D3-R1 曾被退回的隐式源码依赖性质相同。
+- 关键统计：两轮正式复现 0/2，Dataset 正式加载验证 0/3；这是前置复现入口失败后的主动停止，不是数据或加载测试失败。D2-R1、D3-R2 既有 checksum 未改。
+- 偏差、风险和阻塞：阻断。若绕过 D2-R1 重建、只把既有 D2-R1 manifest 当输入重跑 D3-R2，两轮结果只能证明 split 算法可复现，不能满足 D4 原定的 D2/D3 核心结果两轮独立重建。建议先执行 D2-R2：将 D2-R1 所需 SHA/dHash/EXIF 等辅助实现收进独立受控脚本或正式共享模块，并将全部运行时源码纳入 checksum；或者由总负责人明确缩减 D4-R1 范围为仅重建 D3-R2。未经决策不采用任一方案。
+- Git 状态：`main` 相对 `origin/main` ahead 11；进入 D4-R1 前已有的旧 D2-R0、D3-R0/R1、D4-D5 未提交文件保持原样；本阶段只修改数据工程师日志。未提交或推送。
+- 下一步建议：总负责人决定执行 D2-R2 依赖收敛返工，或明确批准缩减 D4-R1 的复现范围；解除阻断后重新执行 D4-R1。
+- 边界声明：未执行 D4-R1 正式生成、D5 或 A0
 
 ## 2026-08-10 D3-R2 独立可复现 split 返工
 

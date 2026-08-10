@@ -104,3 +104,18 @@
 - D2-R2 验收门：保持 221,396/221,377/19 数量，SHA-256/dHash 与已校验输入一致，组内 dHash/pHash 最大直径不超过 5/8，同 SHA 不拆组，两个旧错误组回归通过；核心 manifest 和 duplicate groups 应与 D2-R1 字节一致，否则必须解释并触发 D3 重建
 - 后续顺序：D2-R2 验收通过后解除 D4 阻塞，重新执行完整 D4-R1；不得先执行 D5 或 A0
 - 验收清单更新：D2 改为退回并取消运行时源码追溯项，D3 保留通过且注明条件，D4-R1 改为阻塞，D5 保持退回
+
+## 2026-08-10 D2-R2 验收
+
+- 结论：通过；D2 恢复通过，D4-R1 复现阻塞解除
+- 验收输入：commit `0524a1f088513318dc1b82e62f89fed6f6d7448d`、D2-R2 独立脚本与测试、数据工程师日志及 `artifacts/data/v1/d2-r2/`
+- 依赖闭环：R2 为单文件运行时实现，不导入仓库内模块；SHA-256、dHash、pHash、EXIF、旧 lineage、候选召回、complete-link、审计和 verifier 均收敛到受控脚本；配置与 checksum 覆盖唯一运行时源码和专用测试，不包含旧 D2-R0 脚本或产物
+- 独立自动复验：`build_duplicates_d2_r2.py --verify-only` 退出 0；项目测试 `41 passed in 338.39s`；D2-R2 校验清单 25 项全部为 `OK`；独立隔离导入测试通过；`git diff --check` 通过
+- 数据质量：共 221,396 个 SHA-256，221,377 个 dHash/pHash，19 张坏图不含感知哈希；156,871 个 group，非单例 47,900，最大组 21；组内最大 dHash/pHash 直径 5/8；同 SHA 不拆组；两个旧错误组回归 2/2 通过
+- 兼容性复验：独立逐项 `cmp` R1/R2 的 manifest、duplicate groups、回归报告、审计索引和 12 张审计页，16/16 字节一致；manifest SHA-256 为 `177e785b0cffd53ad0de7eb5aa3f2a2899127ca77558a774297929c2e2b80828`，duplicate groups 为 `58c50dcbe3bf40a21c58cd193c7bff08e2eefee7777ecdce95dc0ff7db910c0a`
+- 范围检查：工程师只执行 D2-R2，未执行 D3 返工、D4-R1、D5 或 A0；未修改原图、taxonomy 和既有上游产物。旧 D2-R0、D3-R0/R1、D4-D5 与 Dataset 工作区文件不属于本次通过范围
+- 测试偏差判断：正式生成前一次合成测试失败源于测试夹具的 dHash 距离预期错误；修正夹具后专用测试和全量测试均通过，未影响正式产物，不构成阻断
+- 剩余风险：complete-link 仍可能漏召回变化较大的真实近重复；10,714 个跨类别组仍可能包含标签冲突。本阶段未改标签，风险继续进入数据交接说明
+- D3 来源决策：D2-R2 与 D2-R1 的 manifest 和 duplicate groups 字节一致，因此 D3-R2 的既有 split 与算法验收继续有效，不要求 D3-R3。D4-R1 必须使用 D2-R2 作为正式 D2 实现，并在报告中注明 D3-R2 配置中的 D2-R1 是字节兼容引用；D5 最终 release 必须以 D2-R2 为正式来源
+- 验收清单更新：D2-R2 标记为通过并恢复 D2 源码追溯项；D3 保持通过；D4 从阻塞改为未开始；D5 保持退回，A0 仍等待 D5
+- 建议下一阶段：重新调用 AI 数据工程师执行完整 `D4-R1`，使用 D2-R2 和 D3-R2 完成两轮独立重建及三个 split 的 Dataset 加载验证，完成后停止交验
