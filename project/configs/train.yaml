@@ -1,11 +1,11 @@
 seed: 20260809
 data_root: ../data/raw/dlcpd25-203
 taxonomy: ../metadata/class-taxonomy.json
-split_dir: ../artifacts/splits/v1
+split_dir: ../artifacts/data/v1/d3-r2
 output_dir: ../artifacts/training
 
 model:
-  name: convnext_tiny
+  name: resnet50
   pretrained: true
   num_classes: 203
   image_size: 224

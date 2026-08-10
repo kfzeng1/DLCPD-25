@@ -12,8 +12,13 @@ project/
   pyproject.toml           # Python 依赖和入口
 ```
 
-主线模型为 ImageNet 预训练 ConvNeXt-Tiny，ResNet-50 是基线。当前电脑的 RTX 4070 Laptop 8 GiB 显存适合微调，不适合在本项目周期内从零完成论文级 MAE、SimCLR v2 或 MoCo v3 预训练。
+默认模型为 ImageNet 预训练 ResNet-50。ConvNeXt-Tiny 只在时间和资源允许时作为对照；当前电脑的 RTX 4070 Laptop 8 GiB 显存不适合在项目周期内从零完成论文级 MAE、SimCLR v2 或 MoCo v3 预训练。
 
 本机已有 `/home/zkf/pytorch-env`：PyTorch 2.11.0+cu128、torchvision 0.26.0+cu128，CUDA 可用。工程直接复用这个环境。数据和算法阶段使用 `pip install -e '.[dev]'`；到 P2 应用阶段再使用 `pip install -e '.[app]'` 安装 Gradio，避免提前引入不需要的应用依赖。
 
-开发流程、硬件限制和三位工程师职责见 `../docs/`。用户按 `workflow.md` 逐阶段派工，总负责人按 `acceptance-checklist.md` 复验后才能推进。
+开发流程、硬件限制和三位工程师职责见 `../docs/`。数据 D0-D5 已冻结；后续只执行 A1-A3、P1-P2 和 F0。A1 的快速数据检查入口为：
+
+```bash
+PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
+  -m dlcpd25_classifier.training.preflight
+```

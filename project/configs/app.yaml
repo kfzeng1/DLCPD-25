@@ -1,4 +1,4 @@
-model_path: ../artifacts/training/convnext_tiny/best.pt
+model_bundle: ../artifacts/releases/<model-version>
 taxonomy_path: ../metadata/class-taxonomy.json
 device: auto
 image_size: 224
