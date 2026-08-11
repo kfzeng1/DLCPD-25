@@ -202,3 +202,15 @@
 - 修正与清理：对照门禁改为除 loss strategy/权重公式外全部 actual 配置一致；删除错误时长的旧 comparison 和临时 systemd 日志，只保留 R2 正式对照。
 - 限制：两组开发基线 commit 不同，但差异提交仅为 P1，训练配置与实现一致；正式耗时采用 history 汇总的 26118.87/26604.22 秒。单次种子下 +0.7316 pp 不代表统计显著。
 - 下一阶段：A3 冻结 weighted CE 的 best checkpoint 后执行一次 test，生成评估报告和模型包；不得再基于 test 调参。
+
+## 2026-08-11 A3 最终评估与模型包验收
+
+- 结论：通过；算法工程 A1-A3 全部完成，允许应用工程进入 P2；验收过程未再次执行正式 test 推理。
+- 冻结与隔离：输入 commit `1d34280ea30fe54a15031240e502274e07a555bb`，按 val Macro-F1 选择 weighted CE epoch 21；checkpoint、224 输入预处理和 `0.55` 阈值在读取 test 前冻结，test 只消费一次且未参与调参。
+- 指标：test 共 22,178 张，Top-1 `88.5517%`、Top-5 `95.7796%`、Macro-F1 `71.2177%`、Balanced Accuracy `71.2654%`；独立从 `203 x 203` 混淆矩阵重算 Top-1、Macro-F1 和 Balanced Accuracy，与发布指标一致。
+- 模型包：`artifacts/releases/dlcpd25-resnet50-weighted-v1/` 的 13 项 checksum 全部通过；包内 `best.pt` 与 A2 源 checkpoint 逐字节一致，SHA-256 为 `68fc44f1b4acfe321e5590b5f27dead65b735a777798c141c6528c510e11eabd`；训练评估目录 9 项 checksum 全部通过。
+- 推理复验：bundle loader 通过；三张固定 val 样例的源模型/包内模型 logits 逐位一致且重复推理稳定；taxonomy 或权重被篡改时由测试确认拒绝加载。
+- 验收修正：原实现的一次性门禁只绑定可改名的 evaluation/model 目录；新增受 Git 管理的 `metadata/a3-test-evaluation.json` 仓库级消费凭据和原子占用逻辑，换名也无法二次读取同一 test，并新增回归测试。正式指标和冻结模型包均未改写。
+- 测试：A3 定向测试 `4 passed`；项目全量测试 `66 passed, 4 warnings in 274.61s`；ruff、`git diff --check` 均通过。4 条 warning 均为既有 Gradio 6.0 弃用提示。
+- 风险：阈值 `0.55` 下低置信度率为 `72.7342%`，P2 必须明确显示“不确定”，不得用 test 重新选择阈值；长尾和相似类别混淆仍存在，本系统是图像分类而非目标检测。
+- 下一阶段：应用工程师执行 P2，校验并接入 `dlcpd25-resnet50-weighted-v1`，完成 CPU/CUDA、固定样例一致性、低置信度提示、异常输入和发布说明后停止交验。

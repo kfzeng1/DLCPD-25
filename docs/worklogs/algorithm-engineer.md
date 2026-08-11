@@ -1,6 +1,6 @@
 # AI 算法工程师工作日志
 
-当前状态：A2 已通过，等待执行 A3。
+当前状态：A3 已通过；算法工程 A1-A3 全部完成，等待应用工程 P2。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
 
@@ -58,4 +58,14 @@
 测试结果：A2 定向测试 `7 passed in 7.05s`，CE 与 weighted CE 各 11 项 checksum 全部 OK，正式 comparison checksum 通过且清单 SHA-256 为 `e9cd45eaf5dad9fb514441404019b5d9e552566b97a62041dc3bf3db967c31d2`，`git diff --check` 通过，best checkpoint 均严格重载通过。
 关键指标：普通 CE 最佳 epoch 23，Val Top-1/Top-5/Macro-F1/Balanced Accuracy 为 `88.2135%/96.5732%/71.8358%/71.0727%`；weighted CE 最佳 epoch 21，为 `88.3398%/95.7886%/72.5674%/72.4703%`；按 Val Macro-F1 选择 weighted CE，Macro-F1 `+0.7316` pp、Balanced Accuracy `+1.3976` pp、Top-1 `+0.1263` pp、Top-5 `-0.7846` pp。
 遗留问题：A2 等待总负责人验收；初版 comparison 由旧 duration 汇总生成，正式结果以 R2 为准，R2 从完整 history 统计 CE/weighted 训练加验证耗时 `26118.87/26604.22s`；原始 CE `metrics.json` 的 duration 仅覆盖断点恢复后进程但逐轮时间完整；未提交或推送，未执行 A3。
+是否进入下一阶段：否
+
+## 2026-08-11 A3 最终测试与模型包
+
+阶段：A3，待验收；输入 commit `1d34280ea30fe54a15031240e502274e07a555bb`、A2 已验收 weighted CE epoch 21、data-v1 D5-R1；模型/预处理/阈值 `0.55` 先冻结，固定 test 只评估一次且未调参。
+修改文件：新增 `project/src/dlcpd25_classifier/training/a3.py`、`project/tests/test_training_a3.py` 并更新本日志；生成 `artifacts/training/a3-test-dlcpd25-resnet50-weighted-v1/` 和 `artifacts/releases/dlcpd25-resnet50-weighted-v1/`，未修改原图、taxonomy、split、应用代码或其他日志。
+运行命令：运行 A3 合成定向 pytest、`a3 --verify-inputs-only`、唯一一次正式 A3 CLI、训练/发布 checksum、bundle loader、源权重与包内权重 `cmp`、固定 val 样例重复推理、项目全量 pytest、只读错误摘要和 `git diff --check`。
+测试结果：A3 定向测试 `3 passed in 3.89s`；项目全量测试 `65 passed, 4 warnings in 216.85s`，warning 均为既有 Gradio 6.0 弃用提示；训练评估与发布 checksum 全部 OK，三张固定 val 样例重复 logits 及源/包 logits 逐位一致，taxonomy/权重 hash 篡改拒绝测试通过。
+关键指标：test 22,178 张，loss `1.220233`、Top-1 `88.5517%`、Top-5 `95.7796%`、Macro-F1 `71.2177%`、Balanced Accuracy `71.2654%`，109.96 秒、201.68 img/s、峰值显存 `1,520,168,960` bytes；发布 checksum 清单 SHA-256 `b5b970ebe0f4cae436115fd7449e43f4f49ee6f361724e81b7bb7e4c4128af6a`。
+遗留问题：阈值 `0.55` 为 test 前沿用 P1 已验收配置，test 低置信度率 `72.7342%`，P2 必须如实显示不确定提示且不得用 test 回调；class 162 仅 1 张且 F1 为 0，长尾与相似类混淆仍是风险；等待总负责人验收，未提交或推送，未执行 P2。
 是否进入下一阶段：否

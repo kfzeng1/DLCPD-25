@@ -9,10 +9,10 @@
 | D0-D5 | 通过 | 2026-08-10 | `data-v1` 已冻结；203 类，221,377 张可用图片，固定 split 无路径或重复组泄漏 |
 | A1 | 通过 | 2026-08-10 | preflight、Dataset、预处理、ResNet-50 冒烟、checkpoint 和小样本过拟合均通过 |
 | A2 | 通过 | 2026-08-11 | ResNet-50 普通 CE 与 weighted CE 完成；按 val Macro-F1 选择 weighted CE |
-| A3 | 未开始 | - | 等待 A2；最终测试、评估报告和模型包 |
+| A3 | 通过 | 2026-08-11 | weighted CE epoch 21 已冻结；test 仅评估一次，模型包及一次性消费凭据完整 |
 | P1 | 通过 | 2026-08-10 | Predictor、模型包契约、异常图片处理、假模型页面及响应式浏览器验收通过 |
-| P2 | 未开始 | - | 等待 P1 与 A3；真实模型集成和发布 |
-| F0 | 未开始 | - | 等待 A3 与 P2 |
+| P2 | 未开始 | - | P1、A3 已通过；等待真实模型集成和发布 |
+| F0 | 未开始 | - | 等待 P2 |
 
 独立 A0 已取消，其有效检查改为 A1 的无状态 preflight。历史退回记录保留在工作日志，不再作为活动门禁。
 
@@ -44,11 +44,11 @@
 
 ## A3 评估与模型包
 
-- [ ] 先冻结模型、预处理和阈值，再执行一次 test。
-- [ ] 输出 Top-1、Top-5、Macro-F1、Balanced Accuracy、混淆矩阵和错误案例。
-- [ ] 模型包包含权重、manifest、配置、预处理、taxonomy、指标、模型卡和 checksums。
-- [ ] 固定样例推理稳定，taxonomy 或权重 hash 不匹配时拒绝加载。
-- [ ] 全量测试通过。
+- [x] 先冻结模型、预处理和阈值，再执行一次 test。
+- [x] 输出 Top-1、Top-5、Macro-F1、Balanced Accuracy、混淆矩阵和错误案例。
+- [x] 模型包包含权重、manifest、配置、预处理、taxonomy、指标、模型卡和 checksums。
+- [x] 固定样例推理稳定，taxonomy 或权重 hash 不匹配时拒绝加载。
+- [x] 全量测试通过。
 
 ## P1 应用骨架
 
