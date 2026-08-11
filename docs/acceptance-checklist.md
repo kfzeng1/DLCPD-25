@@ -8,7 +8,7 @@
 |---|---|---|---|
 | D0-D5 | 通过 | 2026-08-10 | `data-v1` 已冻结；203 类，221,377 张可用图片，固定 split 无路径或重复组泄漏 |
 | A1 | 通过 | 2026-08-10 | preflight、Dataset、预处理、ResNet-50 冒烟、checkpoint 和小样本过拟合均通过 |
-| A2 | 未开始 | - | 等待 A1；完整训练、验证和不平衡策略对照 |
+| A2 | 通过 | 2026-08-11 | ResNet-50 普通 CE 与 weighted CE 完成；按 val Macro-F1 选择 weighted CE |
 | A3 | 未开始 | - | 等待 A2；最终测试、评估报告和模型包 |
 | P1 | 通过 | 2026-08-10 | Predictor、模型包契约、异常图片处理、假模型页面及响应式浏览器验收通过 |
 | P2 | 未开始 | - | 等待 P1 与 A3；真实模型集成和发布 |
@@ -36,11 +36,11 @@
 
 ## A2 完整训练
 
-- [ ] 使用 ImageNet 预训练、固定 seed 和固定 split。
-- [ ] 至少完成 ResNet-50 普通 CE 与一种不平衡策略的单变量对照。
-- [ ] 只用 val Macro-F1 选型，记录 Top-1、Top-5、Balanced Accuracy、时长和峰值显存。
-- [ ] 每个 run 保存解析配置、日志和可重载 checkpoint。
-- [ ] 未查看 test 指标进行调参；ConvNeXt-Tiny 仅在资源允许时对照。
+- [x] 使用 ImageNet 预训练、固定 seed 和固定 split。
+- [x] 至少完成 ResNet-50 普通 CE 与一种不平衡策略的单变量对照。
+- [x] 只用 val Macro-F1 选型，记录 Top-1、Top-5、Balanced Accuracy、时长和峰值显存。
+- [x] 每个 run 保存解析配置、日志和可重载 checkpoint。
+- [x] 未查看 test 指标进行调参；ConvNeXt-Tiny 仅在资源允许时对照。
 
 ## A3 评估与模型包
 

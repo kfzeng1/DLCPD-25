@@ -191,3 +191,14 @@
 - 修正：Gradio 根容器改为响应式宽度；上传组件改为 `filepath`，确保 20 MiB 文件限制在解码前真实执行，并增加组件契约测试。
 - 限制：当前是固定假模型，只验证应用链路；Gradio 5.50 的 6.0 弃用警告不影响当前 `<6` 依赖范围。
 - 下一阶段：等待 A2、A3；A3 通过后执行 P2 真实模型集成。
+
+## 2026-08-11 A2 完整训练验收
+
+- 结论：通过；A2 完成，允许进入 A3，未执行或读取 test 指标。
+- 范围：ResNet-50 普通 CE 与 clipped inverse-frequency weighted CE 两组完整训练、验证指标、断点恢复、对照脚本和测试；数据、taxonomy 与 split 未修改。
+- 复验：A2/A1 定向测试 `12 passed`，ruff、`git diff --check`、两组各 11 项 checksum 和 comparison checksum 通过；两组各 25 epoch、history 与最佳 checkpoint 指标一致。
+- CE：最佳 epoch 23，val Top-1 88.2135%、Top-5 96.5732%、Macro-F1 71.8358%、Balanced Accuracy 71.0727%。
+- weighted CE：最佳 epoch 21，val Top-1 88.3398%、Top-5 95.7886%、Macro-F1 72.5674%、Balanced Accuracy 72.4703%；按既定 Macro-F1 选择为 A3 候选。
+- 修正与清理：对照门禁改为除 loss strategy/权重公式外全部 actual 配置一致；删除错误时长的旧 comparison 和临时 systemd 日志，只保留 R2 正式对照。
+- 限制：两组开发基线 commit 不同，但差异提交仅为 P1，训练配置与实现一致；正式耗时采用 history 汇总的 26118.87/26604.22 秒。单次种子下 +0.7316 pp 不代表统计显著。
+- 下一阶段：A3 冻结 weighted CE 的 best checkpoint 后执行一次 test，生成评估报告和模型包；不得再基于 test 调参。

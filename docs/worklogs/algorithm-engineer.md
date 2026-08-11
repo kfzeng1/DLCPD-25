@@ -1,6 +1,6 @@
 # AI 算法工程师工作日志
 
-当前状态：A1 已通过，等待执行 A2。
+当前状态：A2 已通过，等待执行 A3。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
 
@@ -34,3 +34,28 @@
 - 关键指标：ImageNet V2 预训练 ResNet-50，固定 train 子集 32 张（8 类各 4 张），224 输入、batch 16、AMP；初始/final loss `5.2343/0.1697`，初始/final accuracy `6.25%/96.875%`，3 epoch、14.33 秒，峰值显存 `1,098,122,240` bytes；CUDA `[16,203]`、CPU `[2,203]` logits 有限。
 - 遗留问题：无 A1 阻塞；小样本使用确定性 eval transform 诊断链路，不代表泛化指标；未读取 val/test 指标，A2 完整训练尚未执行；改动与忽略的 artifacts 尚未提交或推送。
 - 是否进入下一阶段：否。
+
+## 2026-08-10 A2 完整训练
+
+- 阶段：A2，状态进行中；输入 commit `cc7e776`、data-v1 D5-R1 和 A1 已验收训练链路。
+- 边界：只训练和验证 ResNet-50 的普通 CE 与 class-weighted CE，不读取 test 指标，不执行 A3。
+
+2026-08-11 A2 运行记录
+
+阶段：A2，进行中；普通 CE 已完成，class-weighted CE 已启动，未读取 test 指标。
+修改文件：本次仅追加本日志；生成 `artifacts/training/a2-resnet50-weighted-ce-cc7e776/` 及独立训练面板运行状态，未修改数据、taxonomy 或 split。
+运行命令：CE 使用固定 split/seed、ResNet-50 ImageNet V2、224、AMP、batch 128、workers 6、AdamW、LR `3e-4`、warmup 2、cosine、25 轮上限；weighted CE 使用完全相同参数并改用 clipped inverse-frequency class weights；面板由 `dlcpd25-a2-dashboard.service` 托管。
+测试结果：CE `metrics.json` 状态为 `completed_pending_project_lead_acceptance`，25 轮完成、最佳 checkpoint 重载通过；CE 产物 `sha256sum -c checksums.sha256` 全部 OK；A2 定向测试 `6 passed`，`git diff --check` 通过。
+关键指标：CE 最佳 epoch 23，Val Top-1 `88.2135%`、Top-5 `96.5732%`、Macro-F1 `71.8358%`、Balanced Accuracy `71.0727%`，峰值显存 `6,213,218,816` bytes，耗时 `23961.31s`；weighted CE 尚无完整指标。
+遗留问题：等待 weighted CE 完成后执行仅基于 val Macro-F1 的两组对照；A2 comparison、项目负责人验收和 A3 尚未执行；训练服务 unit `dlcpd25-a2-weighted.service` 当前进行中。
+是否进入下一阶段：否
+
+## 2026-08-11 A2 完整训练完成
+
+阶段：A2，待验收；输入 commit `71ee1dcc732f039ffcb42cab80928b6d71da8ed1`、data-v1 D5-R1、固定 split D3-R2，普通 CE 与 class-weighted CE 均完成且未读取 test 指标。
+修改文件：新增 `training/{a2,compare,dashboard,metrics,progress}.py` 和 `test_training_a2.py`，更新 `training/{checkpoint,train}.py` 与本日志；产物为 `artifacts/training/a2-resnet50-{ce,weighted-ce}-cc7e776/` 和正式对照 `artifacts/training/a2-resnet50-comparison-r2-cc7e776/`。
+运行命令：两组均使用 ImageNet V2 ResNet-50、224、AMP、batch 128、workers 6、AdamW、LR `3e-4`、warmup 2、cosine、25 轮上限和固定 seed/split，仅切换 `ce`/`weighted_ce`；运行两组 checksum、A2 定向 pytest、comparison CLI、正式 comparison checksum 和 `git diff --check`。
+测试结果：A2 定向测试 `7 passed in 7.05s`，CE 与 weighted CE 各 11 项 checksum 全部 OK，正式 comparison checksum 通过且清单 SHA-256 为 `e9cd45eaf5dad9fb514441404019b5d9e552566b97a62041dc3bf3db967c31d2`，`git diff --check` 通过，best checkpoint 均严格重载通过。
+关键指标：普通 CE 最佳 epoch 23，Val Top-1/Top-5/Macro-F1/Balanced Accuracy 为 `88.2135%/96.5732%/71.8358%/71.0727%`；weighted CE 最佳 epoch 21，为 `88.3398%/95.7886%/72.5674%/72.4703%`；按 Val Macro-F1 选择 weighted CE，Macro-F1 `+0.7316` pp、Balanced Accuracy `+1.3976` pp、Top-1 `+0.1263` pp、Top-5 `-0.7846` pp。
+遗留问题：A2 等待总负责人验收；初版 comparison 由旧 duration 汇总生成，正式结果以 R2 为准，R2 从完整 history 统计 CE/weighted 训练加验证耗时 `26118.87/26604.22s`；原始 CE `metrics.json` 的 duration 仅覆盖断点恢复后进程但逐轮时间完整；未提交或推送，未执行 A3。
+是否进入下一阶段：否

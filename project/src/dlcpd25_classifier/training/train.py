@@ -1,4 +1,4 @@
-"""Training entry point; A1 currently exposes only the bounded smoke workflow."""
+"""Training entry point for bounded A1 smoke and A2 full training."""
 
 from __future__ import annotations
 
@@ -6,16 +6,15 @@ import argparse
 import hashlib
 import importlib.metadata
 import json
-import math
-import os
 import platform
 import random
 import subprocess
 import sys
 import time
 from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 import torch
 import yaml
@@ -27,7 +26,10 @@ from dlcpd25_classifier.data import DLCPD25Dataset
 from dlcpd25_classifier.models import build_classification_model
 from dlcpd25_classifier.training.checkpoint import load_checkpoint, save_checkpoint
 from dlcpd25_classifier.training.preflight import run_preflight
-from dlcpd25_classifier.training.transforms import build_eval_transform, preprocessing_spec
+from dlcpd25_classifier.training.transforms import (
+    build_eval_transform,
+    preprocessing_spec,
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -168,7 +170,7 @@ def overfit_subset(
 def load_config(path: Path) -> dict[str, Any]:
     payload = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
-        raise ValueError("training config must be a mapping")
+        raise TypeError("training config must be a mapping")
     return payload
 
 
@@ -375,6 +377,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--config", type=Path, default=Path("configs/train.yaml"))
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--a1-smoke", action="store_true")
+    parser.add_argument("--a2-train", action="store_true")
+    parser.add_argument("--a2-resource-probe", action="store_true")
+    parser.add_argument("--loss-strategy", choices=("ce", "weighted_ce"), default="ce")
+    parser.add_argument("--resume", type=Path)
+    parser.add_argument("--workers", type=int, default=6)
+    parser.add_argument("--probe-batches", type=int, default=100)
     parser.add_argument("--samples", type=int, default=32)
     parser.add_argument("--classes", type=int, default=8)
     parser.add_argument("--batch-size", type=int, default=16)
@@ -385,22 +393,40 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    if not args.a1_smoke:
-        print("full training is reserved for A2; pass --a1-smoke", file=sys.stderr)
+    modes = sum((args.a1_smoke, args.a2_train, args.a2_resource_probe))
+    if modes != 1:
+        print("choose exactly one training mode", file=sys.stderr)
         return 2
     try:
-        metrics = run_a1_smoke(args)
-    except (FileExistsError, RuntimeError, ValueError, OSError, KeyError, subprocess.CalledProcessError) as exc:
-        print(f"A1 smoke failed: {exc}", file=sys.stderr)
+        if args.a1_smoke:
+            metrics = run_a1_smoke(args)
+        else:
+            from dlcpd25_classifier.training.a2 import run_a2_training
+
+            metrics = run_a2_training(args)
+    except (
+        FileExistsError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+        OSError,
+        KeyError,
+        subprocess.CalledProcessError,
+    ) as exc:
+        print(f"training failed: {exc}", file=sys.stderr)
         return 1
-    print(json.dumps({
-        "status": metrics["status"],
-        "run_id": metrics["run_id"],
-        "final_accuracy": metrics["overfit"]["final_accuracy"],
-        "final_loss": metrics["overfit"]["final_loss"],
-        "epochs": metrics["overfit"]["epochs_completed"],
-        "peak_memory_bytes": metrics["cuda_smoke"]["peak_memory_bytes"],
-    }, ensure_ascii=False))
+    if args.a1_smoke:
+        summary = {
+            "status": metrics["status"],
+            "run_id": metrics["run_id"],
+            "final_accuracy": metrics["overfit"]["final_accuracy"],
+            "final_loss": metrics["overfit"]["final_loss"],
+            "epochs": metrics["overfit"]["epochs_completed"],
+            "peak_memory_bytes": metrics["cuda_smoke"]["peak_memory_bytes"],
+        }
+    else:
+        summary = metrics
+    print(json.dumps(summary, ensure_ascii=False))
     return 0
 
 

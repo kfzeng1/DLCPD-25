@@ -11,7 +11,6 @@ import torch
 from torch import nn
 from torch.optim import Optimizer
 
-
 CHECKPOINT_SCHEMA_VERSION = 1
 
 
@@ -25,9 +24,12 @@ def save_checkpoint(
     epoch: int,
     metrics: dict[str, float],
     metadata: dict[str, Any],
+    scheduler: Any | None = None,
+    scaler: Any | None = None,
+    overwrite: bool = False,
 ) -> None:
     target = Path(path)
-    if target.exists():
+    if target.exists() and not overwrite:
         raise FileExistsError(f"refusing to overwrite checkpoint: {target}")
     target.parent.mkdir(parents=True, exist_ok=True)
     payload = {
@@ -37,6 +39,8 @@ def save_checkpoint(
         "epoch": epoch,
         "model_state_dict": model.state_dict(),
         "optimizer_state_dict": optimizer.state_dict() if optimizer is not None else None,
+        "scheduler_state_dict": scheduler.state_dict() if scheduler is not None else None,
+        "scaler_state_dict": scaler.state_dict() if scaler is not None else None,
         "metrics": metrics,
         "metadata": metadata,
     }
@@ -59,6 +63,8 @@ def load_checkpoint(
     path: str | Path,
     model: nn.Module,
     optimizer: Optimizer | None = None,
+    scheduler: Any | None = None,
+    scaler: Any | None = None,
     *,
     expected_architecture: str | None = None,
     expected_num_classes: int | None = None,
@@ -75,4 +81,10 @@ def load_checkpoint(
     optimizer_state = payload.get("optimizer_state_dict")
     if optimizer is not None and optimizer_state is not None:
         optimizer.load_state_dict(optimizer_state)
+    scheduler_state = payload.get("scheduler_state_dict")
+    if scheduler is not None and scheduler_state is not None:
+        scheduler.load_state_dict(scheduler_state)
+    scaler_state = payload.get("scaler_state_dict")
+    if scaler is not None and scaler_state is not None:
+        scaler.load_state_dict(scaler_state)
     return payload
