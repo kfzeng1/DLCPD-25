@@ -6,17 +6,21 @@ import math
 import time
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
+from hashlib import sha256
 from pathlib import Path
 from typing import Protocol
 
 import torch
+import torchvision
 from PIL import Image
-from torch import Tensor
+from torch import Tensor, nn
 
+from dlcpd25_classifier.models import build_classification_model
 from dlcpd25_classifier.taxonomy import Taxonomy
+from dlcpd25_classifier.training.checkpoint import load_checkpoint
 from dlcpd25_classifier.training.transforms import build_eval_transform
 
-from .bundle import load_bundle_manifest
+from .bundle import BundleManifest, load_bundle_manifest
 from .errors import BundleValidationError, PredictionError
 from .images import ImageLimits, ImageSource, load_rgb_image
 
@@ -40,6 +44,23 @@ class FixedLogitsBackend:
         if batch.ndim != 4 or batch.shape[1] != 3:
             raise ValueError("backend input must have shape [N,3,H,W]")
         return self._logits.to(batch.device).unsqueeze(0).expand(batch.shape[0], -1).clone()
+
+
+class TorchModelBackend:
+    """Execute a frozen classifier on one selected torch device."""
+
+    def __init__(self, model: nn.Module, device: torch.device) -> None:
+        self.model = model.eval()
+        self.device = device
+
+    def warmup(self, image_size: int) -> None:
+        with torch.inference_mode():
+            output = self.model(torch.zeros(1, 3, image_size, image_size, device=self.device))
+        if output.shape != (1, 203) or not torch.isfinite(output).all():
+            raise RuntimeError("model warmup returned invalid logits")
+
+    def __call__(self, batch: Tensor) -> Tensor:
+        return self.model(batch.to(self.device, non_blocking=self.device.type == "cuda")).cpu()
 
 
 @dataclass(frozen=True)
@@ -90,8 +111,8 @@ class Predictor:
         top_k: int = 5,
         image_limits: ImageLimits | None = None,
     ) -> None:
-        if device != "cpu":
-            raise ValueError("P1 fake Predictor only supports device='cpu'")
+        if device not in {"cpu", "cuda"}:
+            raise ValueError("device must be cpu or cuda")
         if image_size <= 0:
             raise ValueError("image_size must be positive")
         if not 0.0 <= confidence_threshold <= 1.0:
@@ -120,11 +141,39 @@ class Predictor:
         self._transform = build_eval_transform(image_size)
 
     @classmethod
-    def from_bundle(cls, bundle_path: str | Path, device: str = "auto") -> Predictor:
-        load_bundle_manifest(bundle_path)
-        raise BundleValidationError(
-            "real_backend_unavailable",
-            "模型包校验已通过，但真实模型加载需等待 P2 集成。",
+    def from_bundle(
+        cls,
+        bundle_path: str | Path,
+        device: str = "auto",
+        *,
+        top_k: int = 5,
+        image_limits: ImageLimits | None = None,
+        expected_image_size: int | None = None,
+        expected_confidence_threshold: float | None = None,
+    ) -> Predictor:
+        if device not in {"auto", "cpu", "cuda"}:
+            raise BundleValidationError("device_invalid", "推理设备必须是 auto、cpu 或 cuda。")
+        bundle = Path(bundle_path).resolve()
+        manifest = load_bundle_manifest(bundle)
+        _validate_runtime_contract(
+            manifest,
+            expected_image_size=expected_image_size,
+            expected_confidence_threshold=expected_confidence_threshold,
+        )
+        selected_device, backend = _select_backend(bundle, manifest, device)
+        config_sha256 = sha256((bundle / "resolved-config.yaml").read_bytes()).hexdigest()
+        return cls(
+            taxonomy=Taxonomy(bundle / "taxonomy.json"),
+            backend=backend,
+            model_version=manifest.model_version,
+            data_version=manifest.data_version,
+            config_sha256=config_sha256,
+            git_commit=manifest.git_commit,
+            device=selected_device,
+            image_size=manifest.image_size,
+            confidence_threshold=manifest.confidence_threshold,
+            top_k=top_k,
+            image_limits=image_limits,
         )
 
     def predict(self, image: ImageSource) -> PredictionResult:
@@ -208,3 +257,84 @@ def create_fake_predictor(
         top_k=top_k,
         image_limits=image_limits,
     )
+
+
+def _validate_runtime_contract(
+    manifest: BundleManifest,
+    *,
+    expected_image_size: int | None,
+    expected_confidence_threshold: float | None,
+) -> None:
+    if manifest.architecture != "resnet50":
+        raise BundleValidationError(
+            "architecture_unsupported", f"应用不支持模型架构：{manifest.architecture}。"
+        )
+    if manifest.torch_version != torch.__version__:
+        raise BundleValidationError(
+            "dependency_mismatch",
+            f"PyTorch 版本不匹配：模型包要求 {manifest.torch_version}。",
+        )
+    if manifest.torchvision_version != torchvision.__version__:
+        raise BundleValidationError(
+            "dependency_mismatch",
+            f"torchvision 版本不匹配：模型包要求 {manifest.torchvision_version}。",
+        )
+    if expected_image_size is not None and manifest.image_size != expected_image_size:
+        raise BundleValidationError(
+            "preprocessing_mismatch", "应用配置与冻结模型包的输入尺寸不一致。"
+        )
+    if (
+        expected_confidence_threshold is not None
+        and manifest.confidence_threshold != expected_confidence_threshold
+    ):
+        raise BundleValidationError(
+            "threshold_mismatch", "应用配置与冻结模型包的置信度阈值不一致。"
+        )
+
+
+def _load_torch_backend(
+    bundle: Path, manifest: BundleManifest, device: torch.device
+) -> TorchModelBackend:
+    model, _ = build_classification_model(
+        manifest.architecture,
+        num_classes=manifest.num_classes,
+        pretrained=False,
+    )
+    load_checkpoint(
+        bundle / "best.pt",
+        model,
+        expected_architecture=manifest.architecture,
+        expected_num_classes=manifest.num_classes,
+        map_location="cpu",
+    )
+    model.to(device)
+    backend = TorchModelBackend(model, device)
+    backend.warmup(manifest.image_size)
+    return backend
+
+
+def _select_backend(
+    bundle: Path, manifest: BundleManifest, requested_device: str
+) -> tuple[str, TorchModelBackend]:
+    if requested_device == "cuda" and not torch.cuda.is_available():
+        raise BundleValidationError("device_unavailable", "CUDA 不可用，无法按配置加载模型。")
+    candidates = ["cuda", "cpu"] if requested_device == "auto" and torch.cuda.is_available() else []
+    if not candidates:
+        candidates = ["cpu" if requested_device == "auto" else requested_device]
+    last_error: Exception | None = None
+    for candidate in candidates:
+        try:
+            return candidate, _load_torch_backend(bundle, manifest, torch.device(candidate))
+        except (KeyError, OSError, RuntimeError, TypeError, ValueError) as exc:
+            last_error = exc
+            if candidate != "cuda" or requested_device != "auto":
+                break
+            try:
+                torch.cuda.empty_cache()
+            except RuntimeError as cache_error:
+                last_error = cache_error
+    if requested_device == "cuda":
+        message = "CUDA 模型加载或预热失败，请检查显存和运行环境。"
+    else:
+        message = "冻结模型加载失败，请检查模型包和运行环境。"
+    raise BundleValidationError("model_load_failed", message) from last_error

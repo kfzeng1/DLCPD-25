@@ -37,8 +37,27 @@ APP_CSS = """
 
 
 def predictor_from_settings(settings: AppSettings) -> Predictor:
+    limits = ImageLimits(
+        max_upload_bytes=settings.max_upload_bytes,
+        max_image_pixels=settings.max_image_pixels,
+    )
     if settings.mode == "bundle":
-        return Predictor.from_bundle(settings.model_bundle, device=settings.device)
+        return Predictor.from_bundle(
+            settings.model_bundle,
+            device=settings.device,
+            top_k=settings.top_k,
+            image_limits=limits,
+            expected_image_size=settings.image_size,
+            expected_confidence_threshold=settings.confidence_threshold,
+        )
+    if (
+        settings.taxonomy_path is None
+        or settings.fake_class_id is None
+        or settings.model_version is None
+        or settings.data_version is None
+        or settings.git_commit is None
+    ):
+        raise ValueError("fake mode requires taxonomy and fake model metadata")
     return create_fake_predictor(
         settings.taxonomy_path,
         class_id=settings.fake_class_id,
@@ -49,10 +68,7 @@ def predictor_from_settings(settings: AppSettings) -> Predictor:
         image_size=settings.image_size,
         confidence_threshold=settings.confidence_threshold,
         top_k=settings.top_k,
-        image_limits=ImageLimits(
-            max_upload_bytes=settings.max_upload_bytes,
-            max_image_pixels=settings.max_image_pixels,
-        ),
+        image_limits=limits,
     )
 
 
@@ -73,7 +89,7 @@ def classify_image(image: Any, predictor: Predictor) -> tuple[Any, ...]:
         return _empty_result("图片处理失败，请稍后重试。")
 
     if result.low_confidence:
-        status = "结果不确定，图片可能不属于系统已知类别。"
+        status = "**低置信度：结果不确定，图片可能不属于系统已知类别。**"
     elif result.model_version.startswith("p1-fixed-logits"):
         status = "P1 固定假模型输出，仅用于应用联调。"
     else:

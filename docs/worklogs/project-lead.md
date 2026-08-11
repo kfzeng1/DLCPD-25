@@ -214,3 +214,14 @@
 - 测试：A3 定向测试 `4 passed`；项目全量测试 `66 passed, 4 warnings in 274.61s`；ruff、`git diff --check` 均通过。4 条 warning 均为既有 Gradio 6.0 弃用提示。
 - 风险：阈值 `0.55` 下低置信度率为 `72.7342%`，P2 必须明确显示“不确定”，不得用 test 重新选择阈值；长尾和相似类别混淆仍存在，本系统是图像分类而非目标检测。
 - 下一阶段：应用工程师执行 P2，校验并接入 `dlcpd25-resnet50-weighted-v1`，完成 CPU/CUDA、固定样例一致性、低置信度提示、异常输入和发布说明后停止交验。
+
+## 2026-08-11 P2 真实模型集成验收
+
+- 结论：通过；P1 假模型已由 A3 冻结的真实 ResNet-50 替换，允许进入 F0。
+- 模型契约：A3 模型包 13 项 checksum 全部通过；应用从 bundle 读取 `203` 类 taxonomy、224 输入预处理、阈值 `0.55`、模型和数据版本，依赖或 checkpoint 契约不一致时拒绝启动。
+- 推理一致性：独立 CPU smoke 的三张固定 val 样例 Top-5 与 A3 参考完全一致，其中 1 张低置信度；损坏图片稳定返回 `decode_failed`。未访问或重新评估正式 test。
+- 设备路径：真实 `auto` 路径在本机选择 CUDA；合成测试确认 CUDA 预热失败后回退 CPU，显式 CUDA 不可用时返回 `device_unavailable`；CPU 路径可独立运行。
+- 页面与 API：`http://127.0.0.1:7860` 返回 HTTP 200；真实 `/classify` API 的正常样例返回 class 0、`90.62%`，低置信度样例返回 class 131、`20.27%` 及“不确定”提示，版本栏显示真实模型、data-v1 和 CUDA。
+- 测试：应用定向测试 `22 passed`；全量测试 `73 passed, 4 warnings in 264.65s`；ruff、`git diff --check`、P2 evidence checksum 均通过。4 条 warning 是既有 Gradio 6.0 弃用提示。
+- 浏览器限制：按 `browser-harness` 技能检查时 Chrome 未开放 CDP 授权，因此未绕过授权生成新截图；沿用 P1 已通过的响应式组件测试，并以真实 HTTP、Gradio API 和组件构建测试完成 P2 验收。
+- 下一阶段：总负责人执行 F0，冻结 P2 Git 基线，核对数据/模型/应用版本链、根 README、演示路径和 Git 追踪范围，完成后提交最终验收。

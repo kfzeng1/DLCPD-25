@@ -23,9 +23,9 @@ PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
   -m dlcpd25_classifier.training.preflight
 ```
 
-## P1 假模型应用
+## 图片分类应用
 
-P1 页面使用固定 logits 验证图片处理、层级映射和界面，不代表真实模型结果。从仓库根目录运行：
+应用默认加载已验收的 `dlcpd25-resnet50-weighted-v1` 冻结模型包。从仓库根目录运行：
 
 ```bash
 /home/zkf/pytorch-env/bin/pip install -e 'project[app]'
@@ -33,4 +33,6 @@ PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
   -m dlcpd25_classifier.web --host 127.0.0.1 --port 7860
 ```
 
-打开 <http://127.0.0.1:7860>。真实冻结模型只能在 A3 通过后于 P2 接入。
+打开 <http://127.0.0.1:7860>。`device: auto` 优先使用 CUDA，CUDA 初始化或预热失败时回退 CPU；显式配置 `cuda` 时失败会拒绝启动。置信度低于冻结阈值 `0.55` 的结果会显示不确定提示。
+
+启动前会校验模型包全部 checksum、taxonomy、预处理、依赖版本和 checkpoint 契约。详细排错及固定演示样例见 `../docs/application-runbook.md`。

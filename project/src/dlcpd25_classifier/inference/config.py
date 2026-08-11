@@ -14,17 +14,17 @@ import yaml
 class AppSettings:
     mode: str
     model_bundle: Path
-    taxonomy_path: Path
+    taxonomy_path: Path | None
     device: str
     image_size: int
     confidence_threshold: float
     top_k: int
     max_upload_bytes: int
     max_image_pixels: int
-    fake_class_id: int
-    model_version: str
-    data_version: str
-    git_commit: str
+    fake_class_id: int | None
+    model_version: str | None
+    data_version: str | None
+    git_commit: str | None
     config_sha256: str
 
     @classmethod
@@ -53,7 +53,6 @@ class AppSettings:
         threshold = float(required("confidence_threshold"))
         max_upload_bytes = int(required("max_upload_bytes"))
         max_image_pixels = int(required("max_image_pixels"))
-        fake_class_id = int(required("fake_class_id"))
         if image_size <= 0:
             raise ValueError("image_size must be positive")
         if not 1 <= top_k <= 203:
@@ -62,17 +61,28 @@ class AppSettings:
             raise ValueError("confidence_threshold must be between zero and one")
         if max_upload_bytes <= 0 or max_image_pixels <= 0:
             raise ValueError("image limits must be positive")
-        if not 0 <= fake_class_id < 203:
-            raise ValueError("fake_class_id must be between 0 and 202")
-
         def project_path(name: str) -> Path:
             candidate = Path(str(required(name)))
             return candidate if candidate.is_absolute() else (project_root / candidate).resolve()
 
+        taxonomy_path: Path | None = None
+        fake_class_id: int | None = None
+        model_version: str | None = None
+        data_version: str | None = None
+        git_commit: str | None = None
+        if mode == "fake":
+            taxonomy_path = project_path("taxonomy_path")
+            fake_class_id = int(required("fake_class_id"))
+            if not 0 <= fake_class_id < 203:
+                raise ValueError("fake_class_id must be between 0 and 202")
+            model_version = str(required("model_version"))
+            data_version = str(required("data_version"))
+            git_commit = str(required("git_commit"))
+
         return cls(
             mode=mode,
             model_bundle=project_path("model_bundle"),
-            taxonomy_path=project_path("taxonomy_path"),
+            taxonomy_path=taxonomy_path,
             device=device,
             image_size=image_size,
             confidence_threshold=threshold,
@@ -80,8 +90,8 @@ class AppSettings:
             max_upload_bytes=max_upload_bytes,
             max_image_pixels=max_image_pixels,
             fake_class_id=fake_class_id,
-            model_version=str(required("model_version")),
-            data_version=str(required("data_version")),
-            git_commit=str(required("git_commit")),
+            model_version=model_version,
+            data_version=data_version,
+            git_commit=git_commit,
             config_sha256=hashlib.sha256(raw).hexdigest(),
         )

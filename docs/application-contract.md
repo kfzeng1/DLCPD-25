@@ -9,7 +9,7 @@ predictor = Predictor.from_bundle(bundle_path, device="auto")
 result = predictor.predict(image)
 ```
 
-P1 使用 `create_fake_predictor()` 提供固定 203 维 logits，只验证应用链路。`from_bundle()` 在 P1 只执行完整性与契约检查，校验通过后仍拒绝加载真实权重；真实加载和 CPU/CUDA 选择属于 P2。
+P1 使用 `create_fake_predictor()` 提供固定 203 维 logits 验证应用链路。P2 的 `from_bundle()` 先完成全部文件校验，再按 manifest 构建模型并严格加载 checkpoint。`device="auto"` 优先选择 CUDA 并执行预热，失败时重新构建 CPU 后端；显式 `cuda` 失败则拒绝启动。
 
 结果 schema 版本为 `1`，字段包括：
 
@@ -38,7 +38,7 @@ checksums.sha256
 
 `manifest.json` schema 版本为 `1`，必须记录：模型与数据版本、Git commit、架构、`num_classes=203`、taxonomy 和预处理 SHA-256、置信度阈值、RGB、输入和 resize 尺寸、center crop、bicubic 插值、mean/std，以及 torch/torchvision 版本。
 
-`checksums.sha256` 必须覆盖除自身外的七个文件。应用先校验文件存在性和全部 SHA-256，再解析 taxonomy；任何文件缺失、hash 不匹配、类别数错误或预处理不兼容都拒绝加载。
+`checksums.sha256` 必须覆盖至少七个必需文件；A3 正式模型包当前包含 13 个条目。应用先校验清单内全部 SHA-256，再解析 manifest、preprocessing 和 taxonomy，最后核对 torch/torchvision 版本及 checkpoint；任何文件缺失、hash 不匹配、类别数错误或预处理不兼容都拒绝加载。
 
 ## 图片输入
 

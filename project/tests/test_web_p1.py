@@ -1,7 +1,9 @@
+import os
 from pathlib import Path
 
 from dlcpd25_classifier.inference import create_fake_predictor
 from dlcpd25_classifier.web import build_app, classify_image
+from dlcpd25_classifier.web.__main__ import ensure_local_no_proxy
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -43,3 +45,11 @@ def test_gradio_app_builds_with_bound_predictor() -> None:
         if component.get("props", {}).get("label") == "待分类图片"
     )
     assert image_component["props"]["type"] == "filepath"
+
+
+def test_local_launcher_adds_exact_proxy_bypass(monkeypatch) -> None:
+    monkeypatch.setenv("NO_PROXY", "127.0.0.0/8")
+    monkeypatch.setenv("no_proxy", "localhost")
+    ensure_local_no_proxy("127.0.0.1")
+    assert "127.0.0.1" in os.environ["NO_PROXY"].split(",")
+    assert "127.0.0.1" in os.environ["no_proxy"].split(",")

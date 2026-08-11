@@ -117,8 +117,11 @@ def _rewrite_checksums(bundle: Path) -> None:
 
 def test_app_settings_resolve_repository_paths_and_limits() -> None:
     settings = AppSettings.from_yaml(APP_CONFIG)
-    assert settings.mode == "fake"
-    assert settings.taxonomy_path == TAXONOMY_PATH
+    assert settings.mode == "bundle"
+    assert settings.model_bundle == (
+        ROOT / "artifacts" / "releases" / "dlcpd25-resnet50-weighted-v1"
+    )
+    assert settings.taxonomy_path is None
     assert settings.image_size == 224
     assert settings.top_k == 5
     assert len(settings.config_sha256) == 64
@@ -217,10 +220,6 @@ def test_bundle_contract_validates_files_taxonomy_and_checksums(tmp_path: Path) 
     manifest = load_bundle_manifest(bundle)
     assert manifest.num_classes == 203
     assert manifest.color_mode == "RGB"
-
-    with pytest.raises(BundleValidationError) as p1_gate:
-        Predictor.from_bundle(bundle)
-    assert p1_gate.value.code == "real_backend_unavailable"
 
     (bundle / "metrics.json").write_text('{"tampered": true}\n', encoding="utf-8")
     with pytest.raises(BundleValidationError) as checksum:

@@ -1,6 +1,6 @@
 # AI 应用工程师工作日志
 
-当前状态：P1 已通过；P2 等待 A3 模型包。
+当前状态：P1、P2 均已通过；应用工程完成，F0 由总负责人执行。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
 
@@ -18,4 +18,20 @@
 - 偏差、风险和阻塞：`browser-harness --doctor` 因 Chrome 未开放 CDP/daemon 连接而退出 1，按技能安全规则未自行启动独立浏览器，因此没有浏览器截图；以 Gradio 组件测试、HTTP 和真实上传 API 冒烟替代。Gradio 5.50 对未来 6.0 API 给出弃用警告，当前依赖明确限制 `<6`。安装 Gradio 将 Pillow 12.2.0 降至 11.3.0、Pydantic 2.13.4 降至 2.12.3，并报告环境中既有 `pyrender`/PyOpenGL 版本冲突；P1 定向测试未受影响。真实模型加载和 CPU/CUDA 选择未实现，严格留待 P2。
 - Git 状态：`main` 相对 `origin/main` ahead 19；P1 修改/新增 `project/README.md`、`project/configs/app.yaml`、`inference/`、`web/`、`docs/application-contract.md`、`project/tests/test_inference_p1.py`、`project/tests/test_web_p1.py` 和本日志。工作区另有算法工程师的 `algorithm-engineer.md`、`training/` 与 `test_training_a2.py` 改动，未修改或回退。
 - 下一步建议：总负责人独立复验 P1；P1 通过后仍等待 A3，再由用户明确下令执行 P2。
+- 边界声明：未执行下一阶段。
+
+## 2026-08-11 P2 真实模型集成与发布
+
+- 状态：待验收
+- 指挥者指令：A3 验收通过，下一阶段 P2；接入真实模型并明确展示低置信度提示，禁止使用 test 调整阈值。
+- 前置版本：Git `10993001fbeaaea26052ce4f15f34bb02be99567`；P1、A3 均通过；模型包 `artifacts/releases/dlcpd25-resnet50-weighted-v1/`；模型包 checksum 清单 SHA-256 `b5b970ebe0f4cae436115fd7449e43f4f49ee6f361724e81b7bb7e4c4128af6a`；冻结阈值 `0.55`。
+- 允许范围：`inference/`、`web/`、`project/configs/app.yaml`、应用测试、应用文档、应用验证 artifacts 和本日志。
+- 实际修改：实现真实 ResNet-50 checkpoint 加载、torch/torchvision 契约核对、bundle taxonomy/预处理/阈值消费、CPU/CUDA 设备路径、`auto` CUDA warmup 失败回退 CPU、启动错误转换和 localhost 代理绕过；应用切换真实 bundle 并强化低置信度提示；新增真实模型集成测试、P2 smoke CLI、三张 fixed-val 演示与启动排错说明。
+- 生成产物：`artifacts/releases/application-p2-v1/validation-summary.json`，SHA-256 `a9f69c2c976e8fd4a3b2eac50e7396a9421c8db3d8fa0796a6b96b544e0fdcc8`；产物 checksum 文件 SHA-256 `aeb2fc2716ad0c9f284d8881d83a775bbfaa9464178bfa3f06ba9dbed02270de`。真实应用运行于 `http://127.0.0.1:7860`。
+- 执行命令：CPU 最小固定样例推理；P2 定向 pytest；真实 Gradio `/classify` 正常与低置信度 API 冒烟；`python -m dlcpd25_classifier.inference.smoke`；最终全量 `pytest project/tests -q`；P2 范围 `ruff check`；`git diff --check`；HTTP 健康检查。未执行 `training.a3`，未读取正式 test split 复算指标。
+- 验收证据：A3 13 项 checksum 全部验证；CPU 三张 fixed-val Top-5 顺序与算法参考完全一致；`auto` 实机选择 CUDA，模拟 CUDA warmup 失败后成功回退 CPU，显式 CUDA 不可用返回稳定错误；API 正常样例显示 class 0、90.62%、真实模型/数据版本和 CUDA，低置信度样例显示 class 131、20.27% 及“低置信度：结果不确定”；损坏图片返回稳定解码错误。
+- 关键统计：全量测试 `73 passed`、4 条 Gradio 6 未来弃用警告、耗时 242.91 秒；P2 evidence 3 张 fixed-val、Top-5 一致、1 张低置信度、CUDA 中位推理耗时 22.152 ms；冻结阈值保持 0.55。A3 提供的 test 低置信度率 72.7342% 仅用于展示口径，未据此调阈值。
+- 偏差、风险和阻塞：CPU 与 A3 CPU 参考概率最大浮点差约 `1.2e-7`；CUDA 概率最大差约 `7.4e-4`，class ID 与 Top-5 顺序一致。`browser-harness` daemon 可短暂启动但 Chrome 未授权活动 CDP 连接，最小检查后 daemon 退出，因此未生成 P2 浏览器截图；已用响应式 Gradio 组件测试、HTTP 200 和真实上传 API 冒烟替代。Gradio 5.50 对 6.0 API 有弃用警告，当前项目依赖明确为 `<6`。
+- Git 状态：开始 P2 时工作区干净；当前 `main` 相对 `origin/main` ahead 22，仅有本阶段应用代码、配置、测试、文档和本日志改动；未修改模型包、训练代码、taxonomy、split、test 凭据或验收清单。
+- 下一步建议：总负责人独立复验 P2；通过后由总负责人执行 F0，应用工程师不自行进入下一阶段。
 - 边界声明：未执行下一阶段。
