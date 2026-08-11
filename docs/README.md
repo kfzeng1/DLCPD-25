@@ -11,4 +11,4 @@
 
 数据集事实、论文勘误和翻译材料位于 `research/`，结构化类别元数据位于 `metadata/`。
 
-执行项目时先读 `workflow.md`，再按 `acceptance-checklist.md` 确认当前阶段。D0-D5 已完成；当前活动阶段只有 A1-A3、P1-P2 和 F0。新会话使用 `prompts/` 快速恢复角色，工程师不能自行宣告阶段完成。
+项目 D0-F0 已全部完成。执行或复核项目时先读 `final-acceptance.md` 和 `application-runbook.md`；历史阶段、职责和返工过程保留在 `workflow.md`、`acceptance-checklist.md` 与 `worklogs/`。

@@ -16,7 +16,7 @@ project/
 
 本机已有 `/home/zkf/pytorch-env`：PyTorch 2.11.0+cu128、torchvision 0.26.0+cu128，CUDA 可用。工程直接复用这个环境。数据和算法阶段使用 `pip install -e '.[dev]'`；到 P1 应用阶段再使用 `pip install -e '.[app]'` 安装 Gradio，避免提前引入不需要的应用依赖。
 
-开发流程、硬件限制和三位工程师职责见 `../docs/`。数据 D0-D5 已冻结；后续只执行 A1-A3、P1-P2 和 F0。A1 的快速数据检查入口为：
+开发流程、硬件限制和三位工程师职责见 `../docs/`。D0-F0 已全部通过；训练前的快速数据检查入口为：
 
 ```bash
 PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \

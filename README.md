@@ -2,6 +2,69 @@
 
 本项目围绕 DLCPD-25（Dataset of Large-scale Crop Pests and Diseases, 2025）建设 203 类农产品病虫害与缺陷图像分类系统。公开资料、官方类别清单、本地数据审计和项目级上位分类已经整理完成。
 
+## 当前交付
+
+项目 D0-F0 已完成。用户上传一张图片后，系统输出宿主作物、四大类属性、203 类具体标签、置信度和 Top-5。当前模型是 ImageNet V2 预训练的 ResNet-50，输入为 RGB 图片，经 resize 256 和 center crop 得到 `224 x 224` 张量。
+
+最终 test 共 22,178 张，Top-1 为 `88.5517%`、Top-5 为 `95.7796%`、Macro-F1 为 `71.2177%`、Balanced Accuracy 为 `71.2654%`。置信度低于冻结阈值 `0.55` 时，页面会明确提示结果不确定。
+
+这是整张图片分类系统，不是目标检测系统，不会定位虫体、病斑或绘制检测框。
+
+## 快速启动
+
+本机复用 `/home/zkf/pytorch-env`。从仓库根目录运行：
+
+```bash
+/home/zkf/pytorch-env/bin/pip install -e 'project[app,dev]'
+PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
+  -m dlcpd25_classifier.web --host 127.0.0.1 --port 7860
+```
+
+打开 <http://127.0.0.1:7860>。默认配置会加载 `artifacts/releases/dlcpd25-resnet50-weighted-v1/`；`device: auto` 优先使用 CUDA，失败时回退 CPU。
+
+固定 val 样例、Top-5 一致性和损坏图片处理可用以下命令复验，命令不会访问正式 test：
+
+```bash
+PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
+  -m dlcpd25_classifier.inference.smoke \
+  --output-dir /tmp/dlcpd25-p2-smoke
+```
+
+若该临时目录已经存在，请换一个新目录；验证命令拒绝覆盖旧证据。完整演示和排错见 [`docs/application-runbook.md`](docs/application-runbook.md)。
+
+## 训练与验收
+
+训练前检查冻结数据契约：
+
+```bash
+PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
+  -m dlcpd25_classifier.training.preflight
+```
+
+使用新 `run-id` 分别复现普通 CE 和 weighted CE 训练。每组最多 25 epoch，当前电脑单组约需 7.3 小时：
+
+```bash
+PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
+  -m dlcpd25_classifier.training.train --a2-train \
+  --run-id <new-ce-run-id> --loss-strategy ce \
+  --batch-size 128 --workers 6 --epochs 25 --learning-rate 3e-4
+
+PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
+  -m dlcpd25_classifier.training.train --a2-train \
+  --run-id <new-weighted-run-id> --loss-strategy weighted_ce \
+  --batch-size 128 --workers 6 --epochs 25 --learning-rate 3e-4
+```
+
+A3 的正式 test 已消费一次，禁止重新运行 `training.a3`。复验最终评估时只校验冻结证据：
+
+```bash
+(cd artifacts/training/a3-test-dlcpd25-resnet50-weighted-v1 && sha256sum -c checksums.sha256)
+(cd artifacts/releases/dlcpd25-resnet50-weighted-v1 && sha256sum -c checksums.sha256)
+/home/zkf/pytorch-env/bin/pytest -q project/tests
+```
+
+最终版本和验收矩阵见 [`docs/final-acceptance.md`](docs/final-acceptance.md)。
+
 ## 关键结论
 
 - DLCPD-25 是图像级分类数据集，不含边界框或分割标注；当前分类任务不需要人工画框。

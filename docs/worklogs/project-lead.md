@@ -225,3 +225,14 @@
 - 测试：应用定向测试 `22 passed`；全量测试 `73 passed, 4 warnings in 264.65s`；ruff、`git diff --check`、P2 evidence checksum 均通过。4 条 warning 是既有 Gradio 6.0 弃用提示。
 - 浏览器限制：按 `browser-harness` 技能检查时 Chrome 未开放 CDP 授权，因此未绕过授权生成新截图；沿用 P1 已通过的响应式组件测试，并以真实 HTTP、Gradio API 和组件构建测试完成 P2 验收。
 - 下一阶段：总负责人执行 F0，冻结 P2 Git 基线，核对数据/模型/应用版本链、根 README、演示路径和 Git 追踪范围，完成后提交最终验收。
+
+## 2026-08-11 F0 最终验收
+
+- 结论：通过；D0-F0 全部完成，项目达到可安装、可复验、可演示和可答辩状态。
+- 版本链：数据为 `data-v1-d5-r1`，taxonomy SHA-256 `5cfa1a26...8bd31`；模型为 `dlcpd25-resnet50-weighted-v1`，权重 SHA-256 `68fc44f1...eabd`，A3 验收提交 `1099300`；应用 P2 基线提交 `e9f1463`，配置 SHA-256 `06cb8c99...287c`。
+- 复现边界：根 README 已提供安装、preflight、CE/weighted CE 训练、冻结评估 checksum、全量测试、真实应用和 fixed-val smoke 命令；A3 test 消费凭据 SHA-256 为 `8f89ec47...12d9`，不得再次执行正式 test。
+- Git 范围：F0 暂存后 `git ls-files` 共 89 个工程与文档文件；仅追踪 `data/README.md`，没有原图、模型权重、checkpoint、Python 缓存或 artifacts。大文件均由 `.gitignore` 排除。
+- 演示：真实 Gradio API 正常样例 class 0、`90.62%`；低置信度样例 class 131、`20.27%` 并显示“不确定”；损坏图片返回稳定中文错误。页面运行于 `http://127.0.0.1:7860`。
+- 回归：P2/F0 共同全量回归 `73 passed, 4 warnings in 264.65s`；A3/P2 checksum、CPU smoke、CUDA API、P2 范围 ruff 和 `git diff --check` 均通过。warning 仅为 Gradio 6.0 未来弃用提示。
+- 答辩口径：系统对整张图片进行 203 类分类，并由 taxonomy 映射宿主和四大类；不输出边界框，不得称为目标检测或专业农业诊断。
+- 浏览器限制：Chrome 未授权 CDP，未生成新的浏览器截图；P1 响应式验收、P2 真实 HTTP/API 和组件测试共同覆盖现有页面，后续展示可直接打开正在运行的 7860 服务。
