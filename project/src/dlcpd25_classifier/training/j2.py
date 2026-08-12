@@ -26,6 +26,11 @@ from dlcpd25_classifier.detection.checkpoint import (
     load_joint_checkpoint,
     save_joint_checkpoint,
 )
+from dlcpd25_classifier.training.joint import (
+    build_joint_optimizer,
+    collate_detection,
+    set_task_trainability,
+)
 from dlcpd25_classifier.training.train import (
     environment_versions,
     git_commit,
@@ -69,25 +74,6 @@ def _verify_frozen_inputs(config: dict[str, Any], project_root: Path) -> dict[st
     return actual
 
 
-def _collate_detection(
-    batch: list[tuple[Tensor, dict[str, Tensor]]],
-) -> tuple[Tensor, list[dict[str, Tensor]]]:
-    images, targets = zip(*batch)
-    return torch.stack(images), list(targets)
-
-
-def _set_task_trainability(model: nn.Module, task: str) -> None:
-    if task not in {"classification", "detection"}:
-        raise ValueError(f"unknown J2 task: {task}")
-    for parameter in model.shared_body.parameters():
-        parameter.requires_grad = True
-    for parameter in model.classification_head.parameters():
-        parameter.requires_grad = task == "classification"
-    for module in model.detection_head:
-        for parameter in module.parameters():
-            parameter.requires_grad = task == "detection"
-
-
 def _finite_gradients(parameters: list[nn.Parameter]) -> bool:
     gradients = [parameter.grad for parameter in parameters if parameter.grad is not None]
     return bool(gradients) and all(torch.isfinite(gradient).all() for gradient in gradients)
@@ -123,7 +109,7 @@ def _classification_step(
     device: torch.device,
     amp_enabled: bool,
 ) -> tuple[float, dict[str, bool]]:
-    _set_task_trainability(model, "classification")
+    set_task_trainability(model, "classification")
     model.train()
     images, targets = images.to(device, non_blocking=True), targets.to(device, non_blocking=True)
     shared = list(model.shared_body.parameters())
@@ -160,7 +146,7 @@ def _detection_step(
     device: torch.device,
     amp_enabled: bool,
 ) -> tuple[float, dict[str, bool]]:
-    _set_task_trainability(model, "detection")
+    set_task_trainability(model, "detection")
     model.train()
     images = images.to(device, non_blocking=True)
     targets = [{key: value.to(device, non_blocking=True) for key, value in target.items()} for target in targets]
@@ -258,7 +244,7 @@ def _build_detection_loader(config: dict[str, Any], repo_root: Path) -> tuple[Da
             shuffle=True,
             generator=generator,
             num_workers=int(config["smoke"]["workers"]),
-            collate_fn=_collate_detection,
+            collate_fn=collate_detection,
             drop_last=False,
         ),
         indices,
@@ -309,16 +295,13 @@ def run_j2(args: argparse.Namespace) -> dict[str, Any]:
     model.to(device)
     head_lr = float(config["smoke"]["head_learning_rate"])
     backbone_lr = float(config["smoke"]["backbone_learning_rate"])
-    backbone_parameters = list(model.shared_body.parameters())
-    head_parameters = list(model.classification_head.parameters()) + [
-        parameter for module in model.detection_head for parameter in module.parameters()
-    ]
-    optimizer = torch.optim.AdamW(
-        [
-            {"params": backbone_parameters, "lr": backbone_lr},
-            {"params": head_parameters, "lr": head_lr},
-        ],
+    optimizer = build_joint_optimizer(
+        model,
+        backbone_learning_rate=backbone_lr,
+        classification_head_learning_rate=head_lr,
+        detection_head_learning_rate=head_lr,
         weight_decay=float(config["smoke"]["weight_decay"]),
+        fused=False,
     )
     amp_enabled = bool(config["smoke"]["amp"])
     scaler = torch.amp.GradScaler(
@@ -405,20 +388,13 @@ def run_j2(args: argparse.Namespace) -> dict[str, Any]:
         checkpoint_path, mapping, trainable_backbone_layers=5
     )
     reloaded_model.to(device)
-    reloaded_optimizer = torch.optim.AdamW(
-        [
-            {"params": list(reloaded_model.shared_body.parameters()), "lr": backbone_lr},
-            {
-                "params": list(reloaded_model.classification_head.parameters())
-                + [
-                    parameter
-                    for module in reloaded_model.detection_head
-                    for parameter in module.parameters()
-                ],
-                "lr": head_lr,
-            },
-        ],
+    reloaded_optimizer = build_joint_optimizer(
+        reloaded_model,
+        backbone_learning_rate=backbone_lr,
+        classification_head_learning_rate=head_lr,
+        detection_head_learning_rate=head_lr,
         weight_decay=float(config["smoke"]["weight_decay"]),
+        fused=False,
     )
     reloaded_scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled)
     reloaded_class_generator = torch.Generator().manual_seed(99)

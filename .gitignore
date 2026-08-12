@@ -4,7 +4,8 @@ research/*
 !research/README.md
 !research/*.md
 !research/*.pdf
-artifacts/
+artifacts/*
+!artifacts/README.md
 __pycache__/
 *.py[cod]
 .pytest_cache/

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import random
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -12,22 +11,9 @@ import torch
 from torch import nn
 from torch.optim import Optimizer
 
+from dlcpd25_classifier.training.joint import capture_rng_state, restore_rng_state
+
 SCHEMA_VERSION = 2
-
-
-def capture_rng_state() -> dict[str, Any]:
-    return {
-        "python": random.getstate(),
-        "torch_cpu": torch.get_rng_state(),
-        "torch_cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else [],
-    }
-
-
-def restore_rng_state(state: dict[str, Any]) -> None:
-    random.setstate(state["python"])
-    torch.set_rng_state(state["torch_cpu"].cpu())
-    if torch.cuda.is_available() and state["torch_cuda"]:
-        torch.cuda.set_rng_state_all([value.cpu() for value in state["torch_cuda"]])
 
 
 def save_joint_checkpoint(

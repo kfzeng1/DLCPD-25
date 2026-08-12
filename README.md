@@ -34,9 +34,9 @@ PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
 
 ## 当前开发入口
 
-历史分类训练与 F0 验收已经冻结，不再复跑 A2/A3。IP102 T0 也已通过。当前下一阶段是 J1：从历史分类权重初始化，只用 DLCPD-25 train/val 适配统一的 `224 x 224` 直缩预处理。
+历史分类训练与 F0 验收已经冻结，不再复跑 A2/A3。IP102 T0、J1 和 J2 已通过。当前代码进入 J3：从已验收的 J1 分类 checkpoint 构建共享主干和分类头，随机初始化检测分支，再使用固定的 DLCPD-25/IP102 train/val 进行完整交替训练；J2 r8 只作为链路验收证据，不作为正式权重初始化，两套 test 保持未读。
 
-J1 通过后依次执行 J2 交替训练冒烟、J3 完整双数据集联合训练、J4 冻结评估、J5 单模型应用和 F1 最终验收。完整规则见：
+J3 通过后依次执行 J4 冻结评估、J5 单模型应用和 F1 最终验收。完整规则见：
 
 - [`docs/project-plan.md`](docs/project-plan.md)
 - [`docs/development-guide.md`](docs/development-guide.md)

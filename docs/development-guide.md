@@ -17,7 +17,7 @@ research/   论文、来源和翻译资料
 ## 环境
 
 ```bash
-/home/zkf/pytorch-env/bin/pip install -e 'project[app,dev]'
+/home/zkf/pytorch-env/bin/pip install -e 'project[training,dev]'
 PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python -c \
   "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"
 ```
@@ -63,11 +63,17 @@ J1 不是从零重新训练分类模型，而是为联合输入合同建立可�
 - 分类 step：只计算分类损失；共享主干和分类头更新，检测分支不更新。
 - 检测 step：只计算 Faster R-CNN 损失；共享主干和检测分支更新，分类头不更新。
 
-主干学习率低于任务头，初始建议为头部学习率的 `0.1` 倍。使用 AMP；batch size 由 J2 显存实测决定。每个验证周期分别跑 DLCPD-25 val 与 IP102 val，不把两个指标简单相加掩盖退化。
+J3 固定三组学习率：主干 `1e-5`、203 类分类头 `1e-5`、检测头 `1e-4`。检测头需要更快适配 IP102，主干与分类头保持低学习率以防 J1 分类能力骤降。分类 step 使用 AMP FP16，检测 step 固定 FP32 以避免 Faster R-CNN 的数值不稳定；batch size 由 J2 显存实测决定。每个验证周期分别跑 DLCPD-25 val 与 IP102 val，不把两个指标简单相加掩盖退化。
 
 ## 评估与模型包
 
-J3 checkpoint 先满足分类 val Top-1 相对 J1 下降不超过 2 个百分点，再以检测 val mAP@0.5:0.95 选优。J4 冻结后分别对两个 test 执行一次最终评估。
+J3 从已验收的 J1 checkpoint 构建共享主干和分类头，并随机初始化检测分支。J2 r8 是小样本链路、显存和恢复能力的验收证据，不作为正式 J3 权重初始化。J3 开始前先执行 `--preflight-only`，它只校验冻结输入并评估该初始模型的分类 val，不创建训练目录、不执行训练 step、不读 test。只有 Top-1 达到 `88.783659%` 门槛才允许正式运行。每个训练周期后若分类 val Top-1 低于 `85%`，自动停止并标记阻塞。J3 checkpoint 先满足分类 val Top-1 相对 J1 下降不超过 2 个百分点，再以检测 val mAP@0.5:0.95 选优。J4 冻结后分别对两个 test 执行一次最终评估。
+
+```bash
+PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
+  -m dlcpd25_classifier.training.j3 \
+  --config configs/j3.yaml --preflight-only
+```
 
 ```text
 artifacts/releases/<joint-model-version>/

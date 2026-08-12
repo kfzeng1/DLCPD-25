@@ -14,9 +14,11 @@ project/
 
 默认模型为 ImageNet 预训练 ResNet-50。ConvNeXt-Tiny 只在时间和资源允许时作为对照；当前电脑的 RTX 4070 Laptop 8 GiB 显存不适合在项目周期内从零完成论文级 MAE、SimCLR v2 或 MoCo v3 预训练。
 
-本机已有 `/home/zkf/pytorch-env`：PyTorch 2.11.0+cu128、torchvision 0.26.0+cu128，CUDA 可用。工程直接复用这个环境。从仓库根目录安装开发依赖使用 `pip install -e 'project[dev]'`，应用依赖使用 `pip install -e 'project[app]'`。
+本机已有 `/home/zkf/pytorch-env`：PyTorch 2.11.0+cu128、torchvision 0.26.0+cu128，CUDA 可用。工程直接复用这个环境。联合训练及测试使用 `pip install -e 'project[training,dev]'`；应用使用 `pip install -e 'project[app]'`。
 
 开发流程、硬件限制和三位工程师职责见 `../docs/`。历史分类阶段 D0-F0 与 IP102 T0 已通过；联合模型按 J1-J5、F1 推进。
+
+训练代码按职责分层：`training/joint.py` 放两个任务共用的优化器、梯度开关、检测 batch 拼接和随机状态；`training/j2.py` 只保留小样本链路验收；`training/j3.py` 只负责完整联合训练与断点续训；`detection/evaluation.py` 只负责 COCO 指标。新训练代码不能跨阶段导入私有函数。
 
 ```bash
 PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
