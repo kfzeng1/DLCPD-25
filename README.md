@@ -40,6 +40,8 @@ J3 通过后依次执行 J4 冻结评估、J5 单模型应用和 F1 最终验收
 
 - [`docs/project-plan.md`](docs/project-plan.md)
 - [`docs/development-guide.md`](docs/development-guide.md)
+- [`模型架构PPT`](docs/presentations/dlcpd25-joint-model-architecture.pptx)
+- [`模型架构PDF`](docs/presentations/dlcpd25-joint-model-architecture.pdf)
 - [`docs/workplans/algorithm-engineer-detection.md`](docs/workplans/algorithm-engineer-detection.md)
 - [`docs/acceptance-checklist.md`](docs/acceptance-checklist.md)
 
