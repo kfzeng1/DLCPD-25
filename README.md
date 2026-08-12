@@ -1,14 +1,14 @@
-# 基于 DLCPD-25 数据集的农产品病虫害与缺陷分类系统
+# 基于DLCPD-25数据集的农产品病虫害与缺陷分类目标检测系统
 
-本项目围绕 DLCPD-25（Dataset of Large-scale Crop Pests and Diseases, 2025）建设 203 类农产品病虫害与缺陷图像分类系统。公开资料、官方类别清单、本地数据审计和项目级上位分类已经整理完成。
+本项目围绕 DLCPD-25（Dataset of Large-scale Crop Pests and Diseases, 2025）建设农产品病虫害与缺陷分类及目标检测系统。DLCPD-25 提供 203 类整图分类数据，IP102 提供其中 96 个公共害虫类别的边界框标注。
 
 ## 当前交付
 
-项目 D0-F0 已完成。用户上传一张图片后，系统输出宿主作物、四大类属性、203 类具体标签、置信度和 Top-5。当前模型是 ImageNet V2 预训练的 ResNet-50，输入为 RGB 图片，经 resize 256 和 center crop 得到 `224 x 224` 张量。
+203 类分类基线 D0-F0 已完成。用户上传一张图片后，当前应用可输出宿主作物、四大类属性、203 类具体标签、置信度和 Top-5。分类模型是 ImageNet V2 预训练的 ResNet-50，输入为 RGB 图片，经 resize 256 和 center crop 得到 `224 x 224` 张量。
 
 最终 test 共 22,178 张，Top-1 为 `88.5517%`、Top-5 为 `95.7796%`、Macro-F1 为 `71.2177%`、Balanced Accuracy 为 `71.2654%`。置信度低于冻结阈值 `0.55` 时，页面会明确提示结果不确定。
 
-这是整张图片分类系统，不是目标检测系统，不会定位虫体、病斑或绘制检测框。
+IP102 类别映射和共享 ResNet-50 + FPN + Faster R-CNN 代码骨架已经完成；数据合同、检测训练、最终评估和页面接入将按 `T0-T4、F1` 推进。当前 `7860` 应用仍是分类基线，尚不绘制检测框。最终检测能力只覆盖 IP102 有框的 96 类害虫，不能定位其余病害、健康或缺陷类别。
 
 ## 快速启动
 
@@ -86,6 +86,7 @@ A3 的正式 test 已消费一次，禁止重新运行 `training.a3`。复验最
 data/
   README.md                    # 数据目录说明
   raw/dlcpd25-203/             # 唯一原图，203 个类别目录
+  raw/ip102/                   # IP102 原始检测图片与 VOC XML
   views/by-host/               # 宿主/四大类/具体标签软链接视图
 docs/
   dataset-taxonomy.md          # 本地分组定义与边界
@@ -95,11 +96,12 @@ docs/
   workflow.md                  # 用户逐阶段调用和工程师汇报流程
   acceptance-checklist.md      # 总负责人维护的动态验收状态
   prompts/                     # 三位 AI 工程师固定启动提示词
+  workplans/                   # T0-T4 各工程师执行工作单
   worklogs/                    # 工程实施和总负责人验收日志
 project/
   pyproject.toml               # 分类工程依赖和打包配置
   configs/                     # 训练和应用配置
-  src/                         # 分类、训练和推理代码
+  src/                         # 分类、检测、训练、推理和Web代码
 research/
   dataset-card.md              # 数据卡
   source-audit.md              # 来源检索与论文勘误
@@ -129,4 +131,4 @@ python3 scripts/build_dataset_taxonomy.py
 
 ## 使用边界
 
-训练集、验证集和测试集应先按内容哈希或近重复组切分，再进行数据增强，避免同源图片泄漏。若以后扩展为目标检测，仍然需要对象级框标注，不能把整幅图自动当作目标框。
+DLCPD-25 的分类 split 已按重复组隔离。目标检测使用 IP102 的对象级框标注，不能把 DLCPD-25 整幅分类图片自动当作目标框。

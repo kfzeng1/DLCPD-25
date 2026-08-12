@@ -7,8 +7,9 @@
 - `workflow.md`：用户逐阶段调用工程师、阶段停点、返工和汇报规则；
 - `acceptance-checklist.md`：由总负责人维护的阶段状态与复验清单；
 - `prompts/`：三位 AI 工程师的固定启动提示词；
+- `workplans/`：数据 T0、算法 T1-T3、应用 T4 的执行工作单；
 - `worklogs/`：三位工程师的实施日志和总负责人的验收日志；
 
 数据集事实、论文勘误和翻译材料位于 `research/`，结构化类别元数据位于 `metadata/`。
 
-项目 D0-F0 已全部完成。执行或复核项目时先读 `final-acceptance.md` 和 `application-runbook.md`；历史阶段、职责和返工过程保留在 `workflow.md`、`acceptance-checklist.md` 与 `worklogs/`。
+历史分类基线 D0-F0 已完成，验收证据见 `final-acceptance.md`。当前目标检测扩展按 `T0-T4、F1` 推进；开始工作时先读 `project-plan.md`、`workflow.md`、自己的提示词和 `workplans/` 工作单。`acceptance-checklist.md` 是唯一状态表。

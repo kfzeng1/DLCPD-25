@@ -1,6 +1,6 @@
 # 本地数据目录
 
-数据图像不提交到 Git。原始图片只有一份，位于 `raw/dlcpd25-203/`。203 个类别目录使用“英文 + 中文”本地名称，并通过 `metadata/class-directory-aliases.json` 映射回官方原名。
+数据图像不提交到 Git。DLCPD-25 原始图片只有一份，位于 `raw/dlcpd25-203/`。203 个类别目录使用“英文 + 中文”本地名称，并通过 `metadata/class-directory-aliases.json` 映射回官方原名。IP102 目标检测数据位于 `raw/ip102/`，用途和目录见该目录内的 `README.md`。
 
 ```text
 data/

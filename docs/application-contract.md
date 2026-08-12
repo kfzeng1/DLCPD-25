@@ -1,5 +1,7 @@
 # 应用推理契约
 
+当前已实现的是下述 schema v1 分类契约。T4 将在保持 v1 分类字段兼容的前提下增加 `classification`、`detections` 和双模型版本字段；详细目标合同见 `workplans/application-engineer-detection.md`。在 T4 验收前，不得声称当前应用已经接入检测模型。
+
 ## Predictor
 
 统一入口为：
@@ -43,3 +45,5 @@ checksums.sha256
 ## 图片输入
 
 支持 JPG、PNG、WEBP、BMP 和 TIFF。图片在应用侧校正 EXIF 方向并转换为 RGB，再调用算法侧共享的确定性 eval transform。默认限制为 20 MiB 和 4000 万像素；损坏图片、未知扩展名和超限图片返回稳定的用户提示，不向页面泄露堆栈。
+
+T4 联合推理仍只解码一次图片，再分别调用分类和检测预处理。检测框必须映射回原图坐标，并只暴露 DLCPD-25 公共类别 ID。
