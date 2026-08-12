@@ -1,6 +1,6 @@
 # AI 算法工程师工作日志
 
-当前状态：历史分类算法 A1-A3、分类应用 P2 和分类基线 F0 已通过；IP102 T0 已通过；J1 已通过，下一阶段为 J2 双数据集交替训练；旧单任务检测 T1 已撤销。
+当前状态：历史分类算法 A1-A3、分类应用 P2 和分类基线 F0 已通过；IP102 T0、J1、J2 已通过，下一阶段为 J3 完整联合训练；旧单任务检测 T1 已撤销。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
 
@@ -79,3 +79,13 @@
 关键指标：适配前同一 val 的旧预处理 Top-1/Top-5/Macro-F1/Balanced Accuracy 为 `88.3398%/95.7886%/72.5674%/72.4703%`，未适配直缩为 `87.5823%/95.7120%/72.3580%/71.9039%`；按 val Macro-F1 选择 epoch 5，结果 `90.7837%/96.6228%/75.2253%/74.9910%`，较旧预处理 Top-1 `+2.4439` pp、Macro-F1 `+2.6579` pp；5 epoch 训练加验证 `5706.73s`，峰值显存 `6,118,022,144` bytes，AMP 正常；`classification-init.pt` SHA-256 `36deb283fe6b82132005ec03641e3fbc140d82c02f3223aaa632c5e47cb4f739`，checksum 清单 SHA-256 `4fe4a62578c7bfb4b6474f2e0c53059cb53150e83ff34d1cd21cf6498899c2f0`。
 遗留问题：J1 的 3 pp Top-1 门禁通过；尚待总负责人验收，直缩形变和 IP102 小目标检测表现仍需在 J2/J3 分别验证；不提交、不推送，未进入 J2。
 是否进入下一阶段：否
+
+## 2026-08-12 J2 交替联合训练链路冒烟
+
+阶段：J2，总负责人修复后验收通过；输入 Git `95b24b99751116716a15641332a09d0d3b6415d3`、J1 `classification-init.pt` SHA-256 `36deb283fe6b82132005ec03641e3fbc140d82c02f3223aaa632c5e47cb4f739`、DLCPD-25 固定 train 与 IP102 T0 固定 train/annotations；未读取任一 val/test。
+修改文件：新增 `project/configs/j2.yaml`、`detection/{checkpoint,transforms}.py`、`training/j2.py` 和 `test_detection_training_j2.py`；更新 `detection/{model,__init__}.py` 与 `test_detection_model.py`；总负责人验收时补充 J1 初始化契约、6 项冻结输入 SHA-256 门禁和 loader 循环边界 checkpoint v2；正式产物为 `artifacts/training/detection/j2-alternating-smoke-95b24b9-r8/`。
+运行命令：统一 RGB bicubic 直缩 `224x224` + ImageNet normalization，分类 batch 8、检测 batch 2、固定 `1:1` 各 12 step，AdamW 任务头 LR `1e-3`/共享主干 LR `1e-4`、AMP fixed scale 32；运行 J2/T0 定向 pytest、CUDA/CPU 联合推理、完整 checkpoint 恢复续跑、产物 checksum、项目全量 pytest、J2 范围 Ruff 和 `git diff --check`。
+测试结果：修复后 J2+T0 定向测试 `15 passed`，项目全量测试 `100 passed, 4 warnings in 245.88s`；修改范围 Ruff 与 `git diff --check` 通过；5 项产物 checksum 全部通过；CUDA 重载分类 logits 与检测 boxes/labels/scores 逐位一致，CPU 联合推理通过，循环边界恢复后继续分类/检测各一步通过。
+关键指标：一个共享 ResNet-50 body、一次 joint body forward、分类 203 类、检测背景+96 类；固定 16 个分类类别与 8 个不同 detector label，24 个正式 step 全部梯度/参数边界通过；分类周期均值 loss `0.124485→0.059652`，检测 `7.938776→4.463577`；训练 `11.30s`、`2.124 step/s`、`10.619 image/s`，峰值显存 `2,494,724,096` bytes；`joint-last.pt` SHA-256 `fcf84a903e296040d0c72cc0026e8c52dd229483a621921946c25d943513805a`，checksum 清单 SHA-256 `32c1ba592d5011f1495ae3f9ed33e2e0e0d447e3fbdf7db04f34c7123a7bc8ee`。
+遗留问题：r1-r7 为工程调试或验收补强产物，正式结果仅为 r8；J2 只证明小样本链路和硬件可行，不代表检测 val 精度或分类遗忘已验收，J3 仍需完整双 val 选型；J2/J3 checkpoint 当前只承诺在两个 loader 循环边界精确恢复。
+是否进入下一阶段：是，J3

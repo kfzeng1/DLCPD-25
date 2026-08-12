@@ -1,0 +1,38 @@
+seed: 20260812
+classification_data_root: ../data/raw/dlcpd25-203
+classification_taxonomy: ../artifacts/data/v1/d5-r1/taxonomy-v1.json
+classification_train_csv: ../artifacts/data/v1/d3-r2/train.csv
+detection_voc_root: ../data/raw/ip102/downloads/Detection/VOC2007
+detection_train_split: ../artifacts/data/ip102-detection-v1/train.txt
+detection_annotations: ../artifacts/data/ip102-detection-v1/annotations.jsonl
+detection_mapping: ../metadata/ip102-detection-class-map.json
+classification_checkpoint: ../artifacts/training/j1-direct-resize-ed09c0f/classification-init.pt
+output_dir: ../artifacts/training/detection
+
+input_sha256:
+  classification_checkpoint: 36deb283fe6b82132005ec03641e3fbc140d82c02f3223aaa632c5e47cb4f739
+  classification_train_csv: af457fcd9c49af93b9929585175aa68f973113d43895e5a035db61bbe7f7d778
+  classification_taxonomy: 5cfa1a261b1a9fbb80adf24f299bca0883a42dd523914a70234f31dbf748bd31
+  detection_train_split: 77e2b4271f099b4817dbe1bae80140f0d8167b3f4af72bab5c1dc40d03c08c6f
+  detection_annotations: bc3303f13a66090dcfbf87390ddb77c31e4186da13c36ca8e8a45113320fbfc2
+  detection_mapping: 4468b961264180d8a9e49e35c1e41d39c4c35b4f817d7c2790af679e4f5dd928
+
+model:
+  image_size: 224
+  classification_classes: 203
+  detection_classes: 96
+
+smoke:
+  classification_samples: 16
+  detection_samples: 8
+  classification_batch_size: 8
+  detection_batch_size: 2
+  steps_per_task: 12
+  workers: 0
+  amp: true
+  amp_init_scale: 32
+  amp_growth_interval: 100000
+  head_learning_rate: 0.001
+  backbone_learning_rate: 0.0001
+  weight_decay: 0.0001
+  task_ratio: [1, 1]
