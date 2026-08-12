@@ -8,7 +8,7 @@
 
 最终 test 共 22,178 张，Top-1 为 `88.5517%`、Top-5 为 `95.7796%`、Macro-F1 为 `71.2177%`、Balanced Accuracy 为 `71.2654%`。置信度低于冻结阈值 `0.55` 时，页面会明确提示结果不确定。
 
-IP102 类别映射和共享 ResNet-50 + FPN + Faster R-CNN 代码骨架已经完成；数据合同、检测训练、最终评估和页面接入将按 `T0-T4、F1` 推进。当前 `7860` 应用仍是分类基线，尚不绘制检测框。最终检测能力只覆盖 IP102 有框的 96 类害虫，不能定位其余病害、健康或缺陷类别。
+IP102 T0 数据合同和共享模型骨架已经完成。后续采用双数据集交替联合训练：历史分类权重先适配统一 `224 x 224` 直缩，再交替使用 DLCPD-25 分类 batch 与 IP102 检测 batch 更新同一个模型。最终只发布一个 checkpoint、使用一个 224 输入和一次共享主干前向。当前 `7860` 仍是历史分类基线，尚未接入联合模型。
 
 ## 快速启动
 
@@ -32,38 +32,16 @@ PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
 
 若该临时目录已经存在，请换一个新目录；验证命令拒绝覆盖旧证据。完整演示和排错见 [`docs/application-runbook.md`](docs/application-runbook.md)。
 
-## 训练与验收
+## 当前开发入口
 
-训练前检查冻结数据契约：
+历史分类训练与 F0 验收已经冻结，不再复跑 A2/A3。IP102 T0 也已通过。当前下一阶段是 J1：从历史分类权重初始化，只用 DLCPD-25 train/val 适配统一的 `224 x 224` 直缩预处理。
 
-```bash
-PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
-  -m dlcpd25_classifier.training.preflight
-```
+J1 通过后依次执行 J2 交替训练冒烟、J3 完整双数据集联合训练、J4 冻结评估、J5 单模型应用和 F1 最终验收。完整规则见：
 
-使用新 `run-id` 分别复现普通 CE 和 weighted CE 训练。每组最多 25 epoch，当前电脑单组约需 7.3 小时：
-
-```bash
-PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
-  -m dlcpd25_classifier.training.train --a2-train \
-  --run-id <new-ce-run-id> --loss-strategy ce \
-  --batch-size 128 --workers 6 --epochs 25 --learning-rate 3e-4
-
-PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
-  -m dlcpd25_classifier.training.train --a2-train \
-  --run-id <new-weighted-run-id> --loss-strategy weighted_ce \
-  --batch-size 128 --workers 6 --epochs 25 --learning-rate 3e-4
-```
-
-A3 的正式 test 已消费一次，禁止重新运行 `training.a3`。复验最终评估时只校验冻结证据：
-
-```bash
-(cd artifacts/training/a3-test-dlcpd25-resnet50-weighted-v1 && sha256sum -c checksums.sha256)
-(cd artifacts/releases/dlcpd25-resnet50-weighted-v1 && sha256sum -c checksums.sha256)
-/home/zkf/pytorch-env/bin/pytest -q project/tests
-```
-
-最终版本和验收矩阵见 [`docs/final-acceptance.md`](docs/final-acceptance.md)。
+- [`docs/project-plan.md`](docs/project-plan.md)
+- [`docs/development-guide.md`](docs/development-guide.md)
+- [`docs/workplans/algorithm-engineer-detection.md`](docs/workplans/algorithm-engineer-detection.md)
+- [`docs/acceptance-checklist.md`](docs/acceptance-checklist.md)
 
 ## 关键结论
 
@@ -96,7 +74,7 @@ docs/
   workflow.md                  # 用户逐阶段调用和工程师汇报流程
   acceptance-checklist.md      # 总负责人维护的动态验收状态
   prompts/                     # 三位 AI 工程师固定启动提示词
-  workplans/                   # T0-T4 各工程师执行工作单
+  workplans/                   # T0、J1-J5 各工程师执行工作单
   worklogs/                    # 工程实施和总负责人验收日志
 project/
   pyproject.toml               # 分类工程依赖和打包配置

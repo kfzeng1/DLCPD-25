@@ -1,22 +1,20 @@
-# 分类与目标检测开发指南
+# 联合分类与目标检测开发指南
 
-## 目录
+## 目录边界
 
 ```text
-data/       DLCPD-25 与 IP102 原始数据、只读浏览视图
-metadata/   203类taxonomy、别名、IP102到DLCPD-25映射
-research/   论文、数据来源与翻译
-project/    分类、检测、训练、评估、推理与Web代码
-scripts/    可复现的数据和映射生成脚本
-artifacts/  数据合同、训练run和模型包（Git忽略）
-docs/       开发计划、职责、接口、验收和日志
+data/       DLCPD-25与IP102原始数据，只读
+metadata/   203类taxonomy和IP102映射
+project/    联合模型、训练、评估、推理和Web代码
+scripts/    数据合同构建与验证脚本
+artifacts/  数据合同、训练run和模型包，Git忽略
+docs/       计划、职责、工作单、验收和日志
+research/   论文、来源和翻译资料
 ```
 
-原始数据不得移动或改写：DLCPD-25 位于 `data/raw/dlcpd25-203/`；IP102 检测数据位于 `data/raw/ip102/downloads/Detection/VOC2007/`。`data/views/` 只用于浏览。
+不得移动或改写 `data/raw/`、T0 合同、DLCPD-25 固定 split、taxonomy 和历史分类模型包。
 
 ## 环境
-
-复用 `/home/zkf/pytorch-env`：Python 3.12、PyTorch 2.11.0+cu128、torchvision 0.26.0+cu128。RTX 4070 Laptop 可用显存约 7.62 GiB。
 
 ```bash
 /home/zkf/pytorch-env/bin/pip install -e 'project[app,dev]'
@@ -24,58 +22,74 @@ PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python -c \
   "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"
 ```
 
-## 分类基线
+环境为 Python 3.12、PyTorch 2.11.0+cu128、torchvision 0.26.0+cu128；GPU 为 RTX 4070 Laptop，约 7.62 GiB 可用显存。
 
-分类模型保持冻结：ResNet-50、RGB、resize 256、center crop 224、ImageNet normalization，输出 `[N,203]`。模型包为 `artifacts/releases/dlcpd25-resnet50-weighted-v1/`。正式分类 test 已消费，不重新训练或调阈值。
+## 统一预处理
 
-## 检测数据合同
+两个任务必须共享以下确定性输入合同：
 
-IP102 原始标注为 Pascal VOC XML。官方 `trainval.txt` 用于生成固定 train/val；官方 `test.txt` 只在 T3 使用。数据入口必须保留三套编号：
+1. 校正 EXIF 并转换 RGB；
+2. 整张图片直接 bicubic resize 为 `224 x 224`，不 center crop、不保持纵横比；
+3. IP102 框同步执行 `x *= 224/原宽`、`y *= 224/原高`；
+4. 使用 ImageNet mean/std 归一化；
+5. Faster R-CNN 内部不得再次 resize 或 normalization。
 
-- `ip102_class_ids`：原始标签，供追溯；
-- `labels`：Faster R-CNN 内部连续标签 `1-96`；
-- `dlcpd25_class_ids`：系统公共编号 `0-202`。
+历史分类模型的预处理不同，只用于初始化。J1 必须用 DLCPD-25 train/val 适配新合同。
 
-映射只来自 `metadata/ip102-detection-class-map.json`，不得靠目录排序或模糊字符串在训练时动态推断。
+## 联合模型
 
-T0 必须冻结派生清洗规则：`IP087000986.xml` 的重复根只计一次；`IP046000898.xml` 的零宽框被过滤但同图有效框保留；正式划分外 5 张 JPEG 排除。不得改写官方 XML 或图片。
+```text
+JointResNet50FasterRCNN
+  backbone: ResNet-50
+  classification_head: Linear(2048, 203)
+  detection_neck: FPN
+  detection_head: RPN + ROI Heads，背景+96前景
+```
 
-## 检测模型
+联合推理必须先计算一次 ResNet-50 body 特征，再将同一份特征送入分类池化头和 FPN。禁止用两套输入分别运行两次主干后仍称为共享一次前向。
 
-使用共享 ResNet-50 主干、FPN、RPN 和 Faster R-CNN ROI 头。初始化时从现有分类 `best.pt` 加载 ResNet-50 主干和 203 类分类头。检测头为 96 个前景类加背景。
+最终 checkpoint 同时保存主干、分类头、FPN、RPN 和 ROI 参数，以及 optimizer、scheduler、AMP scaler、随机状态、预处理和映射哈希。
 
-第一阶段冻结 ResNet 主干和分类头，仅训练 FPN/RPN/ROI；稳定后最多解冻 `layer4`。起始 batch 2、AMP，OOM 时降 batch 1 并使用梯度累积。检测输入由 torchvision transform 保持纵横比缩放，不套用分类的 224 center crop。
+## J1 分类适配
+
+从 `artifacts/releases/dlcpd25-resnet50-weighted-v1/best.pt` 初始化。只读取 DLCPD-25 train/val，使用统一 224 直缩预处理进行短周期微调；不读取分类 test。按 val Macro-F1 保存最佳 checkpoint，记录相对历史模型在同一 val 上的变化。
+
+J1 不是从零重新训练分类模型，而是为联合输入合同建立可靠起点。
+
+## J2-J3 交替训练
+
+每轮以固定 `classification_steps:detection_steps = 1:1` 交替训练，两个 DataLoader 独立打乱并循环取样：
+
+- 分类 step：只计算分类损失；共享主干和分类头更新，检测分支不更新。
+- 检测 step：只计算 Faster R-CNN 损失；共享主干和检测分支更新，分类头不更新。
+
+主干学习率低于任务头，初始建议为头部学习率的 `0.1` 倍。使用 AMP；batch size 由 J2 显存实测决定。每个验证周期分别跑 DLCPD-25 val 与 IP102 val，不把两个指标简单相加掩盖退化。
 
 ## 评估与模型包
 
-T2 只报告 val 的 mAP@0.5、mAP@0.5:0.95、Precision、Recall 和逐类 AP。T3 在模型、阈值和预处理冻结后消费一次官方检测 test。
+J3 checkpoint 先满足分类 val Top-1 相对 J1 下降不超过 2 个百分点，再以检测 val mAP@0.5:0.95 选优。J4 冻结后分别对两个 test 执行一次最终评估。
 
 ```text
-artifacts/training/detection/<run-id>/
-artifacts/releases/<detector-version>/
-  best.pt
+artifacts/releases/<joint-model-version>/
+  joint-best.pt
   manifest.json
   resolved-config.yaml
   preprocessing.json
-  class-map.json
-  metrics.json
+  postprocessing.json
+  taxonomy.json
+  ip102-detection-class-map.json
+  metrics-classification.json
+  metrics-detection.json
   model-card.md
   checksums.sha256
 ```
 
-版本目录不可覆盖。模型包必须记录分类 checkpoint 来源、映射 SHA-256、96 个检测类、203 类公共编号空间和依赖版本。
+发布包只含一份联合权重。IP102 test 缺源类 61，必须标记无支持，不伪造 AP。
 
-## 联合推理
+## 联合应用
 
-同一上传图片进入分类与检测分支。应用显示整图分类 Top-5，并在原图上绘制检测框。无框是合法结果；低于检测阈值的框不展示；分类低置信度继续显示不确定提示。不得将检测能力扩展描述为病害或缺陷定位。
+上传图片只生成一个 224 张量并调用一次联合模型。返回分类 Top-5 和检测框；检测框从 224 坐标缩放回原图。无框是合法结果，分类与检测结论允许不同。应用不得加载历史分类模型作为第二个后端。
 
-## 测试
+## 验证
 
-普通任务运行相关测试和 `git diff --check`。T1、T3、T4、F1 运行：
-
-```bash
-PYTHONPATH=project/src /home/zkf/pytorch-env/bin/pytest -q project/tests
-git diff --check
-```
-
-不重复执行 DLCPD-25 的耗时 D2-D4，也不重新运行已消费的分类 A3 test。
+普通阶段运行定向测试与 `git diff --check`；J1、J2、J4、J5、F1 运行项目全量测试。不得重跑 DLCPD-25 D2-D4 或用 test 调参。

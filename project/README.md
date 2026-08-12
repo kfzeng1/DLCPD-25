@@ -1,6 +1,6 @@
 # DLCPD-25 分类与目标检测系统工程
 
-本目录是训练、评估和图片推理应用的唯一代码工程。现有 ResNet-50 提供 203 类整图分类；新增 `detection/` 使用 IP102 边界框训练共享 ResNet-50 主干的 Faster R-CNN 检测分支。
+本目录是训练、评估和图片推理应用的唯一代码工程。最终模型使用 DLCPD-25 与 IP102 交替联合训练：一个 ResNet-50 共享主干、一个 203 类分类头和一个 Faster R-CNN 检测分支，最终只发布一份联合权重。
 
 ## 模块
 
@@ -16,7 +16,7 @@ project/
 
 本机已有 `/home/zkf/pytorch-env`：PyTorch 2.11.0+cu128、torchvision 0.26.0+cu128，CUDA 可用。工程直接复用这个环境。从仓库根目录安装开发依赖使用 `pip install -e 'project[dev]'`，应用依赖使用 `pip install -e 'project[app]'`。
 
-开发流程、硬件限制和三位工程师职责见 `../docs/`。历史分类阶段 D0-F0 已全部通过；目标检测扩展按 T0-T4、F1 推进。
+开发流程、硬件限制和三位工程师职责见 `../docs/`。历史分类阶段 D0-F0 与 IP102 T0 已通过；联合模型按 J1-J5、F1 推进。
 
 ```bash
 PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \

@@ -62,4 +62,4 @@ artifacts/data/ip102-detection-v1/
 - 修改 DLCPD-25 taxonomy、冻结 split、分类模型包或检测映射语义；
 - 使用官方 test 选随机种子、划分比例、清洗策略或训练参数；
 - 重跑旧 DLCPD-25 D2-D4 全量流程；
-- 自行开始 T1、提交或推送。
+- 自行开始 J1、提交或推送。

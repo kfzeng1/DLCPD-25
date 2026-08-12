@@ -1,39 +1,47 @@
-# IP102 目标检测扩展
+# DLCPD-25 与 IP102 联合模型设计
 
-## 系统边界
+## 模型边界
 
-系统保留现有 DLCPD-25 ResNet-50 的 203 类整图分类能力，并在同一 ResNet-50 主干上增加 FPN、RPN 和 Faster R-CNN ROI 检测头。分类头输出 DLCPD-25 `class_id 0-202`；检测结果也统一输出该编号，但只能定位 IP102 提供边界框的害虫类别。没有边界框标注的病害、缺陷和健康类别仍只能整图分类。
+最终模型由一个 ResNet-50 共享主干、一个 203 类分类头和一个 Faster R-CNN 检测分支组成。输入固定为 RGB 直接缩放 `224 x 224`；主干只计算一次，分类头读取 layer4，FPN/RPN/ROI 读取同一组主干特征。
 
-## 类别编号
+检测仅覆盖 IP102 有框且能映射到 DLCPD-25 的 96 类害虫。其余病害、健康、缺陷和无框害虫只能整图分类。
 
-`metadata/ip102-detection-class-map.json` 是唯一映射合同，由 `scripts/build_ip102_detection_mapping.py` 从官方 IP102 类别表、全部 VOC XML 和冻结的 DLCPD-25 taxonomy 生成。
+## 编号合同
 
-- IP102 检测标注实际出现 97 个源标签。
-- 映射后对应 96 个 DLCPD-25 类别；IP102 的 `legume blister beetle` 与 `blister beetle` 在 DLCPD-25 中合并为 `class_id 97`。
-- Faster R-CNN 内部使用连续标签 `1-96`，`0` 保留为背景。这只是损失函数需要的内部编号。
-- 数据审计保留原始 IP102 ID；训练目标同时保存内部标签和 DLCPD-25 ID；推理出口只返回 DLCPD-25 `class_id 0-202`。
+- DLCPD-25 公共 ID：`0-202`，分类和应用统一使用。
+- IP102 原始检测标签：97 个，用于追溯。
+- Faster R-CNN 内部标签：`1-96`，`0` 为背景。
+- IP102 类别 50、51 合并到同一个检测标签和 DLCPD-25 `class_id 97`。
 
-因此，不允许直接把 IP102 的 `0-101` 写入应用结果，也不允许让检测头输出稀疏的 203 维前景类别。这两种做法分别会造成编号冲突和大量无标注类别参与检测损失。
+唯一映射为 `metadata/ip102-detection-class-map.json`。不得在训练时按目录或名称动态推断。
 
-## 权重复用
+## 统一输入
 
-`build_shared_detection_model` 从现有发布包 `best.pt` 加载：
+历史分类模型使用 `resize 256 + center crop 224`，不能直接与检测框共用。联合模型改为整图直缩 `224 x 224`：
 
-- ResNet-50 卷积主干权重；
-- 203 类分类头权重；
-- 冻结的 BatchNorm 统计。
+```text
+x_new = x_old * 224 / original_width
+y_new = y_old * 224 / original_height
+```
 
-FPN、RPN 和 ROI 检测头为新增参数。初始训练冻结 ResNet-50 主干和 203 类分类头，仅训练检测分支；稳定后可只解冻 `layer4` 做小学习率微调。分类头不得使用 IP102 检测损失更新。
+随后做 ImageNet normalization。Faster R-CNN 内部 transform 必须配置为固定 224 且 identity normalization，避免二次处理。
+
+## 训练顺序
+
+1. J1 用历史分类权重初始化，在 DLCPD-25 train/val 上适配新预处理。
+2. J2-J3 交替执行 DLCPD-25 分类 step 和 IP102 检测 step。
+3. 分类 step 更新主干和分类头；检测 step 更新主干、FPN、RPN、ROI。
+4. 分类 step 冻结检测头，检测 step 冻结分类头；主干使用较小学习率持续参与两种任务。
+5. J4 冻结后分别进行一次最终分类和检测测试，发布一个联合 checkpoint。
+
+不得只用 IP102 长时间微调整个主干，否则会造成分类遗忘；也不得部署两套权重规避联合训练目标。
 
 ## 数据位置
 
 ```text
-data/raw/ip102/downloads/Detection/VOC2007/
-├── JPEGImages/
-├── Annotations/
-└── ImageSets/Main/
-    ├── trainval.txt
-    └── test.txt
+DLCPD-25 split: artifacts/data/v1/d3-r2/
+IP102 contract: artifacts/data/ip102-detection-v1/
+IP102 raw:      data/raw/ip102/downloads/Detection/VOC2007/
 ```
 
-官方 `test.txt` 保留到最终评估。验证集应从 `trainval.txt` 中按类别和图片分组一次性生成，训练过程中不得读取官方测试指标调参。
+IP102 官方 test 在 J4 前不得用于模型、比例、阈值或训练轮数选择。分类正式 test 也不得重新用于调参。
