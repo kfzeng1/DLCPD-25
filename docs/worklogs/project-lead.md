@@ -1,6 +1,14 @@
 # 总负责人工作与验收日志
 
-当前状态：历史分类基线 F0 与 IP102 T0 已通过；旧单任务检测 T1 已撤销，下一阶段为双数据集联合训练 J1。
+当前状态：历史分类基线 F0、IP102 T0 和统一预处理适配 J1 已通过；旧单任务检测 T1 已撤销，下一阶段为双数据集交替训练 J2。
+
+## 2026-08-12 J1 验收
+
+- 结论：通过；J1 已冻结统一直缩 224 的分类初始化权重，允许进入 J2；未读取分类 test，未执行 J2。
+- 验收输入：算法工程师产物 `artifacts/training/j1-direct-resize-ed09c0f/`，输入 Git `ed09c0f5c93c599cd8ed5a12656d7a7156b1e403`。
+- 独立复验：13 项产物 checksum 全部 OK；`best.pt` 与 `classification-init.pt` 字节一致；严格 checkpoint reload 通过；J1 定向测试 `5 passed`；修改范围 Ruff 通过；项目全量测试 `91 passed`，仅 4 条既有 Gradio 弃用警告；`git diff --check` 通过。
+- 关键指标：epoch 5 按 val Macro-F1 选优；Top-1 `90.7837%`、Top-5 `96.6228%`、Macro-F1 `75.2253%`、Balanced Accuracy `74.9910%`。相对同一 val 上旧 `resize 256 + center crop 224` 预处理，Top-1 `+2.4439` 个百分点；“3 pp 门禁”表示最多允许下降 3 个百分点，本次实际提升，门禁通过。
+- 交接边界：J1 输出 `classification-init.pt` 作为 J2 分类初始化；J2 必须继续使用 RGB bicubic 直缩 `224x224`，实现分类/IP102 两个 DataLoader 的 1:1 交替、共享 ResNet-50 主干单次前向和联合 checkpoint。J1 的直缩形变对检测小目标的影响留到 J2/J3 的验证集评估。
 
 ## 2026-08-12 联合训练路线重构
 

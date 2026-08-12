@@ -1,6 +1,6 @@
 # AI 算法工程师工作日志
 
-当前状态：历史分类算法 A1-A3、分类应用 P2 和分类基线 F0 已通过；IP102 T0 已通过；旧单任务检测 T1 已撤销，双数据集联合训练 J1 未开始。
+当前状态：历史分类算法 A1-A3、分类应用 P2 和分类基线 F0 已通过；IP102 T0 已通过；J1 已通过，下一阶段为 J2 双数据集交替训练；旧单任务检测 T1 已撤销。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
 
@@ -68,4 +68,14 @@
 测试结果：A3 定向测试 `3 passed in 3.89s`；项目全量测试 `65 passed, 4 warnings in 216.85s`，warning 均为既有 Gradio 6.0 弃用提示；训练评估与发布 checksum 全部 OK，三张固定 val 样例重复 logits 及源/包 logits 逐位一致，taxonomy/权重 hash 篡改拒绝测试通过。
 关键指标：test 22,178 张，loss `1.220233`、Top-1 `88.5517%`、Top-5 `95.7796%`、Macro-F1 `71.2177%`、Balanced Accuracy `71.2654%`，109.96 秒、201.68 img/s、峰值显存 `1,520,168,960` bytes；发布 checksum 清单 SHA-256 `b5b970ebe0f4cae436115fd7449e43f4f49ee6f361724e81b7bb7e4c4128af6a`。
 遗留问题：阈值 `0.55` 为 test 前沿用 P1 已验收配置，test 低置信度率 `72.7342%`，P2 必须如实显示不确定提示且不得用 test 回调；class 162 仅 1 张且 F1 为 0，长尾与相似类混淆仍是风险；等待总负责人验收，未提交或推送，未执行 P2。
+是否进入下一阶段：否
+
+## 2026-08-12 J1 统一直缩分类适配
+
+阶段：J1，待验收；输入 Git `ed09c0f5c93c599cd8ed5a12656d7a7156b1e403`、DLCPD-25 data-v1 D5-R1/D3-R2、历史 weighted CE `best.pt` SHA-256 `68fc44f1b4acfe321e5590b5f27dead65b735a777798c141c6528c510e11eabd`；只读取 train/val，未读取分类 test。
+修改文件：新增 `project/configs/j1.yaml`、`project/src/dlcpd25_classifier/training/j1.py`、`project/tests/test_training_j1.py`；更新 `training/transforms.py`；新增不可覆盖产物 `artifacts/training/j1-direct-resize-ed09c0f/`，未修改数据、taxonomy、split、映射、验收清单或其他工程师日志。
+运行命令：J1 CLI 使用 ResNet-50、RGB bicubic 直缩 `224x224`、weighted CE、AdamW LR `1e-4`、warmup 1、batch 128、workers 6、AMP、最多 5 epoch；运行 `sha256sum -c`、`cmp best.pt classification-init.pt`、J1 定向 pytest、全量 pytest 和 `git diff --check`。
+测试结果：J1 定向测试 `5 passed in 7.11s`，相关训练回归 `17 passed in 5.77s`，项目全量测试 `91 passed, 4 warnings in 288.75s`；13 项产物 checksum 全部通过，最佳 checkpoint 严格重载通过，`classification-init.pt` 与 `best.pt` 字节一致；全库 Ruff 有 19 项既有非 J1 风格告警，J1 修改文件 Ruff 通过。
+关键指标：适配前同一 val 的旧预处理 Top-1/Top-5/Macro-F1/Balanced Accuracy 为 `88.3398%/95.7886%/72.5674%/72.4703%`，未适配直缩为 `87.5823%/95.7120%/72.3580%/71.9039%`；按 val Macro-F1 选择 epoch 5，结果 `90.7837%/96.6228%/75.2253%/74.9910%`，较旧预处理 Top-1 `+2.4439` pp、Macro-F1 `+2.6579` pp；5 epoch 训练加验证 `5706.73s`，峰值显存 `6,118,022,144` bytes，AMP 正常；`classification-init.pt` SHA-256 `36deb283fe6b82132005ec03641e3fbc140d82c02f3223aaa632c5e47cb4f739`，checksum 清单 SHA-256 `4fe4a62578c7bfb4b6474f2e0c53059cb53150e83ff34d1cd21cf6498899c2f0`。
+遗留问题：J1 的 3 pp Top-1 门禁通过；尚待总负责人验收，直缩形变和 IP102 小目标检测表现仍需在 J2/J3 分别验证；不提交、不推送，未进入 J2。
 是否进入下一阶段：否
