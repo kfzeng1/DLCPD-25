@@ -1,8 +1,20 @@
 # AI 数据工程师工作日志
 
-当前状态：历史 DLCPD-25 分类数据 D0-D5 已通过并冻结；IP102 检测数据阶段 T0 未开始。
+当前状态：历史 DLCPD-25 分类数据 D0-D5 已通过并冻结；IP102 检测数据阶段 T0 已通过总负责人验收。
 
 后续记录必须按 `README.md` 模板追加，不得覆盖历史记录。
+
+## 2026-08-12 T0 IP102 检测数据合同
+
+- 阶段：T0，状态为已通过；前置 Git commit `a0791e60654035186d63000f9f18fd43084fb814`。只完成 IP102 数据审计、派生标注、固定 split、Dataset 和交接合同，未进入 T1、未训练模型、未修改原始数据或历史分类冻结资产。
+- 修改文件：新增 `scripts/ip102/build_detection_data_t0.py`、`scripts/ip102/verify_detection_dataset_t0.py`、`project/tests/test_ip102_data_t0.py`；修改 `project/src/dlcpd25_classifier/detection/dataset.py`、`project/tests/test_detection_dataset.py` 和本日志。产物写入 `artifacts/data/ip102-detection-v1/`，包含约定的 11 个文件；该目录被 Git 忽略。
+- 运行命令：`py_compile` 退出 0；构建脚本退出 0并内置完成全量验证；`build_detection_data_t0.py --verify-only` 退出 0；`verify_detection_dataset_t0.py --workers 8` 退出 0、全量 Dataset 遍历耗时 144.00 秒；`sha256sum -c artifacts/data/ip102-detection-v1/checksums.sha256` 退出 0，20 项全部 OK；定向测试退出 0，`12 passed`；项目全量测试退出 0，`86 passed, 4 warnings in 249.97s`；`git diff --check` 退出 0。
+- 测试结果：18,976 个正式 ID 均有可解码 JPEG 和可解析 XML，图片/XML 声明尺寸一致；项目 Dataset 完整加载 train/val/test 共 18,976 张和 22,283 个有效框，train/val DataLoader 冒烟通过。train/val 非空且互斥、并集严格等于官方 trainval；test 与官方文件字节一致并和前两者互斥。三套标签空间验证为 IP102 97 类、检测内部 `1..96`、DLCPD-25 公共 ID `0..202`。
+- 关键指标：原始 JPEG/XML 为 18,981/18,976，正式 trainval/test 为 15,178/3,798，5 张额外 JPEG 已列入异常清单并排除。固定 seed `20260812`、验证比例 `0.20`、算法 `deterministic_iterative_multilabel_stratification_v1`，派生 train/val/test 为 12,142/3,036/3,798；train 和 val 各覆盖 97 个源标签，test 覆盖 96 个且仅缺源类 61。重复 XML 根内容去重后原框 22,284，过滤 `IP046000898` 的唯一零宽框后有效框 22,283。核心 SHA-256：annotations `bc3303f13a66090dcfbf87390ddb77c31e4186da13c36ca8e8a45113320fbfc2`，train `77e2b4271f099b4817dbe1bae80140f0d8167b3f4af72bab5c1dc40d03c08c6f`，val `088ffe3ec03363df2ee11c30d7d23f2f1e347b5b776f5b19f2f551d78ce81dda`，test `7fb0e7140964774f8ef9253301c172d54b14acd001cc29a38aee148fd46f9213`。验收修正源码后最终 checksum 清单为 `5d796c12a01ef15fe6014203af949c4797cd5f75f77f5a6550dd1bf93dfe69ed`；数据索引和三个 split 与待验收版本逐字节一致。
+- 遗留问题：官方 test 对 IP102 源类 61 无支持，后续不得伪造该类 AP；5 张正式 split 外 JPEG 仅排除未删除；类别 50/51 多对一映射到公共 `class_id=97`，属于冻结映射合同。官方 test 未用于 seed、比例、清洗规则、train/val 分配或训练设置。全量项目测试的 4 条警告均为既有 Gradio 6 弃用提示，与 T0 无关。构建调试期间曾因把逐张全量解码放入 pytest 而超过前台执行窗口，未出现数据失败；最终将全量解码职责固化到独立 verifier，常规测试保留固定样本与 DataLoader 冒烟。
+- 总负责人验收：2026-08-12 独立复跑 `--verify-only`、全量 Dataset verifier、checksum、定向测试、全量测试和 ruff；结果分别为 18,976 张/22,283 框、20 项 OK、8 passed、86 passed、静态检查通过。验收时修正未使用导入、导入顺序和线程池闭包写法，并重建校验和闭包，未改变 split、标注或统计。
+- Git 状态：由总负责人验收提交，未推送。
+- 是否进入下一阶段：是。T1 可由用户授权启动。
 
 ## 2026-08-10 D5-R1 冻结并交接 data-v1
 

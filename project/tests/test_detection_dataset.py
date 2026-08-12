@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import torch
-
 from dlcpd25_classifier.detection import IP102DetectionDataset
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -31,3 +30,12 @@ def test_duplicated_official_xml_is_parsed_once(tmp_path: Path) -> None:
     _, target = dataset[0]
     assert target["ip102_class_ids"].tolist() == [86]
     assert target["boxes"].shape == (1, 4)
+
+
+def test_degenerate_box_is_filtered_but_valid_peer_is_retained(tmp_path: Path) -> None:
+    split = tmp_path / "sample.txt"
+    split.write_text("IP046000898\n", encoding="utf-8")
+    dataset = IP102DetectionDataset(VOC_ROOT, split, MAPPING)
+    _, target = dataset[0]
+    assert target["ip102_class_ids"].tolist() == [45]
+    assert target["boxes"].tolist() == [[9.0, 34.0, 185.0, 131.0]]
