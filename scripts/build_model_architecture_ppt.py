@@ -292,7 +292,7 @@ def build() -> None:
     add_box(slide, "共享主干", "ResNet-50 body\n学习率 1e-5\n分类/检测 step 都更新", 0.7, 1.65, 3.0, 1.65, fill=GREEN_LIGHT, line=GREEN, title_size=20)
     add_box(slide, "203类分类头", "Linear(2048→203)\n学习率 1e-5\n仅分类 step 更新", 4.0, 1.65, 2.7, 1.65, fill=GOLD_LIGHT, line=GOLD, title_size=20)
     add_box(slide, "检测分支", "FPN + RPN + ROI Heads\n学习率 1e-4\n仅检测 step 更新", 7.0, 1.65, 2.8, 1.65, fill=BLUE_LIGHT, line=BLUE, title_size=20)
-    add_box(slide, "优化器", "AdamW + Cosine Scheduler\nWeight decay 1e-4\n正式计划 5 epochs", 10.1, 1.65, 2.55, 1.65, fill=WHITE, line=MUTED, title_size=20)
+    add_box(slide, "优化器", "AdamW + Cosine Scheduler\nWeight decay 1e-4\n正式计划 10 epochs", 10.1, 1.65, 2.55, 1.65, fill=WHITE, line=MUTED, title_size=20)
     add_text(slide, "每个 epoch 分别评估两个 val 集", 0.75, 4.0, 4.2, 0.4, size=18, color=INK, bold=True)
     add_bullet_list(
         slide,

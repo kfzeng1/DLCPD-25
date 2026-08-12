@@ -27,7 +27,7 @@ model:
   detection_classes: 96
 
 training:
-  epochs: 5
+  epochs: 10
   classification_batch_size: 8
   detection_batch_size: 2
   workers: 4
