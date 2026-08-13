@@ -1,49 +1,43 @@
-# 应用推理契约
+# 联合应用推理契约
 
-当前已实现的是下述 schema v1 历史分类契约。J5 将改为只加载 J4 的一个联合模型包，并增加 `classification`、`detections` 和单一 `model_version`；详细目标合同见 `workplans/application-engineer-detection.md`。J5 验收前不得声称当前应用已接入联合模型。
+J5 默认应用只加载 J4 的 `artifacts/releases/dlcpd25-ip102-joint-v1/`。一张图片只解码一次、只生成一个 RGB bicubic 直缩 `224 x 224` 张量，并调用一次 `forward_joint()`；分类与检测共享同一次 ResNet-50 主干前向。
 
 ## Predictor
 
-统一入口为：
-
 ```python
-predictor = Predictor.from_bundle(bundle_path, device="auto")
+predictor = JointPredictor.from_bundle(bundle_path, device="auto")
 result = predictor.predict(image)
 ```
 
-P1 使用 `create_fake_predictor()` 提供固定 203 维 logits 验证应用链路。P2 的 `from_bundle()` 先完成全部文件校验，再按 manifest 构建模型并严格加载 checkpoint。`device="auto"` 优先选择 CUDA 并执行预热，失败时重新构建 CPU 后端；显式 `cuda` 失败则拒绝启动。
+`device="auto"` 优先使用 CUDA；CUDA 构建或预热失败时重新构建 CPU 模型。显式 `cuda` 失败则拒绝启动。应用启动前校验模型包全部 checksum、唯一 `.pt` 权重、架构、203/96 类数、taxonomy、IP102 映射、预处理、后处理和 torch/torchvision 版本。
 
-结果 schema 版本为 `1`，字段包括：
-
-- `model_version`、`data_version`、`config_sha256`、`git_commit` 和 `device`；
-- `class_id`、`official_name`、`host_zh`、`category_zh` 和 `detail_name`；
-- `confidence`、`top_k`、`low_confidence` 和 `inference_ms`。
-
-`top_k` 每项包含稳定排名、class ID、官方细类名、宿主、四大类和概率。概率相同时按 class ID 升序。三级结果全部由同一 class ID 经冻结 taxonomy 得到。
-
-`inference_ms` 从图片解码开始计时，覆盖 EXIF/RGB 处理、确定性 transform、后端执行和结果整理，不包含网络上传及页面渲染。
-
-## 模型包
-
-模型包目录不可覆盖，必须包含：
+结果 schema v1：
 
 ```text
-best.pt
-manifest.json
-resolved-config.yaml
-preprocessing.json
-taxonomy.json
-metrics.json
-model-card.md
-checksums.sha256
+schema_version, model_version, config_sha256, git_commit, device
+classification
+  class_id, official_name, host_zh, category_zh, detail_name
+  confidence, top_k, low_confidence
+detections[]
+  class_id, official_name, host_zh, category_zh
+  score, box_xyxy_original
+original_size, inference_ms
 ```
 
-`manifest.json` schema 版本为 `1`，必须记录：模型与数据版本、Git commit、架构、`num_classes=203`、taxonomy 和预处理 SHA-256、置信度阈值、RGB、输入和 resize 尺寸、center crop、bicubic 插值、mean/std，以及 torch/torchvision 版本。
+分类 `class_id` 与检测 `class_id` 均使用冻结的 DLCPD-25 `0-202` 编号。内部 detector label `1-96` 不得暴露。`top_k` 概率相同时按 class ID 升序。
 
-`checksums.sha256` 必须覆盖至少七个必需文件；A3 正式模型包当前包含 13 个条目。应用先校验清单内全部 SHA-256，再解析 manifest、preprocessing 和 taxonomy，最后核对 torch/torchvision 版本及 checkpoint；任何文件缺失、hash 不匹配、类别数错误或预处理不兼容都拒绝加载。
+## 图片与坐标
 
-## 图片输入
+支持 JPG、PNG、WEBP、BMP 和 TIFF。应用校正 EXIF、转换 RGB 并限制为 20 MiB、4000 万像素。损坏、未知扩展名或超限图片只返回稳定中文提示，不泄露堆栈。
 
-支持 JPG、PNG、WEBP、BMP 和 TIFF。图片在应用侧校正 EXIF 方向并转换为 RGB，再调用算法侧共享的确定性 eval transform。默认限制为 20 MiB 和 4000 万像素；损坏图片、未知扩展名和超限图片返回稳定的用户提示，不向页面泄露堆栈。
+联合模型使用完整图片直接缩放到 `224 x 224`，不裁剪、不保持宽高比。检测输出的 224 坐标分别乘以 `原宽/224` 和 `原高/224`，裁剪到原图边界后返回和绘制。
 
-J5 联合推理只解码一次图片，直接缩放为一个 `224 x 224` 张量并调用一次联合模型。检测框必须映射回原图坐标，并只暴露 DLCPD-25 公共类别 ID。
+## 能力边界
+
+- 分类覆盖 DLCPD-25 全部 203 类，包括害虫、病害、健康和生理缺陷。
+- 检测只定位 IP102 有边界框监督并映射成功的 96 类害虫。
+- 不得为其余病害、健康或缺陷伪造检测框。
+- 分类置信度低于 `0.55` 时显示不确定提示；检测仅显示分数不低于 `0.5` 的框。
+- 无检测框是正常结果，不代表分类失败或图片健康。
+
+历史 `Predictor` 和分类 bundle 仅为 F0 回归兼容，不被默认 J5 服务加载。

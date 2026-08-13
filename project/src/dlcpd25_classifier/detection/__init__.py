@@ -5,6 +5,7 @@ from .mapping import DetectionClass, DetectionClassMapping
 from .model import (
     SharedModelInfo,
     SharedResNet50ClassifierDetector,
+    build_empty_shared_detection_model,
     build_shared_detection_model,
 )
 from .transforms import DirectResizeDetectionTransform
@@ -16,5 +17,6 @@ __all__ = [
     "IP102DetectionDataset",
     "SharedModelInfo",
     "SharedResNet50ClassifierDetector",
+    "build_empty_shared_detection_model",
     "build_shared_detection_model",
 ]

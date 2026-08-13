@@ -43,8 +43,8 @@ class AppSettings:
             return payload[name]
 
         mode = str(required("mode"))
-        if mode not in {"fake", "bundle"}:
-            raise ValueError("mode must be 'fake' or 'bundle'")
+        if mode not in {"fake", "bundle", "joint_bundle"}:
+            raise ValueError("mode must be 'fake', 'bundle', or 'joint_bundle'")
         device = str(required("device"))
         if device not in {"auto", "cpu", "cuda"}:
             raise ValueError("device must be auto, cpu, or cuda")

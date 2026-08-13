@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 import torch
+import torchvision
 from dlcpd25_classifier.inference import (
     BundleValidationError,
     load_joint_bundle_manifest,
@@ -88,6 +89,8 @@ def _bundle(tmp_path: Path) -> Path:
         ),
         "preprocessing_sha256": sha256_file(bundle / "preprocessing.json"),
         "postprocessing_sha256": sha256_file(bundle / "postprocessing.json"),
+        "torch_version": torch.__version__,
+        "torchvision_version": torchvision.__version__,
     }
     (bundle / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
     write_checksums(bundle)

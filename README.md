@@ -8,7 +8,7 @@
 
 联合模型在 DLCPD-25 test 上的 Top-1 为 `91.3157%`、Top-5 为 `96.4289%`、Macro-F1 为 `75.4451%`；在 IP102 test 上的 mAP@0.5:0.95 为 `35.8823%`、AP50 为 `65.5326%`、Precision 为 `68.9095%`、Recall 为 `80.1980%`。分类置信度低于冻结阈值 `0.55` 时，应用必须明确提示结果不确定。
 
-唯一模型包位于 `artifacts/releases/dlcpd25-ip102-joint-v1/`。当前 `7860` 页面仍加载历史分类基线；下一阶段 J5 将改为加载联合模型包，一次推理同时显示分类 Top-5 和支持类别的检测框。
+唯一模型包位于 `artifacts/releases/dlcpd25-ip102-joint-v1/`。默认 `7860` 页面已加载该联合模型包，一次推理同时显示分类 Top-5 和支持类别的检测框。
 
 ## 快速启动
 
@@ -20,7 +20,7 @@ PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
   -m dlcpd25_classifier.web --host 127.0.0.1 --port 7860
 ```
 
-打开 <http://127.0.0.1:7860>。默认配置会加载 `artifacts/releases/dlcpd25-resnet50-weighted-v1/`；`device: auto` 优先使用 CUDA，失败时回退 CPU。
+打开 <http://127.0.0.1:7860>。默认配置加载 `artifacts/releases/dlcpd25-ip102-joint-v1/`；`device: auto` 优先使用 CUDA，失败时回退 CPU。
 
 固定 val 样例、Top-5 一致性和损坏图片处理可用以下命令复验，命令不会访问正式 test：
 
@@ -34,7 +34,7 @@ PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
 
 ## 当前开发入口
 
-历史分类训练与 F0 验收已经冻结，不再复跑 A2/A3。IP102 T0 和联合模型 J1-J4 已通过。两个冻结 test 均已在 J4 各评估一次，不得重跑或用于调参；当前代码进入 J5，只接入唯一联合模型包，不再训练模型。
+历史分类训练与 F0 验收已经冻结，不再复跑 A2/A3。IP102 T0 和联合模型 J1-J5 已通过。两个冻结 test 均已在 J4 各评估一次，不得重跑或用于调参；下一阶段仅执行 F1 最终验收，不再训练模型。
 
 J5 完成后执行 F1 最终验收。完整规则见：
 

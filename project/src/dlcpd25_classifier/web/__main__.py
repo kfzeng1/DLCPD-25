@@ -1,4 +1,4 @@
-"""Launch the P1 Gradio application."""
+"""Launch the DLCPD-25 joint classification/detection application."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ DEFAULT_CONFIG = ROOT / "project" / "configs" / "app.yaml"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Launch the DLCPD-25 classification application")
+    parser = argparse.ArgumentParser(description="Launch the DLCPD-25 joint application")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=7860)

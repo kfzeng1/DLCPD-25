@@ -117,9 +117,9 @@ def _rewrite_checksums(bundle: Path) -> None:
 
 def test_app_settings_resolve_repository_paths_and_limits() -> None:
     settings = AppSettings.from_yaml(APP_CONFIG)
-    assert settings.mode == "bundle"
+    assert settings.mode == "joint_bundle"
     assert settings.model_bundle == (
-        ROOT / "artifacts" / "releases" / "dlcpd25-resnet50-weighted-v1"
+        ROOT / "artifacts" / "releases" / "dlcpd25-ip102-joint-v1"
     )
     assert settings.taxonomy_path is None
     assert settings.image_size == 224

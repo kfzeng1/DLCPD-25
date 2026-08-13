@@ -1,5 +1,5 @@
-mode: bundle
-model_bundle: ../artifacts/releases/dlcpd25-resnet50-weighted-v1
+mode: joint_bundle
+model_bundle: ../artifacts/releases/dlcpd25-ip102-joint-v1
 device: auto
 image_size: 224
 confidence_threshold: 0.55

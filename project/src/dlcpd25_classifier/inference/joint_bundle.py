@@ -47,6 +47,8 @@ class JointBundleManifest:
     detection_mapping_sha256: str
     preprocessing_sha256: str
     postprocessing_sha256: str
+    torch_version: str
+    torchvision_version: str
 
 
 def sha256_file(path: Path) -> str:
@@ -138,6 +140,8 @@ def load_joint_bundle_manifest(bundle_path: str | Path) -> JointBundleManifest:
             detection_mapping_sha256=str(payload["detection_mapping_sha256"]),
             preprocessing_sha256=str(payload["preprocessing_sha256"]),
             postprocessing_sha256=str(payload["postprocessing_sha256"]),
+            torch_version=str(payload["torch_version"]),
+            torchvision_version=str(payload["torchvision_version"]),
         )
     except (KeyError, TypeError, ValueError) as exc:
         raise _error("manifest_invalid", "联合模型包 manifest 字段无效。") from exc

@@ -218,3 +218,32 @@ def build_shared_detection_model(
         image_size=IMAGE_SIZE,
         shared_body_forwards_per_joint_call=1,
     )
+
+
+def build_empty_shared_detection_model(
+    mapping: DetectionClassMapping,
+) -> tuple[SharedResNet50ClassifierDetector, SharedModelInfo]:
+    """Build the joint architecture without reading initialization weights."""
+    backbone = resnet_fpn_backbone(
+        backbone_name="resnet50",
+        weights=None,
+        trainable_layers=5,
+        norm_layer=FrozenBatchNorm2d,
+    )
+    detector = FasterRCNN(
+        backbone,
+        num_classes=mapping.num_detector_classes + 1,
+        min_size=IMAGE_SIZE,
+        max_size=IMAGE_SIZE,
+        image_mean=[0.0, 0.0, 0.0],
+        image_std=[1.0, 1.0, 1.0],
+    )
+    model = SharedResNet50ClassifierDetector(detector, nn.Linear(2048, 203))
+    return model, SharedModelInfo(
+        backbone="resnet50-fpn",
+        classification_classes=203,
+        detection_classes=mapping.num_detector_classes,
+        detector_classes_with_background=mapping.num_detector_classes + 1,
+        image_size=IMAGE_SIZE,
+        shared_body_forwards_per_joint_call=1,
+    )

@@ -9,6 +9,12 @@ from .joint_bundle import (
     JointBundleManifest,
     load_joint_bundle_manifest,
 )
+from .joint_predictor import (
+    JOINT_PREDICTION_SCHEMA_VERSION,
+    DetectionResult,
+    JointPredictionResult,
+    JointPredictor,
+)
 from .predictor import (
     PREDICTION_SCHEMA_VERSION,
     FixedLogitsBackend,
@@ -21,14 +27,18 @@ from .predictor import (
 __all__ = [
     "BUNDLE_SCHEMA_VERSION",
     "JOINT_BUNDLE_SCHEMA_VERSION",
+    "JOINT_PREDICTION_SCHEMA_VERSION",
     "PREDICTION_SCHEMA_VERSION",
     "AppSettings",
     "BundleManifest",
     "BundleValidationError",
+    "DetectionResult",
     "FixedLogitsBackend",
     "ImageLimits",
     "ImageValidationError",
     "JointBundleManifest",
+    "JointPredictionResult",
+    "JointPredictor",
     "PredictionError",
     "PredictionResult",
     "Predictor",
