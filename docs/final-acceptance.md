@@ -57,7 +57,7 @@ IP102 detection test，3,798 张、4,444 个目标：
 - IP102 val 真实样例在 CUDA/CPU 均返回 class 156 和 2 个检测框；CUDA 约 `68.686 ms`，CPU 约 `947.309 ms`。
 - 7860 `/analyze` 真实上传返回 5 行分类 Top-5、2 行检测、带框图和低置信度提示。
 - Edge CDP 桌面 `1650x785` 与移动 `390x844` 验收通过，无页面级横向溢出或元素重叠。
-- 项目全量测试 `124 passed`；后续新增 CUDA 回退定向测试 `7 passed`；Ruff 和 `git diff --check` 通过。
+- F1 项目全量测试 `126 passed, 9 warnings in 251.89s`；warning 均为 Gradio 6.0 弃用提示；Ruff 和 `git diff --check` 通过。
 - Git 中无原图、模型权重、缓存、超过 10 MiB 的文件或 `artifacts` 大产物。
 
 浏览器截图位于 `artifacts/audit/j5-browser/`，模型与训练产物按 `.gitignore` 保留在本机，不进入 Git。

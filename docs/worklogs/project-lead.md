@@ -7,7 +7,7 @@
 - 结论：通过；T0、J1-J5 版本链完整，最终只部署 `dlcpd25-ip102-joint-v1` 一份联合权重。
 - 冻结链：J4 模型包 14 项 checksum 全部 OK；`joint-best.pt` 是唯一 `.pt`；J4 test 收据为 `consumed`、评估次数 1、指标未用于调参。
 - 模型与应用：统一 RGB 直缩 `224x224`、一个 ResNet-50-FPN、203 类分类、96 类害虫检测和一次共享主干前向；默认配置、7860 `/analyze`、CPU/CUDA 和浏览器证据一致。
-- 工程：Git 无原图、权重、缓存、artifacts 大文件或超过 10 MiB 的文件；Ruff、`git diff --check` 通过；全量测试 `124 passed`，新增设备回退定向测试 `7 passed`。
+- 工程：Git 无原图、权重、缓存、artifacts 大文件或超过 10 MiB 的文件；Ruff、`git diff --check` 通过；F1 全量测试 `126 passed, 9 warnings in 251.89s`，warning 均为 Gradio 6.0 弃用提示。
 - 文档：重写 `docs/final-acceptance.md` 为 F1 联合系统报告，修正项目 README 和阶段计划中的旧分类模型/J3 状态。
 - 限制：检测仅覆盖 96 类害虫，Small AP `6.1139%`；分类低置信度率 `71.3004%`。系统不得宣称定位全部 203 类，也不替代农业专家诊断。
 
