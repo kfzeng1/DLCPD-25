@@ -2,6 +2,16 @@
 
 当前状态：历史分类基线 F0、IP102 T0、统一预处理适配 J1 和联合链路 J2 已通过；旧单任务检测 T1 已撤销，下一阶段为完整联合训练 J3。
 
+## 2026-08-13 J3 正式联合训练完成，待验收
+
+- 训练 run：`artifacts/training/detection/j3-joint-full-e67e96e-r2/`；配置为 10 epochs，DLCPD-25/IP102 train 按 `1:1` 交替，共 `221,280` 个 pair；systemd 后台服务完成后正常退出，GPU 已释放。
+- 初始化与边界：从 J1 `classification-init.pt` 初始化共享 ResNet-50 和 203 类分类头，检测分支随机初始化；只读取两个 train/val，`test_metrics_read=false` 全程保持，未执行 J4。
+- 最佳 checkpoint：epoch 10，`joint-best.pt` 与 `joint-last.pt` 字节一致，SHA-256 为 `5ec0f4f7891b729ddf26a51cd70d5c56a69825b2dd587c7f6af55854d3c06c49`；严格重载通过，模型契约为 `224 / ResNet-50-FPN / 203 / 96 / 一次共享前向`。
+- 分类 val：Top-1 `91.2842%`、Top-5 `96.2936%`、Macro-F1 `76.3437%`、Balanced Accuracy `75.7520%`；相对 J1 上升，满足 `88.7837%` 门槛。
+- 检测 val：mAP@0.5:0.95 `38.5639%`、AP50 `67.2773%`、Precision `69.4911%`、Recall `80.2136%`；小目标 AP `8.4335%`，仍是明确风险。
+- 训练趋势：检测 mAP 从 epoch 1 `28.5761%` 升至 epoch 10 `38.5639%`；分类 Top-1 从 `90.0667%` 升至 `91.2842%`，无灾难性遗忘。
+- 验收：run checksum 全部通过，项目全量测试 `111 passed`（4 条既有 Gradio 弃用警告）；J3 目前标记“待验收”，不得在总负责人确认前进入 J4。
+
 ## 2026-08-12 工程整理与 J3 保护性修复
 
 - 结论：已整理，J3 仍未开始；本次不读取 test，不创建正式 J3 训练 run。
