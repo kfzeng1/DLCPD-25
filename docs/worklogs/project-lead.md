@@ -1,8 +1,20 @@
 # 总负责人工作与验收日志
 
-当前状态：历史分类基线 F0、IP102 T0、统一预处理适配 J1 和联合链路 J2 已通过；旧单任务检测 T1 已撤销，下一阶段为完整联合训练 J3。
+当前状态：J4 已通过；唯一联合模型包已冻结，下一阶段为 J5 单模型应用接入，之后执行 F1 最终验收。
 
-## 2026-08-13 J3 正式联合训练完成，待验收
+## 2026-08-13 J4 冻结测试与联合模型包验收
+
+- 结论：通过；J3 epoch 10 checkpoint、RGB bicubic 直缩 `224x224`、分类阈值 `0.55`、检测 AP score `0.05`、运行 score/NMS `0.5/0.5` 和每图最多 100 框均在 test 前冻结。
+- 一次性边界：分类 test 22,178 张与 IP102 test 3,798 张各执行一次、各仅一遍模型推理；收据为 `metadata/j4-joint-test-evaluation.json`，状态 `consumed`，test 指标未用于调参或重训。
+- 分类 test：Top-1 `91.3157%`、Top-5 `96.4289%`、Macro-F1 `75.4451%`、Balanced Accuracy `74.6621%`；阈值 `0.55` 下低置信度率 `71.3004%`。
+- 检测 test：mAP@0.5:0.95 `35.8823%`、AP50 `65.5326%`、Precision `68.9095%`、Recall `80.1980%`；小目标 AP `6.1139%`。95/96 个检测类有 test 支持，源类 61 对应 detector label 8 无 test 样本。
+- 发布：`artifacts/releases/dlcpd25-ip102-joint-v1/` 只含一份 `joint-best.pt`，SHA-256 为 `5ec0f4f7891b729ddf26a51cd70d5c56a69825b2dd587c7f6af55854d3c06c49`；统一模型契约为 ResNet-50-FPN、203 类分类、96 类检测、一次共享主干前向。
+- 复验：联合 bundle 校验、checkpoint 严格重载、CPU 联合前向、发布 checksum 全部通过；J4 专项测试 `8 passed`，项目全量测试 `119 passed`，4 条 warning 均为既有 Gradio 弃用提示。
+- 风险：检测 test mAP 比 J3 val 低约 `2.68` 个百分点，且 224 直缩下小目标能力有限；分类低置信度率仍高。J5 必须如实展示不确定提示和检测能力边界，不得声称全部 203 类都能定位。
+
+## 2026-08-13 J3 正式联合训练验收
+
+- 结论：通过；下述正式 run、checkpoint 选型和 test 隔离证据均已复核，允许执行且现已完成 J4。
 
 - 训练 run：`artifacts/training/detection/j3-joint-full-e67e96e-r2/`；配置为 10 epochs，DLCPD-25/IP102 train 按 `1:1` 交替，共 `221,280` 个 pair；systemd 后台服务完成后正常退出，GPU 已释放。
 - 初始化与边界：从 J1 `classification-init.pt` 初始化共享 ResNet-50 和 203 类分类头，检测分支随机初始化；只读取两个 train/val，`test_metrics_read=false` 全程保持，未执行 J4。
@@ -10,7 +22,7 @@
 - 分类 val：Top-1 `91.2842%`、Top-5 `96.2936%`、Macro-F1 `76.3437%`、Balanced Accuracy `75.7520%`；相对 J1 上升，满足 `88.7837%` 门槛。
 - 检测 val：mAP@0.5:0.95 `38.5639%`、AP50 `67.2773%`、Precision `69.4911%`、Recall `80.2136%`；小目标 AP `8.4335%`，仍是明确风险。
 - 训练趋势：检测 mAP 从 epoch 1 `28.5761%` 升至 epoch 10 `38.5639%`；分类 Top-1 从 `90.0667%` 升至 `91.2842%`，无灾难性遗忘。
-- 验收：run checksum 全部通过，项目全量测试 `111 passed`（4 条既有 Gradio 弃用警告）；J3 目前标记“待验收”，不得在总负责人确认前进入 J4。
+- 验收：run checksum 全部通过，项目全量测试 `111 passed`（4 条既有 Gradio 弃用警告）。
 
 ## 2026-08-12 工程整理与 J3 保护性修复
 

@@ -89,3 +89,13 @@
 关键指标：一个共享 ResNet-50 body、一次 joint body forward、分类 203 类、检测背景+96 类；固定 16 个分类类别与 8 个不同 detector label，24 个正式 step 全部梯度/参数边界通过；分类周期均值 loss `0.124485→0.059652`，检测 `7.938776→4.463577`；训练 `11.30s`、`2.124 step/s`、`10.619 image/s`，峰值显存 `2,494,724,096` bytes；`joint-last.pt` SHA-256 `fcf84a903e296040d0c72cc0026e8c52dd229483a621921946c25d943513805a`，checksum 清单 SHA-256 `32c1ba592d5011f1495ae3f9ed33e2e0e0d447e3fbdf7db04f34c7123a7bc8ee`。
 遗留问题：r1-r7 为工程调试或验收补强产物，正式结果仅为 r8；J2 只证明小样本链路和硬件可行，不代表检测 val 精度或分类遗忘已验收，J3 仍需完整双 val 选型；J2/J3 checkpoint 当前只承诺在两个 loader 循环边界精确恢复。
 是否进入下一阶段：是，J3
+
+## 2026-08-13 J4 冻结测试与唯一联合模型包
+
+阶段：J4，总负责人验收通过；J3 最佳 checkpoint 与全部输入、预处理和后处理参数先冻结，DLCPD-25 分类 test 和 IP102 检测 test 各消费一次，未用于调参或重训。
+修改文件：新增 `project/configs/j4.yaml`、`training/j4.py`、`inference/joint_bundle.py` 和 `test_training_j4.py`；发布包为 `artifacts/releases/dlcpd25-ip102-joint-v1/`，一次性收据为 `metadata/j4-joint-test-evaluation.json`。
+运行命令：先执行 Ruff、J4 专项测试和无副作用 `--verify-inputs-only`；随后执行唯一正式 J4，最后完成 bundle checksum、严格 checkpoint 重载、CPU 联合前向和项目全量测试。
+测试结果：J4 专项 `8 passed`；项目全量 `119 passed, 4 warnings`，warning 均为既有 Gradio 弃用提示；模型包校验和严格重载通过，且只有一份 `.pt` 权重。
+关键指标：分类 test Top-1/Top-5/Macro-F1/Balanced Accuracy 为 `91.3157%/96.4289%/75.4451%/74.6621%`；检测 test mAP/AP50/Precision/Recall 为 `35.8823%/65.5326%/68.9095%/80.1980%`；小目标 AP `6.1139%`，95/96 检测类有 test 支持。
+遗留问题：分类阈值 `0.55` 下低置信度率 `71.3004%`；IP102 源类 61 无 test 支持；224 直缩的小目标能力有限。J5 必须显示不确定性，并明确只有映射的 96 个害虫类具有定位能力。
+是否进入下一阶段：是，J5
