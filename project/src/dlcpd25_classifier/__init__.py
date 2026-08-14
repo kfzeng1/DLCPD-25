@@ -1,3 +1,3 @@
-"""DLCPD-25 hierarchical image classification project."""
+"""DLCPD-25 classification and IP102 pest detection system."""
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"

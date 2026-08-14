@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dlcpd25-classifier"
-version = "0.1.0"
-description = "Hierarchical 203-class DLCPD-25 image classification system"
+name = "dlcpd25-joint-system"
+version = "1.0.0"
+description = "Joint DLCPD-25 crop classification and IP102 pest detection system"
 requires-python = ">=3.10"
 dependencies = [
   "Pillow>=10.0,<13",
@@ -18,8 +18,10 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.0,<9", "pycocotools>=2.0.7,<3"]
 app = ["gradio>=4.0,<6"]
-docs = ["python-pptx>=1.0,<2"]
 training = ["pycocotools>=2.0.7,<3"]
+
+[project.scripts]
+dlcpd25-web = "dlcpd25_classifier.web.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

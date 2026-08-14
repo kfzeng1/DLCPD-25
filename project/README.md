@@ -1,40 +1,134 @@
-# DLCPD-25 分类与目标检测系统工程
+# 基于 DLCPD-25 的农产品病虫害与缺陷分类目标检测系统
 
-本目录是训练、评估和图片推理应用的唯一代码工程。最终模型使用 DLCPD-25 与 IP102 交替联合训练：一个 ResNet-50 共享主干、一个 203 类分类头和一个 Faster R-CNN 检测分支，最终只发布一份联合权重。
+本工程实现农产品图像的联合分类与目标检测。模型以 ResNet-50-FPN 为共享主干，一次前向同时输出：
 
-## 模块
+- DLCPD-25 的 203 类整图分类 Top-5；
+- IP102 中与 DLCPD-25 对齐的 96 类害虫检测框。
+
+病害、健康和非生物/生理缺陷只有图像级标签，因此只提供分类结果；系统不会为没有边界框标注的类别生成虚假检测框。
+
+## 模型结构
+
+```text
+RGB 图片
+  -> EXIF 校正与 RGB 转换
+  -> Bicubic 直缩 224 x 224
+  -> ResNet-50 共享特征主干
+      |-- 全局池化 + Linear(2048, 203) -> 分类 Top-5
+      `-- FPN + RPN + ROI Heads         -> 96 类害虫检测框
+```
+
+分类与检测使用同一输入张量和同一份主干特征。检测框在推理后从 `224 x 224` 坐标反算至原图。
+
+## 目录结构
 
 ```text
 project/
-  configs/                 # 训练和应用配置
-  src/dlcpd25_classifier/  # 分类、检测、训练、推理与应用
-  tests/                   # 单元和冒烟测试
-  pyproject.toml           # Python 依赖和入口
+  configs/                    # 应用、分类训练和联合训练配置
+  src/dlcpd25_classifier/
+    data/                     # DLCPD-25 Dataset
+    detection/                # IP102 Dataset、映射、模型与 COCO 评估
+    inference/                # 模型包校验、图片处理与联合推理
+    models/                   # ResNet-50 分类模型构造
+    training/                 # 分类训练、交替联合训练与模型发布
+    web/                      # Gradio 应用
+  tests/                      # 数据、模型、训练、推理和页面测试
+  pyproject.toml              # Python 包与依赖
 ```
 
-默认模型为 ImageNet 预训练 ResNet-50。ConvNeXt-Tiny 只在时间和资源允许时作为对照；当前电脑的 RTX 4070 Laptop 8 GiB 显存不适合在项目周期内从零完成论文级 MAE、SimCLR v2 或 MoCo v3 预训练。
+## 环境安装
 
-本机已有 `/home/zkf/pytorch-env`：PyTorch 2.11.0+cu128、torchvision 0.26.0+cu128，CUDA 可用。工程直接复用这个环境。联合训练及测试使用 `pip install -e 'project[training,dev]'`；应用使用 `pip install -e 'project[app]'`。
-
-开发流程、硬件限制和三位工程师职责见 `../docs/`。历史分类阶段 D0-F0、IP102 T0、联合模型 J1-J5 和最终验收 F1 均已通过；当前工程进入维护与课程演示状态。
-
-训练代码按职责分层：`training/joint.py` 放两个任务共用的优化器、梯度开关、检测 batch 拼接和随机状态；`training/j2.py` 只保留小样本链路验收；`training/j3.py` 只负责完整联合训练与断点续训；`detection/evaluation.py` 只负责 COCO 指标。新训练代码不能跨阶段导入私有函数。
+推荐 Python 3.10 及以上版本。CUDA 训练环境需要与显卡驱动匹配的 PyTorch；仅使用 CPU 也可以运行应用，但推理速度较慢。
 
 ```bash
-PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
-  -m dlcpd25_classifier.training.preflight
+cd project
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e '.[app,training,dev]'
 ```
 
-## 联合分类检测应用
+本项目完成时使用 PyTorch `2.11.0+cu128`、torchvision `0.26.0+cu128` 和 RTX 4070 Laptop GPU。
 
-应用默认加载已验收的 `dlcpd25-ip102-joint-v1` 唯一联合模型包。从仓库根目录运行：
+## 运行应用
+
+默认配置为 `configs/app.yaml`。模型包默认位于工程目录同级的：
+
+```text
+artifacts/releases/dlcpd25-ip102-joint-v1/
+```
+
+该模型包需包含 `joint-best.pt`、manifest、预处理与后处理配置、taxonomy、IP102 映射、指标和 `checksums.sha256`。模型权重体积较大，不包含在源码提交中。
 
 ```bash
-/home/zkf/pytorch-env/bin/pip install -e 'project[app]'
-PYTHONPATH=project/src /home/zkf/pytorch-env/bin/python \
-  -m dlcpd25_classifier.web --host 127.0.0.1 --port 7860
+cd project
+python -m dlcpd25_classifier.web --host 127.0.0.1 --port 7860
 ```
 
-打开 <http://127.0.0.1:7860>。一次上传同时输出 203 类分类 Top-5 和 96 类害虫检测框。`device: auto` 优先使用 CUDA，CUDA 初始化或预热失败时回退 CPU；显式配置 `cuda` 时失败会拒绝启动。分类置信度低于 `0.55` 时显示不确定提示，检测只显示分数不低于 `0.5` 的框。
+也可以使用安装后的命令：
 
-启动前会校验模型包全部 checksum、唯一权重、taxonomy、IP102 映射、预处理、后处理、依赖版本和 checkpoint 契约。详细排错及固定演示样例见 `../docs/application-runbook.md`。
+```bash
+dlcpd25-web --host 127.0.0.1 --port 7860
+```
+
+浏览器打开 <http://127.0.0.1:7860>。`device: auto` 优先使用 CUDA，CUDA 初始化失败时自动回退 CPU。
+
+## 配置说明
+
+- `configs/app.yaml`：最终联合推理应用；
+- `configs/j3.yaml`：双数据集 `1:1` 交替联合训练；
+- `configs/j4.yaml`：冻结模型评估与发布包构建；
+- `configs/train.yaml`：203 类分类训练；
+- `configs/j1.yaml`、`configs/j2.yaml`：预处理适配和联合训练链路验证配置。
+
+配置中的 `../data`、`../metadata` 和 `../artifacts` 均相对于本工程目录解析。若只提交源码，应将数据集和模型权重作为独立附件，并按配置中的相对路径放置。
+
+## 训练方法
+
+联合训练对两个 DataLoader 进行 `1:1` 交替采样：
+
+```text
+DLCPD-25 batch -> 分类交叉熵 -> 更新共享主干与分类头
+IP102 batch    -> 检测损失   -> 更新共享主干与检测分支
+```
+
+正式配置训练 10 轮，分类步骤使用 AMP FP16，检测步骤使用 FP32。模型先满足分类验证集精度门槛，再按照检测验证集 `mAP@0.5:0.95` 选择最佳 checkpoint。
+
+训练需要同级目录中的 DLCPD-25、IP102、固定 split、taxonomy、类别映射和分类初始化权重。完整路径与 SHA-256 均已固定在训练配置中。
+
+## 测试
+
+不加载正式模型的快速测试：
+
+```bash
+cd project
+pytest -q tests/test_taxonomy.py tests/test_detection_mapping.py
+```
+
+联合推理回归测试会加载正式模型包：
+
+```bash
+cd project
+pytest -q tests/test_inference_j5.py
+```
+
+完整测试依赖同级的数据、metadata、artifacts 和仓库数据脚本：
+
+```bash
+cd project
+pytest -q
+```
+
+## 最终指标
+
+| 任务 | 指标 | 结果 |
+|---|---|---:|
+| DLCPD-25 分类 | Top-1 | 91.3157% |
+| DLCPD-25 分类 | Top-5 | 96.4289% |
+| DLCPD-25 分类 | Macro-F1 | 75.4451% |
+| IP102 检测 | mAP@0.5:0.95 | 35.8823% |
+| IP102 检测 | AP50 | 65.5326% |
+| IP102 检测 | Precision | 68.9095% |
+| IP102 检测 | Recall | 80.1980% |
+
+统一使用 `224 x 224` 输入能够控制显存和训练时间，但会限制小目标检测能力。系统定位范围仅为具有 IP102 边界框的 96 类害虫，不代表能够定位 DLCPD-25 的全部 203 类。

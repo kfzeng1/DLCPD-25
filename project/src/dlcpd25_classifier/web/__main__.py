@@ -10,8 +10,8 @@ from dlcpd25_classifier.inference.errors import InferenceError
 
 from .app import load_app
 
-ROOT = Path(__file__).resolve().parents[4]
-DEFAULT_CONFIG = ROOT / "project" / "configs" / "app.yaml"
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+DEFAULT_CONFIG = PROJECT_ROOT / "configs" / "app.yaml"
 
 
 def parse_args() -> argparse.Namespace:

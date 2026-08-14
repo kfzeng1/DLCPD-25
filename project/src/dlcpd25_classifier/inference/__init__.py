@@ -1,4 +1,4 @@
-"""Image preprocessing and hierarchical classification inference."""
+"""Validated image preprocessing and joint classification/detection inference."""
 
 from .bundle import BUNDLE_SCHEMA_VERSION, BundleManifest, load_bundle_manifest
 from .config import AppSettings
