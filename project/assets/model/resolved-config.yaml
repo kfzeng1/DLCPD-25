@@ -1,0 +1,14 @@
+model_version: dlcpd25-ip102-joint-v1
+architecture: joint-resnet50-fasterrcnn
+image_size: 224
+classification_classes: 203
+detection_classes: 96
+preprocessing:
+  color_mode: RGB
+  resize: [224, 224]
+  interpolation: bicubic
+postprocessing:
+  classification_confidence_threshold: 0.55
+  detection_score_threshold: 0.5
+  detection_nms_iou_threshold: 0.5
+  detection_max_detections_per_image: 100

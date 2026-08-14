@@ -26,13 +26,14 @@ y_new = y_old * 224 / original_height
 
 随后做 ImageNet normalization。Faster R-CNN 内部 transform 必须配置为固定 224 且 identity normalization，避免二次处理。
 
-## 训练顺序
+## 训练方法
 
-1. J1 用历史分类权重初始化，在 DLCPD-25 train/val 上适配新预处理。
-2. J2-J3 交替执行 DLCPD-25 分类 step 和 IP102 检测 step。
-3. 分类 step 更新主干和分类头；检测 step 更新主干、FPN、RPN、ROI。
-4. 分类 step 冻结检测头，检测 step 冻结分类头；主干使用较小学习率持续参与两种任务。
-5. J4 冻结后分别进行一次最终分类和检测测试，发布一个联合 checkpoint。
+1. 从 ImageNet V2 权重初始化 ResNet-50，在 DLCPD-25 的 203 类分类任务上先训练 25 轮。
+2. 在 DLCPD-25 train/val 上继续训练 5 轮，适配统一的 `224 x 224` 整图直缩预处理。
+3. 交替执行 DLCPD-25 分类 step 和 IP102 检测 step，共进行 10 轮联合训练。
+4. 分类 step 更新主干和分类头；检测 step 更新主干、FPN、RPN、ROI。
+5. 分类 step 冻结检测头，检测 step 冻结分类头；主干使用较小学习率持续参与两种任务。
+6. 训练配置和后处理参数冻结后，分别进行最终分类和检测测试，发布一个联合 checkpoint。
 
 不得只用 IP102 长时间微调整个主干，否则会造成分类遗忘；也不得部署两套权重规避联合训练目标。
 
@@ -44,4 +45,4 @@ IP102 contract: artifacts/data/ip102-detection-v1/
 IP102 raw:      data/raw/ip102/downloads/Detection/VOC2007/
 ```
 
-IP102 官方 test 在 J4 前不得用于模型、比例、阈值或训练轮数选择。分类正式 test 也不得重新用于调参。
+IP102 与 DLCPD-25 的测试集均不用于模型、数据比例、阈值或训练轮数选择。

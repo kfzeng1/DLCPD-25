@@ -1,0 +1,54 @@
+{
+  "map": 0.35882309938612816,
+  "ap50": 0.6553256033088917,
+  "ap75": 0.35003035756164763,
+  "ap_small": 0.061138848247046754,
+  "ap_medium": 0.27564669101073674,
+  "ap_large": 0.39572327636435706,
+  "precision": 0.6890951276102089,
+  "recall": 0.801980198019802,
+  "precision_recall_score_threshold": 0.5,
+  "precision_recall_iou_threshold": 0.5,
+  "true_positive": 3564,
+  "false_positive": 1608,
+  "false_negative": 880,
+  "images": 3798,
+  "objects": 4444,
+  "predictions": 7773,
+  "object_size_support": {
+    "large": 3453,
+    "medium": 864,
+    "small": 127
+  },
+  "long_tail": {
+    "tail": {
+      "classes": 32,
+      "train_objects_min": 1,
+      "train_objects_max": 44,
+      "mean_ap": 0.2989129958381763
+    },
+    "middle": {
+      "classes": 32,
+      "train_objects_min": 45,
+      "train_objects_max": 116,
+      "mean_ap": 0.3719285707439396
+    },
+    "head": {
+      "classes": 32,
+      "train_objects_min": 117,
+      "train_objects_max": 1907,
+      "mean_ap": 0.403755540840395
+    }
+  },
+  "duration_seconds": 76.65070635598386,
+  "images_per_second": 49.549445537542695,
+  "implementation": "pycocotools COCOeval bbox",
+  "classes_with_test_support": 95,
+  "classes_without_test_support": [
+    {
+      "detector_label": 8,
+      "name": "Brevipoalpus lewisi McGregor(vitis)",
+      "ip102_source_class_id": 61
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # 联合应用推理契约
 
-J5 默认应用只加载 J4 的 `artifacts/releases/dlcpd25-ip102-joint-v1/`。一张图片只解码一次、只生成一个 RGB bicubic 直缩 `224 x 224` 张量，并调用一次 `forward_joint()`；分类与检测共享同一次 ResNet-50 主干前向。
+默认应用只加载 `project/assets/model/` 中的最终联合模型包。一张图片只解码一次、只生成一个 RGB bicubic 直缩 `224 x 224` 张量，并调用一次 `forward_joint()`；分类与检测共享同一次 ResNet-50 主干前向。
 
 ## Predictor
 
@@ -40,4 +40,4 @@ original_size, inference_ms
 - 分类置信度低于 `0.55` 时显示不确定提示；检测仅显示分数不低于 `0.5` 的框。
 - 无检测框是正常结果，不代表分类失败或图片健康。
 
-历史 `Predictor` 和分类 bundle 仅为 F0 回归兼容，不被默认 J5 服务加载。
+历史分类推理接口仅用于兼容测试，默认 Web 服务使用联合模型推理接口。

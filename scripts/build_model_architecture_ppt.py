@@ -207,8 +207,8 @@ def build() -> None:
     add_box(slide, "203类整图分类", "DLCPD-25", 5.3, 3.72, 2.25, 1.25, fill=GREEN_LIGHT, line=GREEN)
     add_box(slide, "96类害虫检测", "IP102边界框", 7.85, 3.72, 2.25, 1.25, fill=BLUE_LIGHT, line=BLUE)
     add_box(slide, "统一输入", "RGB 224 × 224", 10.4, 3.72, 2.0, 1.25, fill=GOLD_LIGHT, line=GOLD)
-    add_text(slide, "状态：J1/J2 已通过；J3 正式联合训练尚未启动", 5.3, 5.6, 7.0, 0.45, size=14, color=RED, bold=True)
-    add_text(slide, "生成日期：2026-08-12", 5.3, 6.3, 4.0, 0.3, size=10.5, color=MUTED)
+    add_text(slide, "状态：已完成分类预训练、10轮联合训练与最终测试", 5.3, 5.6, 7.0, 0.45, size=14, color=RED, bold=True)
+    add_text(slide, "最终版本：2026-08-14", 5.3, 6.3, 4.0, 0.3, size=10.5, color=MUTED)
 
     # Slide 2: overall architecture
     slide = prs.slides.add_slide(blank)
@@ -267,7 +267,7 @@ def build() -> None:
     slide = prs.slides.add_slide(blank)
     set_background(slide)
     add_title(slide, "3. 双数据集交替联合训练", "不是把两种标签混成一个 batch，而是分类 step 与检测 step 固定 1:1 交替")
-    add_box(slide, "J1 初始化", "DLCPD-25分类权重\nVal Top-1 90.7882%", 0.6, 1.55, 2.0, 1.25, fill=GOLD_LIGHT, line=GOLD)
+    add_box(slide, "分类初始化", "DLCPD-25训练25轮 + 适配5轮\nVal Top-1 90.7837%", 0.6, 1.55, 2.0, 1.25, fill=GOLD_LIGHT, line=GOLD, subtitle_size=10)
     add_arrow(slide, 2.6, 2.18, 3.05, 2.18, GOLD)
     add_box(slide, "构建联合模型", "加载共享主干与分类头\n随机初始化检测分支", 3.05, 1.48, 2.55, 1.4, fill=WHITE, line=GREEN)
     add_arrow(slide, 5.6, 2.18, 6.0, 2.18, GREEN)
@@ -292,15 +292,15 @@ def build() -> None:
     add_box(slide, "共享主干", "ResNet-50 body\n学习率 1e-5\n分类/检测 step 都更新", 0.7, 1.65, 3.0, 1.65, fill=GREEN_LIGHT, line=GREEN, title_size=20)
     add_box(slide, "203类分类头", "Linear(2048→203)\n学习率 1e-5\n仅分类 step 更新", 4.0, 1.65, 2.7, 1.65, fill=GOLD_LIGHT, line=GOLD, title_size=20)
     add_box(slide, "检测分支", "FPN + RPN + ROI Heads\n学习率 1e-4\n仅检测 step 更新", 7.0, 1.65, 2.8, 1.65, fill=BLUE_LIGHT, line=BLUE, title_size=20)
-    add_box(slide, "优化器", "AdamW + Cosine Scheduler\nWeight decay 1e-4\n正式计划 10 epochs", 10.1, 1.65, 2.55, 1.65, fill=WHITE, line=MUTED, title_size=20)
+    add_box(slide, "优化器", "AdamW + Cosine Scheduler\nWeight decay 1e-4\n联合训练 10 epochs", 10.1, 1.65, 2.55, 1.65, fill=WHITE, line=MUTED, title_size=20)
     add_text(slide, "每个 epoch 分别评估两个 val 集", 0.75, 4.0, 4.2, 0.4, size=18, color=INK, bold=True)
     add_bullet_list(
         slide,
         [
-            "分类门槛：Top-1 ≥ 88.7837%（相对 J1 最多下降 2 个百分点）",
+            "分类门槛：Top-1 ≥ 88.7837%（相对初始化最多下降2个百分点）",
             "分类安全线：Top-1 < 85% 自动停止，避免灾难性遗忘",
             "门槛合格的 checkpoint 中，选择检测 mAP@0.5:0.95 最高者",
-            "J3 不读取 test；J4 冻结后分类/检测 test 各执行一次",
+            "训练过程不读取 test；冻结后分类/检测 test 各执行一次",
         ],
         0.72,
         4.48,
@@ -326,7 +326,7 @@ def build() -> None:
     add_box(slide, "页面展示", "作物/四大类/细类\nTop-5", 9.05, 1.4, 1.9, 1.5, fill=WHITE, line=GREEN)
     add_box(slide, "页面叠框", "类别名/分数/位置", 9.05, 3.8, 1.9, 1.35, fill=WHITE, line=BLUE)
     add_box(slide, "明确限制", "病害与缺陷没有IP102框标注\n因此只能分类\n不能承诺定位", 11.05, 2.25, 1.7, 2.55, fill=RED_LIGHT, line=RED, title_size=15, subtitle_size=9.5)
-    add_text(slide, "最终发布目标：一个 checkpoint，不再同时部署旧分类模型与单独检测模型", 1.2, 6.2, 10.9, 0.42, size=16, color=RED, bold=True, align=PP_ALIGN.CENTER)
+    add_text(slide, "最终发布：一个 checkpoint，不同时部署旧分类模型与单独检测模型", 1.2, 6.2, 10.9, 0.42, size=16, color=RED, bold=True, align=PP_ALIGN.CENTER)
     add_footer(slide, 6)
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)

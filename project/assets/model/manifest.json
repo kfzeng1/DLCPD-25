@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "model_version": "dlcpd25-ip102-joint-v1",
+  "git_commit": "local-release",
+  "architecture": "joint-resnet50-fasterrcnn",
+  "image_size": 224,
+  "classification_classes": 203,
+  "detection_classes": 96,
+  "shared_body_forwards_per_joint_call": 1,
+  "checkpoint_sha256": "5ec0f4f7891b729ddf26a51cd70d5c56a69825b2dd587c7f6af55854d3c06c49",
+  "taxonomy_sha256": "ebcc8d039eb56346137f8b592c24ff0a2d902988a5111b5efc88a0f53f58a5c6",
+  "detection_mapping_sha256": "4468b961264180d8a9e49e35c1e41d39c4c35b4f817d7c2790af679e4f5dd928",
+  "preprocessing_sha256": "19a984f161e3bb800c48dded1339748ff04c5ea55510ffd39b614aa9bfa1aa47",
+  "postprocessing_sha256": "3aba4705d58066adb6522303b84df3c91169a07eace78d41907a2daa7cdcd61b",
+  "torch_version": "2.11.0+cu128",
+  "torchvision_version": "0.26.0+cu128",
+  "pycocotools_version": "2.0.11"
+}

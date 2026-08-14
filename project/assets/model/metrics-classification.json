@@ -1,0 +1,14 @@
+{
+  "loss": 1.1367505383411964,
+  "accuracy": 0.9131571827937596,
+  "top5_accuracy": 0.9642889349806114,
+  "macro_f1": 0.7544505789319332,
+  "balanced_accuracy": 0.7466210938650182,
+  "samples": 22178,
+  "duration_seconds": 119.04445447499165,
+  "images_per_second": 186.30015230704475,
+  "inference_passes": 1,
+  "confidence_threshold": 0.55,
+  "low_confidence_count": 15813,
+  "low_confidence_rate": 0.7130038777166562
+}

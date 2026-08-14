@@ -1,0 +1,7 @@
+{
+  "classification_confidence_threshold": 0.55,
+  "detection_score_threshold": 0.5,
+  "detection_ap_score_threshold": 0.05,
+  "detection_nms_iou_threshold": 0.5,
+  "detection_max_detections_per_image": 100
+}

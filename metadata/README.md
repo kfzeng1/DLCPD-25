@@ -12,4 +12,4 @@
 
 `class-taxonomy.json` 和 `class-taxonomy.csv` 保存 203 类的固定 ID、宿主作物、经济/粮食作物组、四大标签属性和本地图片数量。训练与推理必须读取这个文件，不要根据目录遍历顺序临时生成类别 ID。
 
-`a3-test-evaluation.json` 是受版本控制的一次性 test 消费凭据。A3 在读取固定 test split 前原子创建该文件，完成后写入模型包和指标哈希；文件存在时禁止再次执行 test 评估。
+`a3-test-evaluation.json` 和 `j4-joint-test-evaluation.json` 保存两次冻结测试的评估记录、模型标识与指标哈希，用于追溯最终结果。它们不是训练输入。

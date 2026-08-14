@@ -17,3 +17,5 @@ weights/
 *.log
 *.tmp
 *~
+.~*
+.~lock.*#
