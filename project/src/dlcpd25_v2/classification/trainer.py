@@ -226,6 +226,8 @@ def train(cfg: TrainConfig) -> dict[str, Any]:
 
     steps_per_epoch = len(train_loader)
     total_steps = steps_per_epoch * epochs
+    schedule_epochs = int(train_cfg.get("schedule_epochs", epochs))
+    schedule_steps = steps_per_epoch * schedule_epochs
     print(f"[data] train={len(train_dataset)} val={len(val_dataset)} batches_per_epoch={steps_per_epoch}")
 
     device = torch.device(cfg.device)
@@ -270,8 +272,8 @@ def train(cfg: TrainConfig) -> dict[str, Any]:
     )
 
     warmup_epochs = int(train_cfg.get("warmup_epochs", 3))
-    warmup_steps = min(warmup_epochs * steps_per_epoch, max(1, total_steps - 1))
-    cosine_steps = max(1, total_steps - warmup_steps)
+    warmup_steps = min(warmup_epochs * steps_per_epoch, max(1, schedule_steps - 1))
+    cosine_steps = max(1, schedule_steps - warmup_steps)
     scheduler = torch.optim.lr_scheduler.SequentialLR(
         optimizer,
         schedulers=[
@@ -300,12 +302,17 @@ def train(cfg: TrainConfig) -> dict[str, Any]:
         checkpoint = torch.load(cfg.resume_path, map_location="cpu", weights_only=False)
         model.load_state_dict(checkpoint["model_state_dict"])
         optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
-        scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
+        start_epoch = int(checkpoint["epoch"]) + 1
+        global_step = int(checkpoint["global_step"])
+        try:
+            scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
+        except Exception as exc:  # noqa: BLE001
+            print(f"[resume] scheduler state mismatch ({type(exc).__name__}); rebuilding from step {global_step}")
+            for _ in range(global_step):
+                scheduler.step()
         scaler.load_state_dict(checkpoint["scaler_state_dict"])
         ema.load_state_dict(checkpoint["ema"])
         ema.ema_model = ema.ema_model.to(device)
-        start_epoch = int(checkpoint["epoch"]) + 1
-        global_step = int(checkpoint["global_step"])
         best_metric = float(checkpoint.get("best_metric", -1.0))
         best_epoch = int(checkpoint.get("best_epoch", 0))
         history = checkpoint.get("history", [])
@@ -363,6 +370,8 @@ def train(cfg: TrainConfig) -> dict[str, Any]:
             "global_step": global_step,
             "best_metric": best_metric,
             "best_epoch": best_epoch,
+            "steps_per_epoch": steps_per_epoch,
+            "schedule_steps": schedule_steps,
             "model_state_dict": model.state_dict(),
             "ema": ema.state_dict(),
             "optimizer_state_dict": optimizer.state_dict(),
@@ -517,6 +526,8 @@ def train(cfg: TrainConfig) -> dict[str, Any]:
             "global_step": global_step,
             "best_metric": best_metric,
             "best_epoch": best_epoch,
+            "steps_per_epoch": steps_per_epoch,
+            "schedule_steps": schedule_steps,
             "updated_at": time.time(),
         }
     )

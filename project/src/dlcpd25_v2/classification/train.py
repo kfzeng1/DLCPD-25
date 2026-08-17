@@ -55,8 +55,10 @@ def main() -> int:
     train_cfg = config["training"]
     run_cfg = config["run"]
 
+    schedule_epochs = int(train_cfg.get("schedule_epochs", int(train_cfg["epochs"])))
     if args.epochs is not None:
         train_cfg["epochs"] = int(args.epochs)
+    train_cfg["schedule_epochs"] = schedule_epochs
     if args.batch_size is not None:
         train_cfg["batch_size"] = int(args.batch_size)
     if args.workers is not None:
