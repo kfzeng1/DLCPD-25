@@ -1,0 +1,44 @@
+# DLCPD-25 Plan-A 分类专家配置（目标值，待训练代码实现）
+dataset:
+  name: DLCPD-25
+  task: image_classification
+  data_root: data/raw/dlcpd25
+  taxonomy: metadata/dlcpd25/class-taxonomy.json
+  aliases: metadata/dlcpd25/class-directory-aliases.json
+  manifest: artifacts/data/dlcpd25/manifest.csv.gz
+  num_classes: 203
+  image_extensions: [".jpg", ".jpeg", ".jfif", ".png", ".bmp", ".gif", ".webp"]
+  split_column: split
+  class_column: class_id
+  path_column: relative_path
+
+model:
+  architecture: convnext_tiny        # 备选：efficientnet_v2_s
+  pretrained: imagenet
+  input_size: 384                    # 短边训练，推理使用等比缩放
+  num_classes: 203
+  auxiliary_heads:
+    host: 22
+    category: 4
+
+training:
+  seed: 20260817
+  epochs: 40
+  batch_size: 32                    # 8GB 显卡 + AMP；不够时降低并增加梯度累积
+  workers: 6
+  optimizer: adamw
+  backbone_learning_rate: 5.0e-5
+  head_learning_rate: 3.0e-4
+  weight_decay: 1.0e-4
+  label_smoothing: 0.1
+  loss: class_balanced_focal        # 长尾 203 类
+  sampling: class_balanced
+  warmup_epochs: 3
+  scheduler: cosine
+  use_amp: true
+  use_ema: true
+
+evaluation:
+  selection_metric: val_macro_f1
+  metrics: [top1_accuracy, top5_accuracy, macro_f1, balanced_accuracy]
+  test_only_after_freeze: true

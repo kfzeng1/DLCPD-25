@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "stage": "J4",
+  "status": "consumed",
+  "evaluation_number": 1,
+  "model_version": "dlcpd25-ip102-joint-v1",
+  "started_at": "2026-08-13T00:35:40.262802+00:00",
+  "git_commit": "23b6f323b29a2e66a781256b2121fa26cc0b80de",
+  "frozen_spec_sha256": "cfd20ab17d2d9815142f6fff05476df2aa30d5c6ab4a979a7fa6a74087772d7d",
+  "classification_test_split_sha256": "23897e0a1a1b2209d1390845c6261ee48a1f94d935fc0173f3a71d18facc1dc8",
+  "detection_test_split_sha256": "7fb0e7140964774f8ef9253301c172d54b14acd001cc29a38aee148fd46f9213",
+  "selected_checkpoint_sha256": "5ec0f4f7891b729ddf26a51cd70d5c56a69825b2dd587c7f6af55854d3c06c49",
+  "completed_at": "2026-08-13T00:39:04.786801+00:00",
+  "release_checksums_sha256": "8590efbbc8a74f6a0ba628b124db1d89ac96fa3617058b6ce66872aaac6c9a2f",
+  "classification_metrics_sha256": "556c4440e704becc3946b5b25d5bb694abdeba2850511d6ad77b20b49d4b8da1",
+  "detection_metrics_sha256": "5d31fa2065c47a0b33c8e322a067271a6587e9fd2c7b2c0bb835e1874df4451a"
+}

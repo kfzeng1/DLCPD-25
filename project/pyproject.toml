@@ -3,28 +3,20 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dlcpd25-joint-system"
-version = "1.0.0"
-description = "Joint DLCPD-25 crop classification and IP102 pest detection system"
+name = "dlcpd25-plan-a"
+version = "0.1.0"
+description = "DLCPD-25 classification + IP102 detection, Plan-A two-model architecture"
 requires-python = ">=3.10"
 dependencies = [
-  "Pillow>=10.0,<13",
-  "PyYAML>=6.0,<7",
-  "scikit-learn>=1.4,<2",
-  "torch>=2.2,<3",
-  "torchvision>=0.17,<1",
+    "pillow>=10.0",
+    "pyyaml>=6.0",
+    "torch>=2.1",
+    "torchvision>=0.16",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0,<9", "pycocotools>=2.0.7,<3"]
-app = ["gradio>=4.0,<6"]
-training = ["pycocotools>=2.0.7,<3"]
-
-[project.scripts]
-dlcpd25-web = "dlcpd25_classifier.web.__main__:main"
+app = ["fastapi>=0.110", "uvicorn>=0.27", "python-multipart>=0.0.9"]
+dev = ["pytest>=8.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]

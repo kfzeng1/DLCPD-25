@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "stage": "DLCPD25-PLAN-A-DATA-V1",
+  "data_root": "data/raw/dlcpd25",
+  "taxonomy_source": "metadata/dlcpd25/class-taxonomy.json",
+  "output_dir": "artifacts/data/dlcpd25",
+  "seed": 20260817,
+  "ratios": {
+    "train": 0.8,
+    "val": 0.1,
+    "test": 0.1
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "pillow": "10.2.0",
+    "platform": "Linux-7.0.0-28-generic-x86_64-with-glibc2.39"
+  }
+}

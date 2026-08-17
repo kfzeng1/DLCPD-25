@@ -1,8 +1,0 @@
-mode: joint_bundle
-model_bundle: assets/model
-device: auto
-image_size: 224
-confidence_threshold: 0.55
-top_k: 5
-max_upload_bytes: 20971520
-max_image_pixels: 40000000

@@ -1,9 +1,6 @@
-# 项目说明文档
+# 文档
 
-- `dataset-taxonomy.md`：宿主作物、四大标签属性和 203 个细粒度类别的层级说明；
-- `ip102-detection-design.md`：IP102 害虫检测数据、类别映射和模型设计；
-- `application-contract.md`：联合模型输入、输出和推理约束；
-- `application-runbook.md`：本地应用启动与演示说明；
-- `presentations/`：最终模型架构演示材料（PPTX 与 PDF）。
+- `plan-a-architecture.md`：新双专家模型架构与训练路线。
+- `data-contract.md`：两份数据集的冻结数据合同与使用规则。
 
-最终实验报告、截图、模型包和结果文件位于 `project/`。
+v1 联合模型设计文档已归档到 `legacy/v1-resnet50-joint/docs/`，完整历史见 Git 标签 `legacy-v1`。

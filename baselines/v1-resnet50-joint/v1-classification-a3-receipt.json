@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "stage": "A3",
+  "status": "consumed",
+  "test_evaluation_number": 1,
+  "evaluation_id": "a3-test-dlcpd25-resnet50-weighted-v1",
+  "model_version": "dlcpd25-resnet50-weighted-v1",
+  "started_at": "2026-08-11T08:35:04.716207+00:00",
+  "git_commit": "1d34280ea30fe54a15031240e502274e07a555bb",
+  "test_split_sha256": "23897e0a1a1b2209d1390845c6261ee48a1f94d935fc0173f3a71d18facc1dc8",
+  "selected_checkpoint_sha256": "68fc44f1b4acfe321e5590b5f27dead65b735a777798c141c6528c510e11eabd",
+  "frozen_spec_sha256": "815ac0bd86135fd7a5d2fe6726b7eb3668df4f4feeb1e35306dd80a38edf70b0",
+  "completed_at": "2026-08-11T08:37:07.487428+00:00",
+  "release_checksums_sha256": "b5b970ebe0f4cae436115fd7449e43f4f49ee6f361724e81b7bb7e4c4128af6a",
+  "test_metrics_sha256": "c752d282806d4ad4e11c0e6d89af32bbec6acc1715c7312651332846aa2cc22b"
+}

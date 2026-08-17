@@ -1,0 +1,41 @@
+# IP102 Plan-A 检测专家配置（目标值，待训练代码实现）
+dataset:
+  name: IP102-Detection
+  task: object_detection
+  voc_root: data/raw/ip102/VOC2007
+  contract_dir: artifacts/data/ip102
+  class_map: metadata/ip102/detection-class-map.json
+  num_classes: 96                   # 0 为背景
+  public_class_space: dlcpd25_class_id_0_202
+
+model:
+  architecture: fasterrcnn_convnext_tiny_fpn   # 备选：yolov8s
+  input_size:
+    min_side: 640
+    max_side: 640
+  letterbox: true                   # 等比缩放 + 填充，禁止 224 直缩
+  max_detections_per_image: 30      # 约 93% 图片是单目标
+
+training:
+  seed: 20260817
+  epochs: 60
+  batch_size: 4                     # 8GB 显卡；不够时 batch=2 + 梯度累积
+  workers: 4
+  optimizer: adamw
+  backbone_learning_rate: 5.0e-5
+  head_learning_rate: 1.0e-4
+  weight_decay: 1.0e-4
+  warmup_iters: 500
+  scheduler: cosine
+  use_amp: true
+  use_ema: true
+  sampling: repeat_factor           # 长尾类别重复采样
+  roi_classifier_loss: sigmoid_focal
+  rpn_batch_size_per_image: 256
+  roi_batch_size_per_image: 128
+
+evaluation:
+  selection_metric: val_coco_mAP_50_95
+  metrics: [mAP_50_95, AP50, AP75, precision, recall]
+  score_threshold: 0.05
+  test_only_after_freeze: true

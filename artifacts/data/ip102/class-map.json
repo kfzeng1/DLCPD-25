@@ -1,0 +1,806 @@
+{
+  "schema_version": 1,
+  "public_class_id_space": "DLCPD-25 class_id 0..202",
+  "detector_label_space": "1..96; 0 is Faster R-CNN background",
+  "ip102_source_labels": 97,
+  "detector_foreground_classes": 96,
+  "mapped_dlcpd25_detection_classes": 96,
+  "dlcpd25_classes": 203,
+  "missing_ip102_detection_class_ids": [
+    59,
+    60,
+    63,
+    75,
+    80
+  ],
+  "match_summary": {
+    "normalized_name": 89,
+    "reviewed_alias_or_host": 8
+  },
+  "many_to_one_mapping": {
+    "dlcpd25_class_id": 97,
+    "ip102_class_ids": [
+      50,
+      51
+    ],
+    "reason": "DLCPD-25 merges IP102 legume blister beetle and blister beetle."
+  },
+  "classes": [
+    {
+      "ip102_class_id": 0,
+      "dlcpd25_class_id": 153,
+      "ip102_name": "rice leaf roller",
+      "dlcpd25_name": "rice leaf roller(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 80
+    },
+    {
+      "ip102_class_id": 1,
+      "dlcpd25_class_id": 152,
+      "ip102_name": "rice leaf caterpillar",
+      "dlcpd25_name": "rice leaf caterpillar(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 79
+    },
+    {
+      "ip102_class_id": 2,
+      "dlcpd25_class_id": 132,
+      "ip102_name": "paddy stem maggot",
+      "dlcpd25_name": "paddy stem maggot(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 73
+    },
+    {
+      "ip102_class_id": 3,
+      "dlcpd25_class_id": 89,
+      "ip102_name": "asiatic rice borer",
+      "dlcpd25_name": "asiatic rice borer(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 50
+    },
+    {
+      "ip102_class_id": 4,
+      "dlcpd25_class_id": 202,
+      "ip102_name": "yellow rice borer",
+      "dlcpd25_name": "yellow rice borer(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 96
+    },
+    {
+      "ip102_class_id": 5,
+      "dlcpd25_class_id": 149,
+      "ip102_name": "rice gall midge",
+      "dlcpd25_name": "rice gall midge(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 78
+    },
+    {
+      "ip102_class_id": 6,
+      "dlcpd25_class_id": 157,
+      "ip102_name": "Rice Stemfly",
+      "dlcpd25_name": "rice stemfly(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 83
+    },
+    {
+      "ip102_class_id": 7,
+      "dlcpd25_class_id": 99,
+      "ip102_name": "brown plant hopper",
+      "dlcpd25_name": "brown plant hopper(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 57
+    },
+    {
+      "ip102_class_id": 8,
+      "dlcpd25_class_id": 199,
+      "ip102_name": "white backed plant hopper",
+      "dlcpd25_name": "white-backed planthopper(rice)",
+      "match_method": "reviewed_alias",
+      "detector_label": 93
+    },
+    {
+      "ip102_class_id": 9,
+      "dlcpd25_class_id": 161,
+      "ip102_name": "small brown plant hopper",
+      "dlcpd25_name": "small brown plant hopper(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 86
+    },
+    {
+      "ip102_class_id": 10,
+      "dlcpd25_class_id": 159,
+      "ip102_name": "rice water weevil",
+      "dlcpd25_name": "rice water weevil(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 84
+    },
+    {
+      "ip102_class_id": 11,
+      "dlcpd25_class_id": 155,
+      "ip102_name": "rice leafhopper",
+      "dlcpd25_name": "rice leafhopper(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 81
+    },
+    {
+      "ip102_class_id": 12,
+      "dlcpd25_class_id": 114,
+      "ip102_name": "grain spreader thrips",
+      "dlcpd25_name": "grain spreader thrips(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 63
+    },
+    {
+      "ip102_class_id": 13,
+      "dlcpd25_class_id": 156,
+      "ip102_name": "rice shell pest",
+      "dlcpd25_name": "rice shell pest(rice)",
+      "match_method": "normalized_name",
+      "detector_label": 82
+    },
+    {
+      "ip102_class_id": 14,
+      "dlcpd25_class_id": 120,
+      "ip102_name": "grub",
+      "dlcpd25_name": "grub(corn)",
+      "match_method": "normalized_name",
+      "detector_label": 65
+    },
+    {
+      "ip102_class_id": 15,
+      "dlcpd25_class_id": 128,
+      "ip102_name": "mole cricket",
+      "dlcpd25_name": "mole cricket(corn)",
+      "match_method": "normalized_name",
+      "detector_label": 70
+    },
+    {
+      "ip102_class_id": 16,
+      "dlcpd25_class_id": 200,
+      "ip102_name": "wireworm",
+      "dlcpd25_name": "wireworm(corn)",
+      "match_method": "normalized_name",
+      "detector_label": 94
+    },
+    {
+      "ip102_class_id": 17,
+      "dlcpd25_class_id": 198,
+      "ip102_name": "white margined moth",
+      "dlcpd25_name": "white margined moth(corn)",
+      "match_method": "normalized_name",
+      "detector_label": 92
+    },
+    {
+      "ip102_class_id": 18,
+      "dlcpd25_class_id": 96,
+      "ip102_name": "black cutworm",
+      "dlcpd25_name": "black cutworm(corn)",
+      "match_method": "normalized_name",
+      "detector_label": 55
+    },
+    {
+      "ip102_class_id": 19,
+      "dlcpd25_class_id": 121,
+      "ip102_name": "large cutworm",
+      "dlcpd25_name": "large cutworm(corn)",
+      "match_method": "normalized_name",
+      "detector_label": 66
+    },
+    {
+      "ip102_class_id": 20,
+      "dlcpd25_class_id": 201,
+      "ip102_name": "yellow cutworm",
+      "dlcpd25_name": "yellow cutworm(corn)",
+      "match_method": "normalized_name",
+      "detector_label": 95
+    },
+    {
+      "ip102_class_id": 21,
+      "dlcpd25_class_id": 145,
+      "ip102_name": "red spider",
+      "dlcpd25_name": "red spider(corn)",
+      "match_method": "normalized_name",
+      "detector_label": 77
+    },
+    {
+      "ip102_class_id": 22,
+      "dlcpd25_class_id": 106,
+      "ip102_name": "corn borer",
+      "dlcpd25_name": "corn borer(corn)",
+      "match_method": "normalized_name",
+      "detector_label": 60
+    },
+    {
+      "ip102_class_id": 23,
+      "dlcpd25_class_id": 88,
+      "ip102_name": "army worm",
+      "dlcpd25_name": "army worm(corn)",
+      "match_method": "reviewed_alias",
+      "detector_label": 49
+    },
+    {
+      "ip102_class_id": 24,
+      "dlcpd25_class_id": 83,
+      "ip102_name": "aphids",
+      "dlcpd25_name": "aphids(corn)",
+      "match_method": "reviewed_alias",
+      "detector_label": 48
+    },
+    {
+      "ip102_class_id": 25,
+      "dlcpd25_class_id": 59,
+      "ip102_name": "Potosiabre vitarsis",
+      "dlcpd25_name": "Protaetia brevitarsis(corn)",
+      "match_method": "reviewed_alias",
+      "detector_label": 33
+    },
+    {
+      "ip102_class_id": 26,
+      "dlcpd25_class_id": 135,
+      "ip102_name": "peach borer",
+      "dlcpd25_name": "peach borer(corn)",
+      "match_method": "normalized_name",
+      "detector_label": 75
+    },
+    {
+      "ip102_class_id": 27,
+      "dlcpd25_class_id": 27,
+      "ip102_name": "english grain aphid",
+      "dlcpd25_name": "English grain aphid(wheat)",
+      "match_method": "normalized_name",
+      "detector_label": 18
+    },
+    {
+      "ip102_class_id": 28,
+      "dlcpd25_class_id": 119,
+      "ip102_name": "green bug",
+      "dlcpd25_name": "green bug(wheat)",
+      "match_method": "normalized_name",
+      "detector_label": 64
+    },
+    {
+      "ip102_class_id": 29,
+      "dlcpd25_class_id": 11,
+      "ip102_name": "bird cherry-oataphid",
+      "dlcpd25_name": "Bird cherry-oat aphid(wheat)",
+      "match_method": "reviewed_alias",
+      "detector_label": 7
+    },
+    {
+      "ip102_class_id": 30,
+      "dlcpd25_class_id": 190,
+      "ip102_name": "wheat blossom midge",
+      "dlcpd25_name": "wheat blossom midge(wheat)",
+      "match_method": "normalized_name",
+      "detector_label": 89
+    },
+    {
+      "ip102_class_id": 31,
+      "dlcpd25_class_id": 137,
+      "ip102_name": "penthaleus major",
+      "dlcpd25_name": "penthaleus major(wheat)",
+      "match_method": "normalized_name",
+      "detector_label": 76
+    },
+    {
+      "ip102_class_id": 32,
+      "dlcpd25_class_id": 123,
+      "ip102_name": "longlegged spider mite",
+      "dlcpd25_name": "longlegged spider mite(wheat)",
+      "match_method": "normalized_name",
+      "detector_label": 67
+    },
+    {
+      "ip102_class_id": 33,
+      "dlcpd25_class_id": 193,
+      "ip102_name": "wheat phloeothrips",
+      "dlcpd25_name": "wheat phloeothrips(wheat)",
+      "match_method": "normalized_name",
+      "detector_label": 90
+    },
+    {
+      "ip102_class_id": 34,
+      "dlcpd25_class_id": 194,
+      "ip102_name": "wheat sawfly",
+      "dlcpd25_name": "wheat sawfly(wheat)",
+      "match_method": "normalized_name",
+      "detector_label": 91
+    },
+    {
+      "ip102_class_id": 35,
+      "dlcpd25_class_id": 102,
+      "ip102_name": "cerodonta denticornis",
+      "dlcpd25_name": "cerodonta denticornis(wheat)",
+      "match_method": "normalized_name",
+      "detector_label": 59
+    },
+    {
+      "ip102_class_id": 36,
+      "dlcpd25_class_id": 91,
+      "ip102_name": "beet fly",
+      "dlcpd25_name": "beet fly(beet)",
+      "match_method": "normalized_name",
+      "detector_label": 52
+    },
+    {
+      "ip102_class_id": 37,
+      "dlcpd25_class_id": 112,
+      "ip102_name": "flea beetle",
+      "dlcpd25_name": "flea beetle(potato)",
+      "match_method": "normalized_name",
+      "detector_label": 62
+    },
+    {
+      "ip102_class_id": 38,
+      "dlcpd25_class_id": 100,
+      "ip102_name": "cabbage army worm",
+      "dlcpd25_name": "cabbage army worm(beet)",
+      "match_method": "normalized_name",
+      "detector_label": 58
+    },
+    {
+      "ip102_class_id": 39,
+      "dlcpd25_class_id": 90,
+      "ip102_name": "beet army worm",
+      "dlcpd25_name": "beet army worm(beet)",
+      "match_method": "normalized_name",
+      "detector_label": 51
+    },
+    {
+      "ip102_class_id": 40,
+      "dlcpd25_class_id": 92,
+      "ip102_name": "Beet spot flies",
+      "dlcpd25_name": "beet spot flies(beet)",
+      "match_method": "normalized_name",
+      "detector_label": 53
+    },
+    {
+      "ip102_class_id": 41,
+      "dlcpd25_class_id": 127,
+      "ip102_name": "meadow moth",
+      "dlcpd25_name": "meadow moth(beet)",
+      "match_method": "normalized_name",
+      "detector_label": 69
+    },
+    {
+      "ip102_class_id": 42,
+      "dlcpd25_class_id": 93,
+      "ip102_name": "beet weevil",
+      "dlcpd25_name": "beet weevil(beet)",
+      "match_method": "normalized_name",
+      "detector_label": 54
+    },
+    {
+      "ip102_class_id": 43,
+      "dlcpd25_class_id": 160,
+      "ip102_name": "sericaorient alismots chulsky",
+      "dlcpd25_name": "sericaorient alismots chulsky(beet)",
+      "match_method": "normalized_name",
+      "detector_label": 85
+    },
+    {
+      "ip102_class_id": 44,
+      "dlcpd25_class_id": 82,
+      "ip102_name": "alfalfa weevil",
+      "dlcpd25_name": "alfalfa weevil(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 47
+    },
+    {
+      "ip102_class_id": 45,
+      "dlcpd25_class_id": 111,
+      "ip102_name": "flax budworm",
+      "dlcpd25_name": "flax budworm(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 61
+    },
+    {
+      "ip102_class_id": 46,
+      "dlcpd25_class_id": 80,
+      "ip102_name": "alfalfa plant bug",
+      "dlcpd25_name": "alfalfa plant bug(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 45
+    },
+    {
+      "ip102_class_id": 47,
+      "dlcpd25_class_id": 176,
+      "ip102_name": "tarnished plant bug",
+      "dlcpd25_name": "tarnished plant bug(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 87
+    },
+    {
+      "ip102_class_id": 48,
+      "dlcpd25_class_id": 42,
+      "ip102_name": "Locustoidea",
+      "dlcpd25_name": "Locustoidea(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 23
+    },
+    {
+      "ip102_class_id": 49,
+      "dlcpd25_class_id": 124,
+      "ip102_name": "lytta polita",
+      "dlcpd25_name": "lytta polita(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 68
+    },
+    {
+      "ip102_class_id": 50,
+      "dlcpd25_class_id": 97,
+      "ip102_name": "legume blister beetle",
+      "dlcpd25_name": "blister beetle(alfalfa)",
+      "match_method": "reviewed_alias",
+      "detector_label": 56
+    },
+    {
+      "ip102_class_id": 51,
+      "dlcpd25_class_id": 97,
+      "ip102_name": "blister beetle",
+      "dlcpd25_name": "blister beetle(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 56
+    },
+    {
+      "ip102_class_id": 52,
+      "dlcpd25_class_id": 177,
+      "ip102_name": "therioaphis maculata Buckton",
+      "dlcpd25_name": "therioaphis maculata Buckton(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 88
+    },
+    {
+      "ip102_class_id": 53,
+      "dlcpd25_class_id": 129,
+      "ip102_name": "odontothrips loti",
+      "dlcpd25_name": "odontothrips loti(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 71
+    },
+    {
+      "ip102_class_id": 54,
+      "dlcpd25_class_id": 72,
+      "ip102_name": "Thrips",
+      "dlcpd25_name": "Thrips(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 39
+    },
+    {
+      "ip102_class_id": 55,
+      "dlcpd25_class_id": 81,
+      "ip102_name": "alfalfa seed chalcid",
+      "dlcpd25_name": "alfalfa seed chalcid(Bruchophagus roddi)(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 46
+    },
+    {
+      "ip102_class_id": 56,
+      "dlcpd25_class_id": 55,
+      "ip102_name": "Pieris canidia",
+      "dlcpd25_name": "Pieris canidia(alfalfa)",
+      "match_method": "normalized_name",
+      "detector_label": 31
+    },
+    {
+      "ip102_class_id": 57,
+      "dlcpd25_class_id": 6,
+      "ip102_name": "Apolygus lucorum",
+      "dlcpd25_name": "Apolygus lucorum(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 5
+    },
+    {
+      "ip102_class_id": 58,
+      "dlcpd25_class_id": 41,
+      "ip102_name": "Limacodidae",
+      "dlcpd25_name": "Limacodidae(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 22
+    },
+    {
+      "ip102_class_id": 61,
+      "dlcpd25_class_id": 12,
+      "ip102_name": "Brevipoalpus lewisi McGregor",
+      "dlcpd25_name": "Brevipoalpus lewisi McGregor(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 8
+    },
+    {
+      "ip102_class_id": 62,
+      "dlcpd25_class_id": 130,
+      "ip102_name": "oides decempunctata",
+      "dlcpd25_name": "oides decempunctata(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 72
+    },
+    {
+      "ip102_class_id": 64,
+      "dlcpd25_class_id": 60,
+      "ip102_name": "Pseudococcus comstocki Kuwana",
+      "dlcpd25_name": "Pseudococcus comstocki Kuwana(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 34
+    },
+    {
+      "ip102_class_id": 65,
+      "dlcpd25_class_id": 133,
+      "ip102_name": "parathrene regalis",
+      "dlcpd25_name": "parathrene regalis(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 74
+    },
+    {
+      "ip102_class_id": 66,
+      "dlcpd25_class_id": 2,
+      "ip102_name": "Ampelophaga",
+      "dlcpd25_name": "Ampelophaga rubiginosa（vitis）",
+      "match_method": "reviewed_alias",
+      "detector_label": 3
+    },
+    {
+      "ip102_class_id": 67,
+      "dlcpd25_class_id": 43,
+      "ip102_name": "Lycorma delicatula",
+      "dlcpd25_name": "Lycorma delicatula(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 24
+    },
+    {
+      "ip102_class_id": 68,
+      "dlcpd25_class_id": 78,
+      "ip102_name": "Xylotrechus",
+      "dlcpd25_name": "Xylotrechus(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 44
+    },
+    {
+      "ip102_class_id": 69,
+      "dlcpd25_class_id": 17,
+      "ip102_name": "Cicadella viridis",
+      "dlcpd25_name": "Cicadella viridis(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 13
+    },
+    {
+      "ip102_class_id": 70,
+      "dlcpd25_class_id": 45,
+      "ip102_name": "Miridae",
+      "dlcpd25_name": "Miridae(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 26
+    },
+    {
+      "ip102_class_id": 71,
+      "dlcpd25_class_id": 75,
+      "ip102_name": "Trialeurodes vaporariorum",
+      "dlcpd25_name": "Trialeurodes vaporariorum(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 42
+    },
+    {
+      "ip102_class_id": 72,
+      "dlcpd25_class_id": 28,
+      "ip102_name": "Erythroneura apicalis",
+      "dlcpd25_name": "Erythroneura apicalis(vitis)",
+      "match_method": "normalized_name",
+      "detector_label": 19
+    },
+    {
+      "ip102_class_id": 73,
+      "dlcpd25_class_id": 51,
+      "ip102_name": "Papilio xuthus",
+      "dlcpd25_name": "Papilio xuthus(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 29
+    },
+    {
+      "ip102_class_id": 74,
+      "dlcpd25_class_id": 50,
+      "ip102_name": "Panonchus citri McGregor",
+      "dlcpd25_name": "Panonchus citri McGregor(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 28
+    },
+    {
+      "ip102_class_id": 76,
+      "dlcpd25_class_id": 36,
+      "ip102_name": "Icerya purchasi Maskell",
+      "dlcpd25_name": "Icerya purchasi Maskell(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 20
+    },
+    {
+      "ip102_class_id": 77,
+      "dlcpd25_class_id": 76,
+      "ip102_name": "Unaspis yanonensis",
+      "dlcpd25_name": "Unaspis yanonensis(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 43
+    },
+    {
+      "ip102_class_id": 78,
+      "dlcpd25_class_id": 13,
+      "ip102_name": "Ceroplastes rubens",
+      "dlcpd25_name": "Ceroplastes rubens(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 9
+    },
+    {
+      "ip102_class_id": 79,
+      "dlcpd25_class_id": 16,
+      "ip102_name": "Chrysomphalus aonidum",
+      "dlcpd25_name": "Chrysomphalus aonidum(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 12
+    },
+    {
+      "ip102_class_id": 81,
+      "dlcpd25_class_id": 49,
+      "ip102_name": "Nipaecoccus vastalor",
+      "dlcpd25_name": "Nipaecoccus vastalor(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 27
+    },
+    {
+      "ip102_class_id": 82,
+      "dlcpd25_class_id": 1,
+      "ip102_name": "Aleurocanthus spiniferus",
+      "dlcpd25_name": "Aleurocanthus spiniferus(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 2
+    },
+    {
+      "ip102_class_id": 83,
+      "dlcpd25_class_id": 14,
+      "ip102_name": "Tetradacus c Bactrocera minax",
+      "dlcpd25_name": "Chinese citrus fly(citru)",
+      "match_method": "reviewed_alias",
+      "detector_label": 10
+    },
+    {
+      "ip102_class_id": 84,
+      "dlcpd25_class_id": 22,
+      "ip102_name": "Dacus dorsalis(Hendel)",
+      "dlcpd25_name": "Dacus dorsalis(Hendel)(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 15
+    },
+    {
+      "ip102_class_id": 85,
+      "dlcpd25_class_id": 9,
+      "ip102_name": "Bactrocera tsuneonis",
+      "dlcpd25_name": "Bactrocera tsuneonis(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 6
+    },
+    {
+      "ip102_class_id": 86,
+      "dlcpd25_class_id": 58,
+      "ip102_name": "Prodenia litura",
+      "dlcpd25_name": "Prodenia litura(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 32
+    },
+    {
+      "ip102_class_id": 87,
+      "dlcpd25_class_id": 0,
+      "ip102_name": "Adristyrannus",
+      "dlcpd25_name": "Adristyrannus(citrus)",
+      "match_method": "normalized_name",
+      "detector_label": 1
+    },
+    {
+      "ip102_class_id": 88,
+      "dlcpd25_class_id": 53,
+      "ip102_name": "Phyllocnistis citrella Stainton",
+      "dlcpd25_name": "Phyllocnistis citrella Stainton(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 30
+    },
+    {
+      "ip102_class_id": 89,
+      "dlcpd25_class_id": 74,
+      "ip102_name": "Toxoptera citricidus",
+      "dlcpd25_name": "Toxoptera citricidus(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 41
+    },
+    {
+      "ip102_class_id": 90,
+      "dlcpd25_class_id": 73,
+      "ip102_name": "Toxoptera aurantii",
+      "dlcpd25_name": "Toxoptera aurantii(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 40
+    },
+    {
+      "ip102_class_id": 91,
+      "dlcpd25_class_id": 5,
+      "ip102_name": "Aphis citricola Vander Goot",
+      "dlcpd25_name": "Aphis citricola Vander Goot(citru)",
+      "match_method": "normalized_name",
+      "detector_label": 4
+    },
+    {
+      "ip102_class_id": 92,
+      "dlcpd25_class_id": 64,
+      "ip102_name": "Scirtothrips dorsalis Hood",
+      "dlcpd25_name": "Scirtothrips dorsalis Hood(mango)",
+      "match_method": "normalized_name",
+      "detector_label": 37
+    },
+    {
+      "ip102_class_id": 93,
+      "dlcpd25_class_id": 23,
+      "ip102_name": "Dasineura sp",
+      "dlcpd25_name": "Dasineura sp(mango)",
+      "match_method": "normalized_name",
+      "detector_label": 16
+    },
+    {
+      "ip102_class_id": 94,
+      "dlcpd25_class_id": 38,
+      "ip102_name": "Lawana imitata Melichar",
+      "dlcpd25_name": "Lawana imitata Melichar(mango)",
+      "match_method": "normalized_name",
+      "detector_label": 21
+    },
+    {
+      "ip102_class_id": 95,
+      "dlcpd25_class_id": 63,
+      "ip102_name": "Salurnis marginella Guerr",
+      "dlcpd25_name": "Salurnis marginella Guerr(mango)",
+      "match_method": "normalized_name",
+      "detector_label": 36
+    },
+    {
+      "ip102_class_id": 96,
+      "dlcpd25_class_id": 24,
+      "ip102_name": "Deporaus marginatus Pascoe",
+      "dlcpd25_name": "Deporaus marginatus Pascoe(mango)",
+      "match_method": "normalized_name",
+      "detector_label": 17
+    },
+    {
+      "ip102_class_id": 97,
+      "dlcpd25_class_id": 15,
+      "ip102_name": "Chlumetia transversa",
+      "dlcpd25_name": "Chlumetia transversa(mango)",
+      "match_method": "normalized_name",
+      "detector_label": 11
+    },
+    {
+      "ip102_class_id": 98,
+      "dlcpd25_class_id": 44,
+      "ip102_name": "Mango flat beak leafhopper",
+      "dlcpd25_name": "Mango flat beak leafhopper(mango)",
+      "match_method": "normalized_name",
+      "detector_label": 25
+    },
+    {
+      "ip102_class_id": 99,
+      "dlcpd25_class_id": 62,
+      "ip102_name": "Rhytidodera bowrinii white",
+      "dlcpd25_name": "Rhytidodera bowrinii white(mango)",
+      "match_method": "normalized_name",
+      "detector_label": 35
+    },
+    {
+      "ip102_class_id": 100,
+      "dlcpd25_class_id": 68,
+      "ip102_name": "Sternochetus frigidus",
+      "dlcpd25_name": "Sternochetus frigidus(mango)",
+      "match_method": "normalized_name",
+      "detector_label": 38
+    },
+    {
+      "ip102_class_id": 101,
+      "dlcpd25_class_id": 18,
+      "ip102_name": "Cicadellidae",
+      "dlcpd25_name": "Cicadellidae(mango)",
+      "match_method": "normalized_name",
+      "detector_label": 14
+    }
+  ]
+}

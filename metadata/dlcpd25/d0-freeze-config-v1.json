@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "freeze_id": "d0-taxonomy-v1",
+  "taxonomy_version": "taxonomy-v1",
+  "target_data_version": "data-v1",
+  "release_state": "d0_taxonomy_frozen_not_handed_off",
+  "data_root": "data/raw/dlcpd25-203",
+  "output_dir": "artifacts/data/v1/d0",
+  "sources": {
+    "official_class_names": "metadata/official-class-names.txt",
+    "class_directory_aliases": "metadata/class-directory-aliases.json",
+    "class_taxonomy_json": "metadata/class-taxonomy.json",
+    "class_taxonomy_csv": "metadata/class-taxonomy.csv",
+    "taxonomy_generator": "scripts/build_dataset_taxonomy.py",
+    "freeze_generator": "scripts/freeze_data_d0.py"
+  },
+  "expected": {
+    "official_class_names_sha256": "6f9c4f1920b2e51131a105315177b8ad7147a1b4ebe9088622e69ee4a0c51225",
+    "class_count": 203,
+    "total_files": 221396,
+    "class_id_min": 0,
+    "class_id_max": 202,
+    "host_count": 22,
+    "category_class_counts": {
+      "pest": 126,
+      "disease": 57,
+      "healthy": 17,
+      "disorder": 3
+    }
+  },
+  "category_semantics": {
+    "pest": "农业有害生物",
+    "disease": "植物病害",
+    "healthy": "健康",
+    "disorder": "非生物或生理缺陷"
+  },
+  "inventory_fingerprint": {
+    "algorithm": "sha256",
+    "record_format": "relative_posix_path_utf8 + NUL + decimal_file_size + LF",
+    "ordering": "taxonomy class_id, then relative_posix_path",
+    "content_hashing": false
+  }
+}

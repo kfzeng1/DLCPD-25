@@ -1,0 +1,45 @@
+{
+  "duplicated_xml_documents": [
+    {
+      "action": "deduplicate_identical_document_content",
+      "ignored_documents": 1,
+      "image_id": "IP087000986"
+    }
+  ],
+  "extra_jpeg_files": [
+    "IP009000231.jpg",
+    "IP022000163.jpg",
+    "IP034000029.jpg",
+    "IP048000152.jpg",
+    "IP053000086.jpg"
+  ],
+  "filtered_boxes": [
+    {
+      "action": "filter_box_only_keep_image",
+      "bbox": [
+        14.0,
+        35.0,
+        14.0,
+        37.0
+      ],
+      "detector_label": 61,
+      "dlcpd25_class_id": 111,
+      "filter_reasons": [
+        "non_positive_width"
+      ],
+      "image_id": "IP046000898",
+      "ip102_class_id": 45,
+      "source_object_index": 0,
+      "valid": false
+    }
+  ],
+  "missing_test_source_labels": [
+    61
+  ],
+  "policy": {
+    "extra_jpegs_deleted": false,
+    "raw_files_modified": false,
+    "test_support_fabricated": false
+  },
+  "schema_version": 1
+}

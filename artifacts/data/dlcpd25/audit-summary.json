@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "total_files": 221396,
+  "usable_files": 221378,
+  "bad_files": 18,
+  "extensions": {
+    ".bmp": 92,
+    ".gif": 7,
+    ".jfif": 513,
+    ".jpeg": 78,
+    ".jpg": 220428,
+    ".png": 277,
+    ".webp": 1
+  },
+  "classes": 203
+}

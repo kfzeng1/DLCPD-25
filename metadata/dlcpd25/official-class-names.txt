@@ -1,0 +1,203 @@
+Adristyrannus(citrus)
+Aleurocanthus spiniferus(citru)
+Ampelophaga rubiginosa（vitis）
+Anticarsia gemmatalis(soybean)
+Aphids（cotton）
+Aphis citricola Vander Goot(citru)
+Apolygus lucorum(vitis)
+Army worm（cotton）
+Bacterial blight（cotton）
+Bactrocera tsuneonis(citru)
+Bemisia argentifolii(tomato)
+Bird cherry-oat aphid(wheat)
+Brevipoalpus lewisi McGregor(vitis)
+Ceroplastes rubens(citru)
+Chinese citrus fly(citru)
+Chlumetia transversa(mango)
+Chrysomphalus aonidum(citru)
+Cicadella viridis(vitis)
+Cicadellidae(mango)
+Coccinellidae(soybean)
+Colomerus vitis(vitis)
+Cotton curl virus（cotton）
+Dacus dorsalis(Hendel)(citru)
+Dasineura sp(mango)
+Deporaus marginatus Pascoe(mango)
+Diabrotica speciosa(soybean)
+Edessa meditabunda(soybean)
+English grain aphid(wheat)
+Erythroneura apicalis(vitis)
+Euschistus heros adulto(soybean)
+Euschistus heros ninfa(soybean)
+Fusarium wilt（cotton）
+Gastropoda(soybean)
+Healthy（cotton）
+Helicoverpa armigera(tomato)
+Herbicide Growth Damage（cotton）
+Icerya purchasi Maskell(citru)
+Lagria villosa(soybean)
+Lawana imitata Melichar(mango)
+Leaf Redding（cotton）
+Leaf Variegation（cotton）
+Limacodidae(vitis)
+Locustoidea(alfalfa)
+Lycorma delicatula(vitis)
+Mango flat beak leafhopper(mango)
+Miridae(vitis)
+Myzus persicae(tomato)
+Nezara viridula adulto(soybean)
+Nezara viridula ninfa(soybean)
+Nipaecoccus vastalor(citru)
+Panonchus citri McGregor(citru)
+Papilio xuthus(citru)
+Parlatoria zizyphus Lucus(citru)
+Phyllocnistis citrella Stainton(citru)
+Phyllocoptes oleiverus ashmead(citru)
+Pieris canidia(alfalfa)
+Polyphagotars onemus latus(vitis)
+Powdery mildew（cotton）
+Prodenia litura(citru)
+Protaetia brevitarsis(corn)
+Pseudococcus comstocki Kuwana(vitis)
+Rhammatocerus schistocercoides(soybean)
+Rhytidodera bowrinii white(mango)
+Salurnis marginella Guerr(mango)
+Scirtothrips dorsalis Hood(mango)
+Spodoptera albula(soybean)
+Spodoptera exigua(tomato)
+Spodoptera litura(tomato)
+Sternochetus frigidus(mango)
+Target spot（cotton）
+Tetranychus urticae(tomato)
+Thrips palmi(tomato)
+Thrips(vitis)
+Toxoptera aurantii(citru)
+Toxoptera citricidus(citru)
+Trialeurodes vaporariorum(vitis)
+Unaspis yanonensis(citru)
+Viteus vitifoliae(vitis)
+Xylotrechus(vitis)
+Zeugodacus cucurbitae(tomato)
+alfalfa plant bug(alfalfa)
+alfalfa seed chalcid(Bruchophagus roddi)(alfalfa)
+alfalfa weevil(alfalfa)
+aphids(corn)
+apple black rot
+apple frogeye spot
+apple healthy
+apple scab
+army worm(corn)
+asiatic rice borer(rice)
+beet army worm(beet)
+beet fly(beet)
+beet spot flies(beet)
+beet weevil(beet)
+bell pepper bacterial spot
+bell pepper healthy
+black cutworm(corn)
+blister beetle(alfalfa)
+blueberry healthy
+brown plant hopper(rice)
+cabbage army worm(beet)
+cedar apple rust
+cerodonta denticornis(wheat)
+cherry healthy
+cherry powdery mildew
+citrus healthy
+corn borer(corn)
+corn curvularia leaf spot fungus
+corn healthy
+corn（maize） common rust
+corn（maize） northern leaf blight
+flax budworm(alfalfa)
+flea beetle(potato)
+garlic pest and diseases
+grain spreader thrips(rice)
+grape black rot（fungus）
+grape esca (black measles)(fungus)
+grape healthy
+grape leaf blight(fungus)
+green bug(wheat)
+grub(corn)
+large cutworm(corn)
+large wheat crown and root rot
+longlegged spider mite(wheat)
+lytta polita(alfalfa)
+maize dwarf mosaic virus
+maize grey leaf spot(cercospora zeae-maydis tehon and daniels)
+meadow moth(beet)
+mole cricket(corn)
+odontothrips loti(alfalfa)
+oides decempunctata(vitis)
+orange huanglongbing(citrus greening)
+paddy stem maggot(rice)
+parathrene regalis(vitis)
+peach bacterial spot
+peach borer(corn)
+peach healthy
+penthaleus major(wheat)
+pepper healthy
+pepper scab
+potato early blight(fungus)
+potato healthy
+potato late blight(fungus)
+puccinia polysora
+raspberry healthy
+red spider(corn)
+rice bacterial leaf blight
+rice blast
+rice brown spot
+rice gall midge(rice)
+rice healthy
+rice hispa
+rice leaf caterpillar(rice)
+rice leaf roller(rice)
+rice leaf smut
+rice leafhopper(rice)
+rice shell pest(rice)
+rice stemfly(rice)
+rice tungro
+rice water weevil(rice)
+sericaorient alismots chulsky(beet)
+small brown plant hopper(rice)
+soybean Crestamento Bacteriano
+soybean bacterial blight
+soybean brown spot
+soybean ferrugen
+soybean healthy
+soybean mossaic virus
+soybean powdery mildew
+soybean septoria brown spot
+soybean southern blight
+soybean sudden death syndrone
+soybean yellow mosaic
+squash powdery mildew
+strawberry healthy
+strawberry leaf scorch
+tarnished plant bug(alfalfa)
+therioaphis maculata Buckton(alfalfa)
+tomato bacterial spot
+tomato early blight(fungus)
+tomato healthy
+tomato late blight(water mold)
+tomato leaf mold(fungus)
+tomato mosaic virus
+tomato powdery mildew
+tomato septoria leaf spot(fungus)
+tomato spider mite(tomato)
+tomato target spot(bacteria)
+tomato two-spotted spider mite(tomato)
+tomato yellow leaf curl virus
+wheat blossom midge(wheat)
+wheat healthy
+wheat leaf rust
+wheat phloeothrips(wheat)
+wheat sawfly(wheat)
+wheat septoria
+wheat stem rust
+wheat stripe rust
+white margined moth(corn)
+white-backed planthopper(rice)
+wireworm(corn)
+yellow cutworm(corn)
+yellow rice borer(rice)
