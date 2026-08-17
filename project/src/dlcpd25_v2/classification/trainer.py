@@ -147,6 +147,7 @@ class TrainConfig:
     amp_dtype: str
     total_epochs: int
     resume_path: Path | None
+    init_checkpoint: Path | None
     limit_train_batches: int | None
     limit_val_batches: int | None
 
@@ -166,6 +167,7 @@ def train(cfg: TrainConfig) -> dict[str, Any]:
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+        torch.backends.cudnn.benchmark = True
 
     image_size = int(model_cfg["input_size"])
     num_classes = int(model_cfg.get("num_classes", data_cfg.get("num_classes", 203)))
@@ -199,7 +201,9 @@ def train(cfg: TrainConfig) -> dict[str, Any]:
         split="val",
         transform=build_transforms(image_size, train=False),
     )
-    train_sampler = train_dataset.balanced_sampler()
+    train_sampler = train_dataset.balanced_sampler(
+        mode=str(train_cfg.get("sampling", "sqrt_inverse_frequency"))
+    )
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
@@ -298,7 +302,14 @@ def train(cfg: TrainConfig) -> dict[str, Any]:
     early_stopping_patience = int(train_cfg.get("early_stopping_patience", 6))
     epochs_without_improvement = 0
 
-    if cfg.resume_path is not None:
+    if cfg.init_checkpoint is not None:
+        init_ckpt = torch.load(cfg.init_checkpoint, map_location="cpu", weights_only=False)
+        ema_payload = init_ckpt.get("ema") or {}
+        ema_state = ema_payload.get("ema_model_state_dict") if isinstance(ema_payload, dict) else None
+        model.load_state_dict(ema_state if ema_state is not None else init_ckpt["model_state_dict"])
+        ema.ema_model.load_state_dict(ema_state if ema_state is not None else init_ckpt["model_state_dict"])
+        print(f"[init] loaded EMA weights from {cfg.init_checkpoint}")
+    elif cfg.resume_path is not None:
         checkpoint = torch.load(cfg.resume_path, map_location="cpu", weights_only=False)
         model.load_state_dict(checkpoint["model_state_dict"])
         optimizer.load_state_dict(checkpoint["optimizer_state_dict"])

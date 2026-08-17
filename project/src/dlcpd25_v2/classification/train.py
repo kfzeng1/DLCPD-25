@@ -40,6 +40,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", type=str, default="cuda" if __import__("torch").cuda.is_available() else "cpu")
     parser.add_argument("--amp-dtype", type=str, choices=["bfloat16", "float16"], default=None)
     parser.add_argument("--resume", type=Path, default=None, help="resume from a checkpoint path")
+    parser.add_argument("--init-checkpoint", type=Path, default=None, help="initialize model/EMA from a checkpoint and start a new run")
     parser.add_argument("--limit-train-batches", type=int, default=None, help="smoke-test override")
     parser.add_argument("--limit-val-batches", type=int, default=None, help="smoke-test override")
     parser.add_argument("--validate-only", action="store_true", help="run validation using best checkpoint")
@@ -82,6 +83,7 @@ def main() -> int:
     if args.validate_only:
         raise SystemExit("--validate-only is not implemented yet; train one epoch first to get a checkpoint.")
 
+    init_checkpoint = repo_path(args.init_checkpoint) if args.init_checkpoint else None
     train_config = TrainConfig(
         config=config,
         run_dir=run_dir,
@@ -89,6 +91,7 @@ def main() -> int:
         amp_dtype=train_cfg.get("amp_dtype", "bfloat16"),
         total_epochs=int(train_cfg["epochs"]),
         resume_path=resume_path,
+        init_checkpoint=init_checkpoint,
         limit_train_batches=args.limit_train_batches,
         limit_val_batches=args.limit_val_batches,
     )

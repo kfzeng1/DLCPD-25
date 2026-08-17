@@ -151,11 +151,19 @@ class ManifestClassificationDataset(Dataset[tuple[Any, int, int, int]]):
     def class_counts(self) -> dict[int, int]:
         return dict(self._class_counts)
 
-    def balanced_sampler(self) -> WeightedRandomSampler:
-        """Square-root inverse-frequency sampler for long-tail training."""
+    def balanced_sampler(self, mode: str = "sqrt_inverse_frequency") -> WeightedRandomSampler:
+        """Class-balanced sampler for long-tail training.
+
+        ``sqrt_inverse_frequency`` is gentler and keeps common classes well
+        represented; ``inverse_frequency`` balances every class uniformly,
+        which usually improves Macro-F1 on tail classes.
+        """
+        if mode not in {"sqrt_inverse_frequency", "inverse_frequency"}:
+            raise ValueError(f"unsupported sampler mode: {mode}")
+        exponent = 0.5 if mode == "sqrt_inverse_frequency" else 1.0
         weights: list[float] = []
         for sample in self.samples:
-            weights.append(1.0 / float(self._class_counts[sample.class_id] ** 0.5))
+            weights.append(1.0 / float(self._class_counts[sample.class_id] ** exponent))
         return WeightedRandomSampler(
             weights=weights,
             num_samples=len(self.samples),
