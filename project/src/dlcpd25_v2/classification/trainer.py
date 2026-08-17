@@ -304,12 +304,21 @@ def train(cfg: TrainConfig) -> dict[str, Any]:
         optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
         start_epoch = int(checkpoint["epoch"]) + 1
         global_step = int(checkpoint["global_step"])
-        try:
-            scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
-        except Exception as exc:  # noqa: BLE001
-            print(f"[resume] scheduler state mismatch ({type(exc).__name__}); rebuilding from step {global_step}")
-            for _ in range(global_step):
-                scheduler.step()
+        # Checkpoints can store a transient lr value (e.g. 0 after the last
+        # cosine step). Restore the scheduler's own initial scheduled lrs
+        # (start_factor values) so the fast-forward below reproduces the
+        # normal warmup curve exactly.
+        scheduled_initial_lrs = scheduler.get_last_lr()
+        for group, initial_lr in zip(optimizer.param_groups, scheduled_initial_lrs):
+            group["lr"] = initial_lr
+        # Rebuild the scheduler for the current total schedule and fast-forward
+        # to the saved global step. Call optimizer.step() before scheduler.step()
+        # exactly like the training loop; with no grads present this does not
+        # touch Adam state but preserves PyTorch's expected lr schedule order.
+        for _ in range(global_step):
+            optimizer.step()
+            scheduler.step()
+        print(f"[resume] scheduler rebuilt from scratch and advanced to step {global_step}")
         scaler.load_state_dict(checkpoint["scaler_state_dict"])
         ema.load_state_dict(checkpoint["ema"])
         ema.ema_model = ema.ema_model.to(device)
