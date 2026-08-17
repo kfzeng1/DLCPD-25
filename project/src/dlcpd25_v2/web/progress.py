@@ -75,14 +75,19 @@ async function refresh(){
     document.getElementById('status').className = 'status ' + (s.status || '');
     document.getElementById('runId').textContent = s.run_id || '';
     const pct = (v,total) => total ? Math.max(0,Math.min(100,v/total*100)).toFixed(2) : 0;
-    const epochPct = pct((s.epoch||0)-1 + (s.batch_in_epoch||0)/(s.steps_per_epoch||1), s.total_epochs||1);
-    const totalPct = pct(s.global_step||0, s.total_steps||1);
-    const fmt = v => v==null||v===undefined ? '—' : Number(v).toLocaleString(undefined,{maximumFractionDigits:4});
+    const batchPct = pct(s.batch_in_epoch||0, s.steps_per_epoch||1);
+    const globalPct = pct((s.epoch||1)-1 + (s.batch_in_epoch||0)/(s.steps_per_epoch||1), s.total_epochs||1);
+    const fmt = v => {
+      if(v==null||v===undefined) return '—';
+      const n=Number(v);
+      if(n!==0 && Math.abs(n)<0.001) return n.toExponential(3);
+      return n.toLocaleString(undefined,{maximumFractionDigits:4});
+    };
     const eta = v => v==null ? '—' : String(Math.floor(v/3600)).padStart(2,'0')+':'+String(Math.floor((v%3600)/60)).padStart(2,'0')+':'+String(Math.floor(v%60)).padStart(2,'0');
     document.getElementById('cards').innerHTML = [
       ['轮次 / 总轮次', (s.epoch||0)+' / '+ (s.total_epochs||0), '当前第 '+ (s.batch_in_epoch||0) +' / '+ (s.steps_per_epoch||0) +' 批'],
-      ['轮次进度', epochPct+'%', '<div class="progress"><span style="width:'+epochPct+'%"></span></div>'],
-      ['全局进度', totalPct+'%', '<div class="progress"><span style="width:'+totalPct+'%"></span></div>'],
+      ['本轮 batch 进度', batchPct+'%', '<div class="progress"><span style="width:'+batchPct+'%"></span></div>'],
+      ['全局 epoch 进度', globalPct+'%', '<div class="progress"><span style="width:'+globalPct+'%"></span></div>'],
       ['最近 loss', fmt(s.loss_recent), '本轮平均 '+fmt(s.avg_epoch_loss)],
       ['学习率', fmt(s.lr), 'EMA 模型用于验证'],
       ['最佳 macro-F1', fmt(s.best_metric), '选择指标 val_macro_f1'],
