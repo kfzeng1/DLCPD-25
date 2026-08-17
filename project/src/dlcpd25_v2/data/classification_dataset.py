@@ -113,10 +113,25 @@ class ManifestClassificationDataset(Dataset[tuple[Any, int, int, int]]):
     def __len__(self) -> int:
         return len(self.samples)
 
+    @staticmethod
+    def _load_rgb(path: str) -> Image.Image:
+        try:
+            with Image.open(path) as image:
+                try:
+                    image = ImageOps.exif_transpose(image)
+                except Exception:
+                    # Malformed EXIF in an otherwise decodable image: ignore
+                    # orientation metadata instead of killing the worker.
+                    pass
+                image = image.convert("RGB")
+                return image.copy()
+        except Exception as exc:  # noqa: BLE001 - keep training alive on bad files
+            print(f"[data-warning] fallback gray image for {path}: {type(exc).__name__}", flush=True)
+            return Image.new("RGB", (384, 384), color=(128, 128, 128))
+
     def __getitem__(self, index: int) -> tuple[Any, int, int, int]:
         sample = self.samples[index]
-        with Image.open(sample.path) as image:
-            image = ImageOps.exif_transpose(image).convert("RGB")
+        image = self._load_rgb(sample.path)
         image = self.transform(image)
         return image, sample.class_id, sample.host_id, sample.category_id
 
