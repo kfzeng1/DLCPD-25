@@ -1,26 +1,74 @@
 # Plan-A 训练/推理工程
 
-这是删除 v1 联合训练代码后的新工程位置。当前先完成数据工程，下一步按 `configs/plan-a/` 实现：
+当前已实现 DLCPD-25 分类专家训练与训练进度网页。
+
+## 已实现
 
 ```text
-project/
-  configs/                # 继承根目录 configs/plan-a 的配置
-  src/dlcpd25_v2/
-    data/                 # 读取 data/raw 与 artifacts/data 的数据加载器
-    classification/       # DLCPD-25 分类专家（ConvNeXt-Tiny @384）
-    detection/            # IP102 检测专家（Faster R-CNN/ConvNeXt-Tiny-FPN @640）
-    serving/              # 双模型推理编排
-    web/                  # Web 应用
-  tests/
+project/src/dlcpd25_v2/
+  common.py                         仓库根目录定位
+  data/classification_dataset.py    读取冻结 manifest.csv.gz 的分类数据集
+  classification/
+    model.py                        ConvNeXt-Tiny + 主头/宿主头/属性头
+    losses.py                       Focal Loss + 类别平衡权重 + 辅助 CE
+    metrics.py                      Top-1/Top-5/Macro-F1/Balanced Accuracy
+    transforms.py                   训练 RandAugment / 验证 Resize+CenterCrop
+    trainer.py                      训练循环、AMP、EMA、早停、checkpoint、进度文件
+    train.py                        CLI 入口
+  web/progress.py                   训练进度网页
 ```
+
+## 训练命令
+
+```bash
+cd /home/zkf/DLCPD-25
+source /home/zkf/pytorch-env/bin/activate
+
+# 训练 1 轮（默认配置为 40 轮，这里显式覆盖为 1）
+python -m dlcpd25_v2.classification.train \
+  --config configs/plan-a/classification.yaml \
+  --run-id convnext-tiny-384-plan-a-v1 \
+  --epochs 1
+
+# 后续从 last.pt 继续训练
+python -m dlcpd25_v2.classification.train \
+  --config configs/plan-a/classification.yaml \
+  --run-id convnext-tiny-384-plan-a-v1 \
+  --epochs 40 \
+  --resume artifacts/training/classification/convnext-tiny-384-plan-a-v1/checkpoints/last.pt
+```
+
+输出：
+
+```text
+artifacts/training/classification/<run_id>/
+  state.json        实时进度（网页读取）
+  history.json      每轮 train/val 指标
+  checkpoints/
+    last.pt         每轮结束后的最新 checkpoint
+    best.pt         按 val_macro_f1 选择的最佳 checkpoint
+```
+
+## 进度网页
+
+训练过程中随时查看：
+
+```bash
+uvicorn dlcpd25_v2.web.progress:app --host 0.0.0.0 --port 8765
+```
+
+浏览器打开 <http://127.0.0.1:8765>。页面每 3 秒自动刷新，显示：
+
+- 当前轮次、batch、全局进度；
+- 最近 loss、本轮平均 loss；
+- 学习率、GPU 显存、预计剩余时间；
+- train/val 指标曲线和每轮历史表。
 
 ## 数据合同
 
-所有数据访问必须使用：
+训练代码只读取：
 
+- `artifacts/data/dlcpd25/manifest.csv.gz`
 - `metadata/dlcpd25/class-taxonomy.json`
-- `metadata/ip102/detection-class-map.json`
-- `artifacts/data/dlcpd25/manifest.csv`
-- `artifacts/data/ip102/*.txt` + `annotations.jsonl`
 
-不得在模型代码中重新扫描原始目录或硬编码类别名称。
+不会重新扫描 `data/raw/`，也不会在代码中硬编码类别名。

@@ -57,7 +57,8 @@ python3 scripts/ip102/verify_detection_contract.py
 - [x] 两份数据集物理目录与数据合同整理清晰
 - [x] DLCPD-25 分类层级、清单、固定划分
 - [x] IP102 检测合同重建
-- [ ] Plan-A 分类模型训练
+- [x] Plan-A 分类训练代码、checkpoint 与进度网页
+- [ ] Plan-A 分类模型训练（第 1 轮正在运行，完成后交给你监督）
 - [ ] Plan-A 检测模型训练
 - [ ] 双模型 Web 应用与推理编排
 
