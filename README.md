@@ -13,13 +13,7 @@
 - **检测专家**：`ConvNeXt-Tiny-FPN + Faster R-CNN` 或 `YOLOv8s`，输入最长边 640，输出 96 类 IP102 害虫框；
 - **推理编排**：检测结果映射回 DLCPD-25 公共 `class_id 0..202`，与整图 Top-5 分类结果同时返回。
 
-旧的 `ResNet-50 + Faster R-CNN` 联合模型已经归档：
-
-- Git 分支：`legacy/v1-resnet50-joint`
-- Git 标签：`legacy-v1`
-- 本地归档：`legacy/v1-resnet50-joint/`
-- 旧模型指标：`baselines/v1-resnet50-joint/`
-
+旧的 `ResNet-50 + Faster R-CNN` 联合模型已从当前工程删除。
 ## 目录结构
 
 ```text
@@ -39,8 +33,7 @@ scripts/
   ip102/                    检测数据工程脚本
 configs/plan-a/             双模型训练与推理配置
 project/                    后续模型训练、推理和 Web 应用代码位置
-baselines/                  旧模型和新模型的指标基线
-legacy/                     旧版本归档（仅保留报告、指标和本地权重）
+baselines/                  模型指标基线（新模型训练后写入）
 ```
 
 ## 数据工程复现
@@ -60,7 +53,7 @@ python3 scripts/ip102/verify_detection_contract.py
 
 ## 当前进度
 
-- [x] 删除旧训练代码（完整版本保留在 `legacy-v1` 标签）
+- [x] 删除旧训练代码与旧版归档
 - [x] 两份数据集物理目录与数据合同整理清晰
 - [x] DLCPD-25 分类层级、清单、固定划分
 - [x] IP102 检测合同重建

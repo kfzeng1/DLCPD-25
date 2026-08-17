@@ -16,14 +16,6 @@ artifacts/*
 # The 53MB uncompressed manifest is reproducible locally; Git tracks the gzip contract.
 artifacts/data/dlcpd25/manifest.csv
 
-# ---- legacy archive: keep reports/metrics, never commit weights ----
-legacy/*
-!legacy/README.md
-!legacy/v1-resnet50-joint/
-legacy/v1-resnet50-joint/**/*.pt
-legacy/v1-resnet50-joint/**/*.pth
-legacy/v1-resnet50-joint/**/*.onnx
-
 # ---- python ----
 __pycache__/
 *.py[cod]

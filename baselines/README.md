@@ -1,7 +1,12 @@
 # 模型基线
 
-| 目录 | 说明 |
-|---|---|
-| `v1-resnet50-joint/` | v1 共享 ResNet-50 联合模型的最终指标与评估回执 |
+新模型训练完成后，将按数据集和模型版本放入本目录，例如：
 
-Plan-A 新模型训练完成后，将按相同结构增加 `v2-plan-a/`，并保持测试集只评估一次。
+```text
+baselines/
+  v2-plan-a/
+    classification-test-metrics.json
+    detection-test-metrics.json
+```
+
+测试集只在配置冻结后评估一次。

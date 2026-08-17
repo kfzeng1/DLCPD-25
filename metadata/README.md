@@ -9,7 +9,6 @@ metadata/
     class-directory-aliases.json      官方类名 → 本地目录名
     class-taxonomy.json               宿主、属性、类别层级的机器可读合同
     class-taxonomy.csv                层级合同表格
-    d0-freeze-config-v1.json          旧版数据冻结记录（legacy 参考）
   ip102/
     detection-class-map.json           IP102 97 个源标签 → 检测标签 1..96 → DLCPD-25 class_id
 ```
