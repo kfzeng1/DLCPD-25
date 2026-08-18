@@ -16,7 +16,10 @@ from fastapi.responses import HTMLResponse
 
 from dlcpd25_v2.common import repo_root
 
-TRAINING_ROOT = "artifacts/training/classification"
+TRAINING_ROOTS = (
+    "artifacts/training/classification",
+    "artifacts/training/detection",
+)
 INDEX_HTML = r"""<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -54,14 +57,14 @@ th { color:var(--muted); font-weight:600; }
 </head>
 <body>
 <header>
-  <h1>DLCPD-25 · Plan-A 分类训练</h1>
+  <h1 id="pageTitle">DLCPD-25 · Plan-A 训练进度</h1>
   <div><span id="runId" style="color:var(--muted);margin-right:12px;"></span><span id="status" class="status">连接中…</span></div>
 </header>
 <main>
   <section class="cards" id="cards"></section>
 
   <section class="panel">
-    <h2>损失曲线</h2>
+    <h2 id="lossTitle">损失曲线</h2>
     <p class="hint">数值越低越好。两条线应整体下降。</p>
     <div class="legend">
       <span><span class="dot" style="background:#38bdf8"></span><span id="legTrainLoss">训练 loss</span></span>
@@ -71,7 +74,7 @@ th { color:var(--muted); font-weight:600; }
   </section>
 
   <section class="panel">
-    <h2>验证指标曲线</h2>
+    <h2 id="metricTitle">验证指标曲线</h2>
     <p class="hint">数值越高越好，最需要关注的是绿色 val macro-F1。</p>
     <div class="legend">
       <span><span class="dot" style="background:#34d399"></span><span id="legMacroF1">val macro-F1</span></span>
@@ -83,7 +86,7 @@ th { color:var(--muted); font-weight:600; }
 
   <section class="panel">
     <h2>每轮评估</h2>
-    <div style="overflow:auto;"><table id="history"><thead><tr><th>epoch</th><th>train_loss</th><th>train_top1</th><th>val_loss</th><th>val_top1</th><th>val_top5</th><th>val_macro_f1</th></tr></thead><tbody></tbody></table></div>
+    <div style="overflow:auto;"><table id="history"><thead id="historyHead"></thead><tbody></tbody></table></div>
   </section>
 </main>
 <script>
@@ -92,6 +95,9 @@ async function refresh(){
     const res = await fetch('/api/progress', {cache:'no-store'});
     const data = await res.json();
     const s = data.state || {};
+    const task = data.task || (s.task || 'classification');
+    document.title = task === 'detection' ? 'IP102 检测训练进度' : 'DLCPD-25 分类训练进度';
+    document.getElementById('pageTitle').textContent = task === 'detection' ? 'IP102 · Plan-A 检测训练' : 'DLCPD-25 · Plan-A 分类训练';
     document.getElementById('status').textContent = s.status || '未知';
     document.getElementById('status').className = 'status ' + (s.status || '');
     document.getElementById('runId').textContent = s.run_id || '';
@@ -111,28 +117,52 @@ async function refresh(){
       ['全局 epoch 进度', globalPct+'%', '<div class="progress"><span style="width:'+globalPct+'%"></span></div>'],
       ['最近 loss', fmt(s.loss_recent), '本轮平均 '+fmt(s.avg_epoch_loss)],
       ['学习率', fmt(s.lr), 'EMA 模型用于验证'],
-      ['最佳 macro-F1', fmt(s.best_metric), '选择指标 val_macro_f1'],
+      [task === 'detection' ? '最佳 mAP50:95' : '最佳 macro-F1', fmt(s.best_metric), task === 'detection' ? '选择指标 val_mAP_50_95' : '选择指标 val_macro_f1'],
       ['已运行', eta(s.elapsed_seconds), 'GPU '+fmt(s.gpu_memory_mb)+' MB'],
       ['预计剩余', eta(s.eta_total_seconds), '本 epoch 剩余 '+eta(s.eta_epoch_seconds)],
     ].map(c=>'<div class="card"><div class="label">'+c[0]+'</div><div class="value">'+c[1]+'</div><div class="sub">'+c[2]+'</div></div>').join('');
     const hist = data.history || [];
     const body = document.querySelector('#history tbody');
-    body.innerHTML = hist.slice().reverse().map(h=>'<tr><td>'+h.epoch+'</td><td>'+fmt(h.train_loss)+'</td><td>'+fmt(h.train_top1)+'</td><td>'+fmt(h.val_loss)+'</td><td>'+fmt(h.val_top1)+'</td><td>'+fmt(h.val_top5)+'</td><td>'+fmt(h.val_macro_f1)+'</td></tr>').join('');
+    const head = document.getElementById('historyHead');
     const last = hist.length ? hist[hist.length-1] : null;
-    document.getElementById('legTrainLoss').textContent = last ? '训练 loss（最新 '+fmt(last.train_loss)+'）' : '训练 loss';
-    document.getElementById('legValLoss').textContent = last ? '验证 loss（最新 '+fmt(last.val_loss)+'）' : '验证 loss';
-    document.getElementById('legMacroF1').textContent = last ? 'val macro-F1（最新 '+fmt(last.val_macro_f1)+'）' : 'val macro-F1';
-    document.getElementById('legTop1').textContent = last ? 'val Top-1（最新 '+fmt(last.val_top1)+'）' : 'val Top-1';
-    document.getElementById('legTop5').textContent = last ? 'val Top-5（最新 '+fmt(last.val_top5)+'）' : 'val Top-5';
-    drawChart('lossChart', [
-      {name:'train_loss', color:'#38bdf8', values:hist.map(h=>h.train_loss)},
-      {name:'val_loss', color:'#fb7185', values:hist.map(h=>h.val_loss)}
-    ], v=>v.toFixed(3));
-    drawChart('metricChart', [
-      {name:'macro_f1', color:'#34d399', values:hist.map(h=>h.val_macro_f1)},
-      {name:'top1', color:'#38bdf8', values:hist.map(h=>h.val_top1)},
-      {name:'top5', color:'#fbbf24', values:hist.map(h=>h.val_top5)}
-    ], v=>v.toFixed(1)+'%');
+    if(task === 'detection'){
+      head.innerHTML = '<tr><th>epoch</th><th>train_loss</th><th>val_mAP50:95</th><th>val_AP50</th><th>val_AP75</th><th>val_AR100</th></tr>';
+      body.innerHTML = hist.slice().reverse().map(h=>'<tr><td>'+h.epoch+'</td><td>'+fmt(h.train_loss)+'</td><td>'+fmt(h.val_mAP_50_95)+'</td><td>'+fmt(h.val_AP50)+'</td><td>'+fmt(h.val_AP75)+'</td><td>'+fmt(h.val_AR_100)+'</td></tr>').join('');
+      document.getElementById('lossTitle').textContent = '训练损失曲线';
+      document.getElementById('metricTitle').textContent = '验证 mAP 曲线';
+      document.getElementById('legTrainLoss').textContent = last ? '训练 loss（最新 '+fmt(last.train_loss)+'）' : '训练 loss';
+      document.getElementById('legValLoss').textContent = '';
+      document.getElementById('legMacroF1').textContent = last ? 'val mAP50:95（最新 '+fmt(last.val_mAP_50_95)+'）' : 'val mAP50:95';
+      document.getElementById('legTop1').textContent = last ? 'val AP50（最新 '+fmt(last.val_AP50)+'）' : 'val AP50';
+      document.getElementById('legTop5').textContent = last ? 'val AP75（最新 '+fmt(last.val_AP75)+'）' : 'val AP75';
+      drawChart('lossChart', [
+        {name:'train_loss', color:'#38bdf8', values:hist.map(h=>h.train_loss)}
+      ], v=>v.toFixed(3));
+      drawChart('metricChart', [
+        {name:'mAP50:95', color:'#34d399', values:hist.map(h=>h.val_mAP_50_95)},
+        {name:'AP50', color:'#38bdf8', values:hist.map(h=>h.val_AP50)},
+        {name:'AP75', color:'#fbbf24', values:hist.map(h=>h.val_AP75)}
+      ], v=>v.toFixed(1)+'%');
+    }else{
+      head.innerHTML = '<tr><th>epoch</th><th>train_loss</th><th>train_top1</th><th>val_loss</th><th>val_top1</th><th>val_top5</th><th>val_macro_f1</th></tr>';
+      body.innerHTML = hist.slice().reverse().map(h=>'<tr><td>'+h.epoch+'</td><td>'+fmt(h.train_loss)+'</td><td>'+fmt(h.train_top1)+'</td><td>'+fmt(h.val_loss)+'</td><td>'+fmt(h.val_top1)+'</td><td>'+fmt(h.val_top5)+'</td><td>'+fmt(h.val_macro_f1)+'</td></tr>').join('');
+      document.getElementById('lossTitle').textContent = '损失曲线';
+      document.getElementById('metricTitle').textContent = '验证指标曲线';
+      document.getElementById('legTrainLoss').textContent = last ? '训练 loss（最新 '+fmt(last.train_loss)+'）' : '训练 loss';
+      document.getElementById('legValLoss').textContent = last ? '验证 loss（最新 '+fmt(last.val_loss)+'）' : '验证 loss';
+      document.getElementById('legMacroF1').textContent = last ? 'val macro-F1（最新 '+fmt(last.val_macro_f1)+'）' : 'val macro-F1';
+      document.getElementById('legTop1').textContent = last ? 'val Top-1（最新 '+fmt(last.val_top1)+'）' : 'val Top-1';
+      document.getElementById('legTop5').textContent = last ? 'val Top-5（最新 '+fmt(last.val_top5)+'）' : 'val Top-5';
+      drawChart('lossChart', [
+        {name:'train_loss', color:'#38bdf8', values:hist.map(h=>h.train_loss)},
+        {name:'val_loss', color:'#fb7185', values:hist.map(h=>h.val_loss)}
+      ], v=>v.toFixed(3));
+      drawChart('metricChart', [
+        {name:'macro_f1', color:'#34d399', values:hist.map(h=>h.val_macro_f1)},
+        {name:'top1', color:'#38bdf8', values:hist.map(h=>h.val_top1)},
+        {name:'top5', color:'#fbbf24', values:hist.map(h=>h.val_top5)}
+      ], v=>v.toFixed(1)+'%');
+    }
   }catch(e){
     document.getElementById('status').textContent = '等待训练启动';
     document.getElementById('status').className = 'status';
@@ -186,17 +216,14 @@ refresh();
 app = FastAPI(title="DLCPD-25 Training Progress")
 
 
-def _runs_dir() -> Path:
-    return repo_root() / TRAINING_ROOT
-
-
-def _latest_run() -> tuple[Path, dict[str, Any], list[dict[str, Any]]]:
-    runs_dir = _runs_dir()
-    if not runs_dir.is_dir():
-        return Path(), {}, []
-    candidates = list(runs_dir.glob("*/state.json"))
+def _latest_run() -> tuple[str, Path, dict[str, Any], list[dict[str, Any]]]:
+    candidates: list[Path] = []
+    for relative_root in TRAINING_ROOTS:
+        runs_dir = repo_root() / relative_root
+        if runs_dir.is_dir():
+            candidates.extend(runs_dir.glob("*/state.json"))
     if not candidates:
-        return Path(), {}, []
+        return "", Path(), {}, []
     latest = max(candidates, key=lambda path: path.stat().st_mtime)
     try:
         state = json.loads(latest.read_text(encoding="utf-8"))
@@ -208,19 +235,25 @@ def _latest_run() -> tuple[Path, dict[str, Any], list[dict[str, Any]]]:
         history = json.loads(history_path.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
         history = []
-    return latest.parent, state, history
+    task = str(state.get("task") or latest.parent.parent.name)
+    return task, latest.parent, state, history
 
 
 @app.get("/api/progress")
 def api_progress() -> dict[str, Any]:
-    run_dir, state, history = _latest_run()
-    runs_dir = _runs_dir()
+    task, run_dir, state, history = _latest_run()
+    run_count = 0
+    for relative_root in TRAINING_ROOTS:
+        runs_dir = repo_root() / relative_root
+        if runs_dir.is_dir():
+            run_count += len(list(runs_dir.glob("*/state.json")))
     return {
+        "task": task,
         "state": state,
         "history": history,
         "run_dir": str(run_dir),
         "updated_at": time.time(),
-        "run_count": len(list(runs_dir.glob("*/state.json"))) if runs_dir.is_dir() else 0,
+        "run_count": run_count,
     }
 
 
