@@ -13,6 +13,8 @@ from pycocotools.cocoeval import COCOeval
 def build_coco_groundtruth_object(records: list[dict[str, Any]]) -> COCO:
     images = []
     annotations = []
+    categories = []
+    seen_categories: set[int] = set()
     annotation_id = 1
     for record in records:
         image_id = record["image_id"]
@@ -27,19 +29,24 @@ def build_coco_groundtruth_object(records: list[dict[str, Any]]) -> COCO:
             xmin, ymin, xmax, ymax = (float(v) for v in obj["bbox"])
             width = max(0.0, xmax - xmin)
             height = max(0.0, ymax - ymin)
+            label = int(obj["detector_label"])
             annotations.append(
                 {
                     "id": annotation_id,
                     "image_id": image_id,
-                    "category_id": int(obj["detector_label"]),
+                    "category_id": label,
                     "bbox": [xmin, ymin, width, height],
                     "area": max(0.0, width * height),
                     "iscrowd": 0,
                 }
             )
             annotation_id += 1
+            if label not in seen_categories:
+                seen_categories.add(label)
+                categories.append({"id": label, "name": f"class_{label}"})
+    categories.sort(key=lambda item: item["id"])
     coco = COCO()
-    coco.dataset = {"images": images, "annotations": annotations, "categories": []}
+    coco.dataset = {"images": images, "annotations": annotations, "categories": categories}
     coco.createIndex()
     return coco
 
