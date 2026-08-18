@@ -73,6 +73,26 @@ uvicorn dlcpd25_v2.web.progress:app --host 0.0.0.0 --port 8765
 
 最终分类模型报告见 `docs/classification-model-report.md`。
 
+## 双模型 Web 应用
+
+```bash
+cd /home/zkf/DLCPD-25
+source /home/zkf/pytorch-env/bin/activate
+python -m dlcpd25_v2.web --config configs/plan-a/app.yaml
+```
+
+浏览器打开 <http://127.0.0.1:7860>：
+
+- 上传图片；
+- 检测专家输出 96 类害虫框并绘制标注图；
+- 分类专家输出 DLCPD-25 203 类 Top-5；
+- 检测框标签映射回公共 `class_id 0..202`。
+
+接口：
+
+- `GET /health`
+- `POST /api/analyze`，上传字段名为 `file`
+
 ## 数据合同
 
 训练代码只读取：

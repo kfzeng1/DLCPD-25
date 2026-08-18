@@ -60,7 +60,7 @@ python3 scripts/ip102/verify_detection_contract.py
 - [x] Plan-A 分类训练代码、checkpoint 与进度网页
 - [x] Plan-A 分类模型训练、早停、微调对比与测试集评估
 - [x] Plan-A 检测模型训练、早停与测试集评估
-- [ ] 双模型 Web 应用与推理编排
+- [x] 双模型 Web 应用与推理编排
 
 ## 标签与类别合同
 
