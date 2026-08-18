@@ -15,6 +15,7 @@ project/src/dlcpd25_v2/
     transforms.py                   训练 RandAugment / 验证 Resize+CenterCrop
     trainer.py                      训练循环、AMP、EMA、早停、checkpoint、进度文件
     train.py                        CLI 入口
+    evaluate.py                    测试集最终评估与报告产物
   web/progress.py                   训练进度网页
 ```
 
@@ -63,6 +64,14 @@ uvicorn dlcpd25_v2.web.progress:app --host 0.0.0.0 --port 8765
 - 最近 loss、本轮平均 loss；
 - 学习率、GPU 显存、预计剩余时间；
 - train/val 指标曲线和每轮历史表。
+
+## 测试集评估
+
+```bash
+/home/zkf/pytorch-env/bin/python -m dlcpd25_v2.classification.evaluate   --checkpoint artifacts/training/classification/convnext-tiny-384-plan-a-v1/checkpoints/best.pt
+```
+
+最终分类模型报告见 `docs/classification-model-report.md`。
 
 ## 数据合同
 
