@@ -13,7 +13,6 @@
 - **检测专家**：`ConvNeXt-Tiny-FPN + Faster R-CNN` 或 `YOLOv8s`，输入最长边 640，输出 96 类 IP102 害虫框；
 - **推理编排**：检测结果映射回 DLCPD-25 公共 `class_id 0..202`，与整图 Top-5 分类结果同时返回。
 
-旧的 `ResNet-50 + Faster R-CNN` 联合模型已从当前工程删除。
 ## 目录结构
 
 ```text
@@ -53,7 +52,7 @@ python3 scripts/ip102/verify_detection_contract.py
 
 ## 当前进度
 
-- [x] 删除旧训练代码与旧版归档
+- [x] 数据目录与工程规范整理
 - [x] 两份数据集物理目录与数据合同整理清晰
 - [x] DLCPD-25 分类层级、清单、固定划分
 - [x] IP102 检测合同重建
