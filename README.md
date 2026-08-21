@@ -27,16 +27,13 @@ project/
 ## GitHub 说明
 
 - 代码仓库：<https://github.com/kfzeng1/DLCPD-25>
-- 远程仓库只提供工程代码与配置，以下文件**不会推送**：
+- GitHub 会推送 `project/` 中的源代码、配置、实验报告、结果图表、截图、PPT/PDF 和冻结数据合同。
+- 以下内容**不会推送**，仅保留在本地 `project/` 提交目录中：
 
-- `data/` 原始数据
-- `research/` 研究资料
-- `docs/` 内部文档与报告
-- `project/data`、`project/artifacts`、`project/metadata`
-- `project/models`、`project/results`、`project/docs`
-- `artifacts/data` 与训练产物
-
-这些内容保留在本地，随 `project/` 目录线下提交。
+  - `project/data/`：原始图片数据（约 17GB）
+  - `project/models/*.pt`：最终模型权重（超过 GitHub 单文件 100MB 限制）
+  - `project/artifacts/data/dlcpd25/manifest.csv`：未压缩 53MB 清单
+  - 根目录 `research/`、内部 `docs/`、根目录 `artifacts/` 训练产物
 
 ## 快速复现
 
