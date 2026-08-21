@@ -40,7 +40,7 @@ training:
   sampling: repeat_factor
   log_every_steps: 10
   early_stopping_patience: 6
-  init_backbone: artifacts/training/classification/convnext-tiny-384-plan-a-v1/checkpoints/best.pt
+  init_backbone: models/classification_best.pt
   rpn_batch_size_per_image: 256
   roi_batch_size_per_image: 128
 
