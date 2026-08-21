@@ -1,0 +1,51 @@
+# DLCPD-25 Plan-A 分类专家配置（训练代码已实现，2026-08-17）
+run:
+  output_dir: artifacts/training/classification
+  run_id: convnext-tiny-384-plan-a-v1
+  resume: null                    # "last" 表示自动恢复该 run_id 的 last.pt
+
+dataset:
+  name: DLCPD-25
+  task: image_classification
+  manifest: artifacts/data/dlcpd25/manifest.csv.gz
+  taxonomy: metadata/dlcpd25/class-taxonomy.json
+  num_classes: 203
+
+model:
+  architecture: convnext_tiny
+  pretrained: imagenet
+  input_size: 384
+  num_classes: 203
+  auxiliary_heads:
+    host: 22
+    category: 4
+
+training:
+  seed: 20260817
+  epochs: 40
+  batch_size: 32
+  workers: 6
+  optimizer: adamw
+  backbone_learning_rate: 5.0e-5
+  head_learning_rate: 3.0e-4
+  weight_decay: 1.0e-4
+  warmup_epochs: 3
+  scheduler: cosine
+  use_amp: true
+  amp_dtype: bfloat16
+  channels_last: true
+  ema_decay: 0.999
+  sampling: sqrt_inverse_frequency
+  log_every_steps: 10
+  early_stopping_patience: 6
+  loss:
+    type: focal
+    focal_gamma: 2.0
+    label_smoothing: 0.1
+    aux_weight_host: 0.2
+    aux_weight_category: 0.05
+
+evaluation:
+  selection_metric: val_macro_f1
+  metrics: [top1, top5, macro_f1, balanced_accuracy]
+  test_only_after_freeze: true

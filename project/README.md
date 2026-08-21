@@ -1,103 +1,81 @@
-# Plan-A 训练/推理工程
+# 基于 DLCPD-25 数据集的农产品病虫害与缺陷分类目标检测系统
 
-当前已实现 DLCPD-25 分类专家训练与训练进度网页。
+本目录为课程大作业提交目录，包含完整源代码、实验数据、冻结数据合同、最终模型、实验结果截图和实验报告。
 
-## 已实现
-
-```text
-project/src/dlcpd25_v2/
-  common.py                         仓库根目录定位
-  data/classification_dataset.py    读取冻结 manifest.csv.gz 的分类数据集
-  classification/
-    model.py                        ConvNeXt-Tiny + 主头/宿主头/属性头
-    losses.py                       Focal Loss + 类别平衡权重 + 辅助 CE
-    metrics.py                      Top-1/Top-5/Macro-F1/Balanced Accuracy
-    transforms.py                   训练 RandAugment / 验证 Resize+CenterCrop
-    trainer.py                      训练循环、AMP、EMA、早停、checkpoint、进度文件
-    train.py                        CLI 入口
-    evaluate.py                    测试集最终评估与报告产物
-  web/progress.py                   训练进度网页
-```
-
-## 训练命令
-
-```bash
-cd /home/zkf/DLCPD-25
-source /home/zkf/pytorch-env/bin/activate
-
-# 训练 1 轮（默认配置为 40 轮，这里显式覆盖为 1）
-python -m dlcpd25_v2.classification.train \
-  --config configs/plan-a/classification.yaml \
-  --run-id convnext-tiny-384-plan-a-v1 \
-  --epochs 1
-
-# 后续从 last.pt 继续训练
-python -m dlcpd25_v2.classification.train \
-  --config configs/plan-a/classification.yaml \
-  --run-id convnext-tiny-384-plan-a-v1 \
-  --epochs 40 \
-  --resume artifacts/training/classification/convnext-tiny-384-plan-a-v1/checkpoints/last.pt
-```
-
-输出：
+## 目录结构
 
 ```text
-artifacts/training/classification/<run_id>/
-  state.json        实时进度（网页读取）
-  history.json      每轮 train/val 指标
-  checkpoints/
-    last.pt         每轮结束后的最新 checkpoint
-    best.pt         按 val_macro_f1 选择的最佳 checkpoint
+project/
+├── src/                 项目源代码
+├── configs/             训练、评估与 Web 配置
+├── data/                原始数据（DLCPD-25 + IP102 Detection）
+├── artifacts/           冻结数据合同与划分
+├── metadata/            类别层级与检测类别映射
+├── models/              最终分类与检测模型权重
+├── results/             测试指标、逐类结果、训练曲线、运行截图
+├── docs/                实验报告、模型报告、架构 PPT/PDF
+├── pyproject.toml       Python 工程配置
+└── README.md            本说明
 ```
 
-## 进度网页
+## 实验报告
 
-训练过程中随时查看：
+- `docs/实验报告.md`
+- `docs/实验报告.docx`
+- `docs/实验报告.pdf`
 
-```bash
-uvicorn dlcpd25_v2.web.progress:app --host 0.0.0.0 --port 8765
-```
+## 复现步骤
 
-浏览器打开 <http://127.0.0.1:8765>。页面每 3 秒自动刷新，显示：
-
-- 当前轮次、batch、全局进度；
-- 最近 loss、本轮平均 loss；
-- 学习率、GPU 显存、预计剩余时间；
-- train/val 指标曲线和每轮历史表。
-
-## 测试集评估
+推荐使用 Python 3.10+，安装与显卡匹配的 PyTorch。已有环境：
 
 ```bash
-/home/zkf/pytorch-env/bin/python -m dlcpd25_v2.classification.evaluate   --checkpoint artifacts/training/classification/convnext-tiny-384-plan-a-v1/checkpoints/best.pt
-```
-
-最终分类模型报告见 `docs/classification-model-report.md`。
-
-## 双模型 Web 应用
-
-```bash
-cd /home/zkf/DLCPD-25
 source /home/zkf/pytorch-env/bin/activate
+```
+
+### 1. 安装工程
+
+```bash
+cd project
+pip install -e .
+```
+
+### 2. 分类模型评估
+
+```bash
+python -m dlcpd25_v2.classification.evaluate \
+  --checkpoint models/classification_best.pt
+```
+
+### 3. 检测模型评估
+
+```bash
+python -m dlcpd25_v2.detection.evaluate \
+  --checkpoint models/detection_best.pt
+```
+
+### 4. 重新训练
+
+```bash
+python -m dlcpd25_v2.classification.train --config configs/plan-a/classification.yaml
+python -m dlcpd25_v2.detection.train --config configs/plan-a/detection.yaml
+```
+
+### 5. 启动双模型 Web 应用
+
+```bash
 python -m dlcpd25_v2.web --config configs/plan-a/app.yaml
 ```
 
-浏览器打开 <http://127.0.0.1:7860>：
+浏览器打开 `http://127.0.0.1:7860`。
 
-- 上传图片；
-- 检测专家输出 96 类害虫框并绘制标注图；
-- 分类专家输出 DLCPD-25 203 类 Top-5；
-- 检测框标签映射回公共 `class_id 0..202`。
+## 结果摘要
 
-接口：
+| 任务 | 关键指标 |
+|---|---|
+| DLCPD-25 分类 | Top-1 89.2240%，Top-5 97.7366%，Macro-F1 75.3537% |
+| IP102 检测 | mAP50:95 34.3449%，AP50 59.6817%，Precision 88.1562% |
 
-- `GET /health`
-- `POST /api/analyze`，上传字段名为 `file`
+## 说明
 
-## 数据合同
-
-训练代码只读取：
-
-- `artifacts/data/dlcpd25/manifest.csv.gz`
-- `metadata/dlcpd25/class-taxonomy.json`
-
-不会重新扫描 `data/raw/`，也不会在代码中硬编码类别名。
+- 原始数据和模型权重体积较大，仅保存在本地提交目录中，不推送到公开 GitHub；
+- GitHub 仓库地址见项目根目录说明，远程仓库只包含可复现代码与配置。

@@ -1,0 +1,50 @@
+# IP102 Plan-A 检测专家配置（训练代码已实现）
+run:
+  output_dir: artifacts/training/detection
+  run_id: fasterrcnn-convnext-tiny-640-v1
+  resume: null
+
+dataset:
+  name: IP102-Detection
+  task: object_detection
+  voc_root: data/raw/ip102/VOC2007
+  contract_dir: artifacts/data/ip102
+  class_map: metadata/ip102/detection-class-map.json
+  num_classes: 96
+
+model:
+  architecture: fasterrcnn_convnext_tiny_fpn
+  pretrained: imagenet
+  input_size:
+    min_side: 640
+    max_side: 640
+  letterbox: aspect_preserving
+  max_detections_per_image: 30
+  box_score_thresh: 0.05
+  box_nms_thresh: 0.5
+
+training:
+  seed: 20260817
+  epochs: 40
+  batch_size: 4
+  workers: 4
+  optimizer: adamw
+  backbone_learning_rate: 1.0e-5
+  head_learning_rate: 1.0e-4
+  weight_decay: 1.0e-4
+  warmup_epochs: 1
+  scheduler: cosine
+  use_amp: true
+  amp_dtype: bfloat16
+  ema_decay: 0.999
+  sampling: repeat_factor
+  log_every_steps: 10
+  early_stopping_patience: 6
+  init_backbone: artifacts/training/classification/convnext-tiny-384-plan-a-v1/checkpoints/best.pt
+  rpn_batch_size_per_image: 256
+  roi_batch_size_per_image: 128
+
+evaluation:
+  selection_metric: val_mAP_50_95
+  metrics: [mAP_50_95, AP50, AP75, AR_100, AP_small, AP_medium, AP_large]
+  test_only_after_freeze: true

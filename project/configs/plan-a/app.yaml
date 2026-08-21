@@ -1,0 +1,11 @@
+# Plan-A 双模型 Web 应用配置
+host: 0.0.0.0
+port: 7860
+classification_checkpoint: artifacts/training/classification/convnext-tiny-384-plan-a-v1/checkpoints/best.pt
+detection_checkpoint: artifacts/training/detection/fasterrcnn-convnext-tiny-640-v1/checkpoints/best.pt
+classification_taxonomy: metadata/dlcpd25/class-taxonomy.json
+detection_class_map: metadata/ip102/detection-class-map.json
+classification_top_k: 5
+detection_score_threshold: 0.30
+detection_max_detections: 30
+annotated_max_side: 1200

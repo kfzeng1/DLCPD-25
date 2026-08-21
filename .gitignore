@@ -1,20 +1,14 @@
-# ---- raw data and generated local views ----
-data/*
-!data/README.md
-
-# ---- research files that are already selectively tracked ----
-research/*
-!research/README.md
-!research/*.md
-!research/*.pdf
-
-# ---- artifacts: data contracts are tracked, other artifacts are local ----
-artifacts/*
-!artifacts/README.md
-!artifacts/data/
-!artifacts/data/**
-# The 53MB uncompressed manifest is reproducible locally; Git tracks the gzip contract.
-artifacts/data/dlcpd25/manifest.csv
+# ---- local-only / private materials: never push ----
+data
+research/
+docs/
+artifacts/data/
+project/data/
+project/artifacts/
+project/metadata/
+project/models/
+project/results/
+project/docs/
 
 # ---- python ----
 __pycache__/
@@ -31,7 +25,7 @@ htmlcov/
 build/
 dist/
 
-# ---- model weights / binary build outputs ----
+# ---- model weights / binary outputs ----
 *.pt
 *.pth
 *.onnx
@@ -47,3 +41,4 @@ runs/
 .DS_Store
 .idea/
 .vscode/
+artifacts/training/
