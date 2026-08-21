@@ -77,5 +77,6 @@ python -m dlcpd25_v2.web --config configs/plan-a/app.yaml
 
 ## 说明
 
-- 原始数据和模型权重体积较大，仅保存在本地提交目录中，不推送到公开 GitHub；
-- GitHub 仓库地址见项目根目录说明，远程仓库只包含可复现代码与配置。
+- `project/` 中的源代码、配置、实验报告、结果图表、截图、PPT/PDF 和冻结数据合同已推送到 GitHub；
+- 原始数据 `data/` 和模型权重 `models/*.pt` 因体积限制仅保存在本地提交目录；
+- GitHub 仓库：<https://github.com/kfzeng1/DLCPD-25>。
