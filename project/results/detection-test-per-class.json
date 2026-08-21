@@ -1,0 +1,674 @@
+[
+  {
+    "detector_label": 1,
+    "name": "Adristyrannus",
+    "ap": 56.1513,
+    "ap50": 86.2671,
+    "ap75": 71.9432
+  },
+  {
+    "detector_label": 2,
+    "name": "Aleurocanthus spiniferus",
+    "ap": 15.0837,
+    "ap50": 46.2657,
+    "ap75": 4.3607
+  },
+  {
+    "detector_label": 3,
+    "name": "Ampelophaga",
+    "ap": 70.4816,
+    "ap50": 94.3074,
+    "ap75": 89.5476
+  },
+  {
+    "detector_label": 4,
+    "name": "Aphis citricola Vander Goot",
+    "ap": 0.0,
+    "ap50": 0.0,
+    "ap75": 0.0
+  },
+  {
+    "detector_label": 5,
+    "name": "Apolygus lucorum",
+    "ap": 8.1034,
+    "ap50": 25.9333,
+    "ap75": 0.5501
+  },
+  {
+    "detector_label": 6,
+    "name": "Bactrocera tsuneonis",
+    "ap": 19.9949,
+    "ap50": 25.7933,
+    "ap75": 23.737
+  },
+  {
+    "detector_label": 7,
+    "name": "bird cherry-oataphid",
+    "ap": 11.831,
+    "ap50": 20.5368,
+    "ap75": 12.9178
+  },
+  {
+    "detector_label": 8,
+    "name": "Brevipoalpus lewisi McGregor",
+    "ap": -100.0,
+    "ap50": -100.0,
+    "ap75": -100.0
+  },
+  {
+    "detector_label": 9,
+    "name": "Ceroplastes rubens",
+    "ap": 28.1557,
+    "ap50": 71.6164,
+    "ap75": 10.8891
+  },
+  {
+    "detector_label": 10,
+    "name": "Tetradacus c Bactrocera minax",
+    "ap": 23.7755,
+    "ap50": 50.4279,
+    "ap75": 17.1462
+  },
+  {
+    "detector_label": 11,
+    "name": "Chlumetia transversa",
+    "ap": 23.3643,
+    "ap50": 39.5473,
+    "ap75": 25.467
+  },
+  {
+    "detector_label": 12,
+    "name": "Chrysomphalus aonidum",
+    "ap": 12.2784,
+    "ap50": 25.0526,
+    "ap75": 8.6359
+  },
+  {
+    "detector_label": 13,
+    "name": "Cicadella viridis",
+    "ap": 50.7262,
+    "ap50": 85.0967,
+    "ap75": 55.5207
+  },
+  {
+    "detector_label": 14,
+    "name": "Cicadellidae",
+    "ap": 67.5986,
+    "ap50": 97.5658,
+    "ap75": 88.0221
+  },
+  {
+    "detector_label": 15,
+    "name": "Dacus dorsalis(Hendel)",
+    "ap": 56.0362,
+    "ap50": 86.6596,
+    "ap75": 66.8698
+  },
+  {
+    "detector_label": 16,
+    "name": "Dasineura sp",
+    "ap": 13.618,
+    "ap50": 26.8977,
+    "ap75": 11.3243
+  },
+  {
+    "detector_label": 17,
+    "name": "Deporaus marginatus Pascoe",
+    "ap": 46.4569,
+    "ap50": 76.8573,
+    "ap75": 47.919
+  },
+  {
+    "detector_label": 18,
+    "name": "english grain aphid",
+    "ap": 20.442,
+    "ap50": 44.8538,
+    "ap75": 14.4876
+  },
+  {
+    "detector_label": 19,
+    "name": "Erythroneura apicalis",
+    "ap": 34.3856,
+    "ap50": 56.3192,
+    "ap75": 56.3192
+  },
+  {
+    "detector_label": 20,
+    "name": "Icerya purchasi Maskell",
+    "ap": 48.9244,
+    "ap50": 94.1162,
+    "ap75": 39.7729
+  },
+  {
+    "detector_label": 21,
+    "name": "Lawana imitata Melichar",
+    "ap": 48.3136,
+    "ap50": 76.5127,
+    "ap75": 46.2833
+  },
+  {
+    "detector_label": 22,
+    "name": "Limacodidae",
+    "ap": 3.1112,
+    "ap50": 7.8244,
+    "ap75": 2.4319
+  },
+  {
+    "detector_label": 23,
+    "name": "Locustoidea",
+    "ap": 32.4234,
+    "ap50": 62.4214,
+    "ap75": 30.5751
+  },
+  {
+    "detector_label": 24,
+    "name": "Lycorma delicatula",
+    "ap": 66.1646,
+    "ap50": 99.8152,
+    "ap75": 83.6942
+  },
+  {
+    "detector_label": 25,
+    "name": "Mango flat beak leafhopper",
+    "ap": 12.6153,
+    "ap50": 23.6373,
+    "ap75": 4.4224
+  },
+  {
+    "detector_label": 26,
+    "name": "Miridae",
+    "ap": 44.6082,
+    "ap50": 84.1764,
+    "ap75": 40.9141
+  },
+  {
+    "detector_label": 27,
+    "name": "Nipaecoccus vastalor",
+    "ap": 37.9302,
+    "ap50": 69.0362,
+    "ap75": 46.4446
+  },
+  {
+    "detector_label": 28,
+    "name": "Panonchus citri McGregor",
+    "ap": 23.8505,
+    "ap50": 35.2285,
+    "ap75": 27.7885
+  },
+  {
+    "detector_label": 29,
+    "name": "Papilio xuthus",
+    "ap": 29.4706,
+    "ap50": 55.4548,
+    "ap75": 18.101
+  },
+  {
+    "detector_label": 30,
+    "name": "Phyllocnistis citrella Stainton",
+    "ap": 51.1881,
+    "ap50": 80.198,
+    "ap75": 80.198
+  },
+  {
+    "detector_label": 31,
+    "name": "Pieris canidia",
+    "ap": 11.9171,
+    "ap50": 23.0198,
+    "ap75": 12.3189
+  },
+  {
+    "detector_label": 32,
+    "name": "Prodenia litura",
+    "ap": 32.991,
+    "ap50": 60.2598,
+    "ap75": 32.9042
+  },
+  {
+    "detector_label": 33,
+    "name": "Potosiabre vitarsis",
+    "ap": 60.8511,
+    "ap50": 90.4527,
+    "ap75": 75.6609
+  },
+  {
+    "detector_label": 34,
+    "name": "Pseudococcus comstocki Kuwana",
+    "ap": 23.9919,
+    "ap50": 48.6368,
+    "ap75": 9.81
+  },
+  {
+    "detector_label": 35,
+    "name": "Rhytidodera bowrinii white",
+    "ap": 51.504,
+    "ap50": 86.2939,
+    "ap75": 54.1792
+  },
+  {
+    "detector_label": 36,
+    "name": "Salurnis marginella Guerr",
+    "ap": 59.8442,
+    "ap50": 87.6572,
+    "ap75": 75.2194
+  },
+  {
+    "detector_label": 37,
+    "name": "Scirtothrips dorsalis Hood",
+    "ap": 17.4533,
+    "ap50": 32.7688,
+    "ap75": 13.3933
+  },
+  {
+    "detector_label": 38,
+    "name": "Sternochetus frigidus",
+    "ap": 66.2622,
+    "ap50": 83.3466,
+    "ap75": 83.3466
+  },
+  {
+    "detector_label": 39,
+    "name": "Thrips",
+    "ap": 22.4342,
+    "ap50": 37.005,
+    "ap75": 17.4049
+  },
+  {
+    "detector_label": 40,
+    "name": "Toxoptera aurantii",
+    "ap": 39.7129,
+    "ap50": 72.7723,
+    "ap75": 30.6931
+  },
+  {
+    "detector_label": 41,
+    "name": "Toxoptera citricidus",
+    "ap": 16.1839,
+    "ap50": 40.3112,
+    "ap75": 4.1584
+  },
+  {
+    "detector_label": 42,
+    "name": "Trialeurodes vaporariorum",
+    "ap": 27.926,
+    "ap50": 38.6779,
+    "ap75": 33.6156
+  },
+  {
+    "detector_label": 43,
+    "name": "Unaspis yanonensis",
+    "ap": 25.2855,
+    "ap50": 80.5174,
+    "ap75": 5.2822
+  },
+  {
+    "detector_label": 44,
+    "name": "Xylotrechus",
+    "ap": 59.9962,
+    "ap50": 94.9382,
+    "ap75": 64.7736
+  },
+  {
+    "detector_label": 45,
+    "name": "alfalfa plant bug",
+    "ap": 18.1003,
+    "ap50": 37.335,
+    "ap75": 12.4741
+  },
+  {
+    "detector_label": 46,
+    "name": "alfalfa seed chalcid",
+    "ap": 57.1977,
+    "ap50": 84.2484,
+    "ap75": 75.2475
+  },
+  {
+    "detector_label": 47,
+    "name": "alfalfa weevil",
+    "ap": 30.3047,
+    "ap50": 51.533,
+    "ap75": 40.4376
+  },
+  {
+    "detector_label": 48,
+    "name": "aphids",
+    "ap": 35.1176,
+    "ap50": 69.1761,
+    "ap75": 29.8114
+  },
+  {
+    "detector_label": 49,
+    "name": "army worm",
+    "ap": 27.4365,
+    "ap50": 45.5877,
+    "ap75": 35.3339
+  },
+  {
+    "detector_label": 50,
+    "name": "asiatic rice borer",
+    "ap": 38.4415,
+    "ap50": 62.0317,
+    "ap75": 39.6276
+  },
+  {
+    "detector_label": 51,
+    "name": "beet army worm",
+    "ap": 34.8639,
+    "ap50": 53.2476,
+    "ap75": 44.2066
+  },
+  {
+    "detector_label": 52,
+    "name": "beet fly",
+    "ap": 18.9307,
+    "ap50": 32.7475,
+    "ap75": 8.3416
+  },
+  {
+    "detector_label": 53,
+    "name": "Beet spot flies",
+    "ap": 53.421,
+    "ap50": 79.9302,
+    "ap75": 57.9827
+  },
+  {
+    "detector_label": 54,
+    "name": "beet weevil",
+    "ap": 36.305,
+    "ap50": 75.6428,
+    "ap75": 20.7063
+  },
+  {
+    "detector_label": 55,
+    "name": "black cutworm",
+    "ap": 38.7425,
+    "ap50": 52.9845,
+    "ap75": 49.9894
+  },
+  {
+    "detector_label": 56,
+    "name": "blister beetle",
+    "ap": 41.0793,
+    "ap50": 86.1763,
+    "ap75": 30.8722
+  },
+  {
+    "detector_label": 57,
+    "name": "brown plant hopper",
+    "ap": 34.9466,
+    "ap50": 63.3399,
+    "ap75": 36.1845
+  },
+  {
+    "detector_label": 58,
+    "name": "cabbage army worm",
+    "ap": 17.5418,
+    "ap50": 27.6343,
+    "ap75": 17.6846
+  },
+  {
+    "detector_label": 59,
+    "name": "cerodonta denticornis",
+    "ap": 17.107,
+    "ap50": 31.8301,
+    "ap75": 6.7212
+  },
+  {
+    "detector_label": 60,
+    "name": "corn borer",
+    "ap": 46.8167,
+    "ap50": 79.5693,
+    "ap75": 51.0321
+  },
+  {
+    "detector_label": 61,
+    "name": "flax budworm",
+    "ap": 25.6848,
+    "ap50": 41.4734,
+    "ap75": 26.5812
+  },
+  {
+    "detector_label": 62,
+    "name": "flea beetle",
+    "ap": 51.0594,
+    "ap50": 94.7156,
+    "ap75": 48.8221
+  },
+  {
+    "detector_label": 63,
+    "name": "grain spreader thrips",
+    "ap": 35.3465,
+    "ap50": 50.495,
+    "ap75": 50.495
+  },
+  {
+    "detector_label": 64,
+    "name": "green bug",
+    "ap": 1.1086,
+    "ap50": 3.8319,
+    "ap75": 0.0646
+  },
+  {
+    "detector_label": 65,
+    "name": "grub",
+    "ap": 55.5898,
+    "ap50": 96.3094,
+    "ap75": 54.9117
+  },
+  {
+    "detector_label": 66,
+    "name": "large cutworm",
+    "ap": 12.0447,
+    "ap50": 22.354,
+    "ap75": 11.94
+  },
+  {
+    "detector_label": 67,
+    "name": "longlegged spider mite",
+    "ap": 31.1621,
+    "ap50": 66.9014,
+    "ap75": 11.7327
+  },
+  {
+    "detector_label": 68,
+    "name": "lytta polita",
+    "ap": 12.6239,
+    "ap50": 32.338,
+    "ap75": 2.4279
+  },
+  {
+    "detector_label": 69,
+    "name": "meadow moth",
+    "ap": 48.3779,
+    "ap50": 72.0585,
+    "ap75": 72.0585
+  },
+  {
+    "detector_label": 70,
+    "name": "mole cricket",
+    "ap": 55.3249,
+    "ap50": 98.3521,
+    "ap75": 52.4484
+  },
+  {
+    "detector_label": 71,
+    "name": "odontothrips loti",
+    "ap": 32.5205,
+    "ap50": 81.2093,
+    "ap75": 21.8722
+  },
+  {
+    "detector_label": 72,
+    "name": "oides decempunctata",
+    "ap": 50.7101,
+    "ap50": 98.2568,
+    "ap75": 41.9614
+  },
+  {
+    "detector_label": 73,
+    "name": "paddy stem maggot",
+    "ap": 38.6958,
+    "ap50": 58.7753,
+    "ap75": 42.4505
+  },
+  {
+    "detector_label": 74,
+    "name": "parathrene regalis",
+    "ap": 45.6271,
+    "ap50": 100.0,
+    "ap75": 25.2475
+  },
+  {
+    "detector_label": 75,
+    "name": "peach borer",
+    "ap": 52.629,
+    "ap50": 83.2849,
+    "ap75": 58.654
+  },
+  {
+    "detector_label": 76,
+    "name": "penthaleus major",
+    "ap": 52.6327,
+    "ap50": 98.6022,
+    "ap75": 66.3658
+  },
+  {
+    "detector_label": 77,
+    "name": "red spider",
+    "ap": 41.5803,
+    "ap50": 69.5522,
+    "ap75": 48.8054
+  },
+  {
+    "detector_label": 78,
+    "name": "rice gall midge",
+    "ap": 32.5101,
+    "ap50": 79.6755,
+    "ap75": 7.4257
+  },
+  {
+    "detector_label": 79,
+    "name": "rice leaf caterpillar",
+    "ap": 17.261,
+    "ap50": 35.6227,
+    "ap75": 20.3994
+  },
+  {
+    "detector_label": 80,
+    "name": "rice leaf roller",
+    "ap": 57.0538,
+    "ap50": 85.5453,
+    "ap75": 64.2051
+  },
+  {
+    "detector_label": 81,
+    "name": "rice leafhopper",
+    "ap": 29.6022,
+    "ap50": 46.2326,
+    "ap75": 30.9708
+  },
+  {
+    "detector_label": 82,
+    "name": "rice shell pest",
+    "ap": 33.2607,
+    "ap50": 54.4554,
+    "ap75": 32.4092
+  },
+  {
+    "detector_label": 83,
+    "name": "Rice Stemfly",
+    "ap": 19.6906,
+    "ap50": 37.7056,
+    "ap75": 16.6662
+  },
+  {
+    "detector_label": 84,
+    "name": "rice water weevil",
+    "ap": 49.4865,
+    "ap50": 75.9673,
+    "ap75": 65.6564
+  },
+  {
+    "detector_label": 85,
+    "name": "sericaorient alismots chulsky",
+    "ap": 64.8779,
+    "ap50": 88.1013,
+    "ap75": 88.1013
+  },
+  {
+    "detector_label": 86,
+    "name": "small brown plant hopper",
+    "ap": 8.2786,
+    "ap50": 16.8056,
+    "ap75": 2.0719
+  },
+  {
+    "detector_label": 87,
+    "name": "tarnished plant bug",
+    "ap": 42.8211,
+    "ap50": 74.0495,
+    "ap75": 44.4304
+  },
+  {
+    "detector_label": 88,
+    "name": "therioaphis maculata Buckton",
+    "ap": 0.0,
+    "ap50": 0.0,
+    "ap75": 0.0
+  },
+  {
+    "detector_label": 89,
+    "name": "wheat blossom midge",
+    "ap": 22.4422,
+    "ap50": 50.495,
+    "ap75": 0.0
+  },
+  {
+    "detector_label": 90,
+    "name": "wheat phloeothrips",
+    "ap": 42.7117,
+    "ap50": 72.1965,
+    "ap75": 49.9109
+  },
+  {
+    "detector_label": 91,
+    "name": "wheat sawfly",
+    "ap": 47.3423,
+    "ap50": 85.079,
+    "ap75": 35.4092
+  },
+  {
+    "detector_label": 92,
+    "name": "white margined moth",
+    "ap": 8.7528,
+    "ap50": 16.157,
+    "ap75": 5.8812
+  },
+  {
+    "detector_label": 93,
+    "name": "white backed plant hopper",
+    "ap": 22.7535,
+    "ap50": 44.5432,
+    "ap75": 12.2643
+  },
+  {
+    "detector_label": 94,
+    "name": "wireworm",
+    "ap": 49.0262,
+    "ap50": 90.2137,
+    "ap75": 45.15
+  },
+  {
+    "detector_label": 95,
+    "name": "yellow cutworm",
+    "ap": 25.6685,
+    "ap50": 39.3422,
+    "ap75": 35.3137
+  },
+  {
+    "detector_label": 96,
+    "name": "yellow rice borer",
+    "ap": 26.7173,
+    "ap50": 50.9713,
+    "ap75": 23.1074
+  }
+]

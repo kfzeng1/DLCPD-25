@@ -1,10 +1,8 @@
 # Submission-only materials stay local, not on GitHub
-data/
-artifacts/
-metadata/
-models/
-results/
-docs/
+/data/
+artifacts/training/
+models/*
+!models/README.md
 
 # Python
 .venv/

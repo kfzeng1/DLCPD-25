@@ -1,14 +1,12 @@
 # ---- local-only / private materials: never push ----
-data
-research/
-docs/
-artifacts/data/
+/data
+/research/
+/docs/
+/artifacts/data/
 project/data/
-project/artifacts/
-project/metadata/
-project/models/
-project/results/
-project/docs/
+project/models/*
+!project/models/README.md
+project/artifacts/training/
 
 # ---- python ----
 __pycache__/
@@ -42,3 +40,7 @@ runs/
 .idea/
 .vscode/
 artifacts/training/
+
+# local-only large intermediate files
+project/artifacts/data/dlcpd25/manifest.csv
+.~*

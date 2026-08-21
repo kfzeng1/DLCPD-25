@@ -1,0 +1,204 @@
+class_id,official_name,local_directory,host_group,host_id,host_zh,category,category_zh,image_count
+0,Adristyrannus(citrus),Adristyrannus 枯叶夜蛾(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,186
+1,Aleurocanthus spiniferus(citru),Aleurocanthus spiniferus 柑橘黑刺粉虱(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,414
+2,Ampelophaga rubiginosa（vitis）,Ampelophaga rubiginosa 葡萄天蛾（葡萄）,economic_crop,grape,葡萄,pest,农业有害生物,458
+3,Anticarsia gemmatalis(soybean),Anticarsia gemmatalis 大豆夜蛾(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+4,Aphids（cotton）,Aphids 蚜虫（棉花）,economic_crop,cotton,棉花,pest,农业有害生物,1582
+5,Aphis citricola Vander Goot(citru),Aphis citricola Vander Goot 绣线菊蚜(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,210
+6,Apolygus lucorum(vitis),Apolygus lucorum 绿盲蝽(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,228
+7,Army worm（cotton）,Army worm 黏虫（棉花）,economic_crop,cotton,棉花,pest,农业有害生物,1360
+8,Bacterial blight（cotton）,Bacterial blight 棉花细菌性角斑病（棉花）,economic_crop,cotton,棉花,disease,植物病害,1000
+9,Bactrocera tsuneonis(citru),Bactrocera tsuneonis 蜜柑大实蝇(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,100
+10,Bemisia argentifolii(tomato),Bemisia argentifolii 银叶粉虱(番茄),economic_crop,tomato,番茄,pest,农业有害生物,840
+11,Bird cherry-oat aphid(wheat),Bird cherry-oat aphid 禾谷缢管蚜(小麦),food_crop,wheat,小麦,pest,农业有害生物,424
+12,Brevipoalpus lewisi McGregor(vitis),Brevipoalpus lewisi McGregor 刘氏短须螨(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,47
+13,Ceroplastes rubens(citru),Ceroplastes rubens 红蜡蚧(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,154
+14,Chinese citrus fly(citru),Chinese citrus fly 柑橘大实蝇(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,232
+15,Chlumetia transversa(mango),Chlumetia transversa 芒果横线尾夜蛾(芒果),economic_crop,mango,芒果,pest,农业有害生物,183
+16,Chrysomphalus aonidum(citru),Chrysomphalus aonidum 褐圆蚧(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,135
+17,Cicadella viridis(vitis),Cicadella viridis 大青叶蝉(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,767
+18,Cicadellidae(mango),Cicadellidae 叶蝉(芒果),economic_crop,mango,芒果,pest,农业有害生物,3444
+19,Coccinellidae(soybean),Coccinellidae 瓢虫(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+20,Colomerus vitis(vitis),Colomerus vitis 葡萄瘿螨(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,105
+21,Cotton curl virus（cotton）,Cotton curl virus 棉花曲叶病毒病（棉花）,economic_crop,cotton,棉花,disease,植物病害,2530
+22,Dacus dorsalis(Hendel)(citru),Dacus dorsalis 橘小实蝇(Hendel)(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,263
+23,Dasineura sp(mango),Dasineura sp 芒果瘿蚊(芒果),economic_crop,mango,芒果,pest,农业有害生物,303
+24,Deporaus marginatus Pascoe(mango),Deporaus marginatus Pascoe 芒果切叶象甲(芒果),economic_crop,mango,芒果,pest,农业有害生物,126
+25,Diabrotica speciosa(soybean),Diabrotica speciosa 大豆叶甲(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+26,Edessa meditabunda(soybean),Edessa meditabunda 大豆盾蝽(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+27,English grain aphid(wheat),English grain aphid 麦长管蚜(小麦),food_crop,wheat,小麦,pest,农业有害生物,392
+28,Erythroneura apicalis(vitis),Erythroneura apicalis 葡萄斑叶蝉(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,42
+29,Euschistus heros adulto(soybean),Euschistus heros adulto 大豆褐蝽成虫(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+30,Euschistus heros ninfa(soybean),Euschistus heros ninfa 大豆褐蝽若虫(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+31,Fusarium wilt（cotton）,Fusarium wilt 棉花枯萎病（棉花）,economic_crop,cotton,棉花,disease,植物病害,881
+32,Gastropoda(soybean),Gastropoda 腹足类软体动物(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+33,Healthy（cotton）,Healthy 健康棉花（棉花）,economic_crop,cotton,棉花,healthy,健康,6444
+34,Helicoverpa armigera(tomato),Helicoverpa armigera 棉铃虫(番茄),economic_crop,tomato,番茄,pest,农业有害生物,756
+35,Herbicide Growth Damage（cotton）,Herbicide Growth Damage 除草剂药害（棉花）,economic_crop,cotton,棉花,disorder,非生物或生理缺陷,280
+36,Icerya purchasi Maskell(citru),Icerya purchasi Maskell 吹绵蚧(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,433
+37,Lagria villosa(soybean),Lagria villosa 大豆毛拟步甲(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+38,Lawana imitata Melichar(mango),Lawana imitata Melichar 白蛾蜡蝉(芒果),economic_crop,mango,芒果,pest,农业有害生物,346
+39,Leaf Redding（cotton）,Leaf Redding 红叶（棉花）,economic_crop,cotton,棉花,disorder,非生物或生理缺陷,578
+40,Leaf Variegation（cotton）,Leaf Variegation 花叶（棉花）,economic_crop,cotton,棉花,disorder,非生物或生理缺陷,116
+41,Limacodidae(vitis),Limacodidae 刺蛾(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,840
+42,Locustoidea(alfalfa),Locustoidea 蝗虫(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,836
+43,Lycorma delicatula(vitis),Lycorma delicatula 斑衣蜡蝉(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,3186
+44,Mango flat beak leafhopper(mango),Mango flat beak leafhopper 芒果扁喙叶蝉(芒果),economic_crop,mango,芒果,pest,农业有害生物,55
+45,Miridae(vitis),Miridae 盲蝽(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,3048
+46,Myzus persicae(tomato),Myzus persicae 桃蚜(番茄),economic_crop,tomato,番茄,pest,农业有害生物,910
+47,Nezara viridula adulto(soybean),Nezara viridula adulto 稻绿蝽成虫(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+48,Nezara viridula ninfa(soybean),Nezara viridula ninfa 稻绿蝽若虫(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+49,Nipaecoccus vastalor(citru),Nipaecoccus vastalor 堆蜡粉蚧(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,59
+50,Panonchus citri McGregor(citru),Panonchus citri McGregor 柑橘全爪螨(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,231
+51,Papilio xuthus(citru),Papilio xuthus 柑橘凤蝶(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,269
+52,Parlatoria zizyphus Lucus(citru),Parlatoria zizyphus Lucus 黑点蚧(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,44
+53,Phyllocnistis citrella Stainton(citru),Phyllocnistis citrella Stainton 柑橘潜叶蛾(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,242
+54,Phyllocoptes oleiverus ashmead(citru),Phyllocoptes oleiverus ashmead 柑橘锈壁虱(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,103
+55,Pieris canidia(alfalfa),Pieris canidia 东方粉蝶(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,281
+56,Polyphagotars onemus latus(vitis),Polyphagotars onemus latus 侧多食跗线螨(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,50
+57,Powdery mildew（cotton）,Powdery mildew 白粉病（棉花）,economic_crop,cotton,棉花,disease,植物病害,1350
+58,Prodenia litura(citru),Prodenia litura 斜纹夜蛾(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,782
+59,Protaetia brevitarsis(corn),Protaetia brevitarsis 白星花金龟(玉米),food_crop,corn,玉米,pest,农业有害生物,339
+60,Pseudococcus comstocki Kuwana(vitis),Pseudococcus comstocki Kuwana 康氏粉蚧(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,184
+61,Rhammatocerus schistocercoides(soybean),Rhammatocerus schistocercoides 大豆蝗虫(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+62,Rhytidodera bowrinii white(mango),Rhytidodera bowrinii white 芒果天牛(芒果),economic_crop,mango,芒果,pest,农业有害生物,333
+63,Salurnis marginella Guerr(mango),Salurnis marginella Guerr 绿蛾蜡蝉(芒果),economic_crop,mango,芒果,pest,农业有害生物,292
+64,Scirtothrips dorsalis Hood(mango),Scirtothrips dorsalis Hood 茶黄蓟马(芒果),economic_crop,mango,芒果,pest,农业有害生物,484
+65,Spodoptera albula(soybean),Spodoptera albula 大豆灰翅夜蛾(大豆),economic_crop,soybean,大豆,pest,农业有害生物,150
+66,Spodoptera exigua(tomato),Spodoptera exigua 甜菜夜蛾(番茄),economic_crop,tomato,番茄,pest,农业有害生物,525
+67,Spodoptera litura(tomato),Spodoptera litura 斜纹夜蛾(番茄),economic_crop,tomato,番茄,pest,农业有害生物,672
+68,Sternochetus frigidus(mango),Sternochetus frigidus 芒果果核象甲(芒果),economic_crop,mango,芒果,pest,农业有害生物,274
+69,Target spot（cotton）,Target spot 靶斑病（棉花）,economic_crop,cotton,棉花,disease,植物病害,1355
+70,Tetranychus urticae(tomato),Tetranychus urticae 二斑叶螨(番茄),economic_crop,tomato,番茄,pest,农业有害生物,518
+71,Thrips palmi(tomato),Thrips palmi 棕榈蓟马(番茄),economic_crop,tomato,番茄,pest,农业有害生物,168
+72,Thrips(vitis),Thrips 蓟马(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,527
+73,Toxoptera aurantii(citru),Toxoptera aurantii 橘二叉蚜(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,135
+74,Toxoptera citricidus(citru),Toxoptera citricidus 橘蚜(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,113
+75,Trialeurodes vaporariorum(vitis),Trialeurodes vaporariorum 温室白粉虱(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,415
+76,Unaspis yanonensis(citru),Unaspis yanonensis 矢尖蚧(柑橘),economic_crop,citrus,柑橘,pest,农业有害生物,251
+77,Viteus vitifoliae(vitis),Viteus vitifoliae 葡萄根瘤蚜(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,212
+78,Xylotrechus(vitis),Xylotrechus 虎天牛(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,690
+79,Zeugodacus cucurbitae(tomato),Zeugodacus cucurbitae 瓜实蝇(番茄),economic_crop,tomato,番茄,pest,农业有害生物,294
+80,alfalfa plant bug(alfalfa),alfalfa plant bug 苜蓿盲蝽(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,393
+81,alfalfa seed chalcid(Bruchophagus roddi)(alfalfa),alfalfa seed chalcid 苜蓿广肩小蜂(Bruchophagus roddi 苜蓿籽蜂)(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,111
+82,alfalfa weevil(alfalfa),alfalfa weevil 苜蓿象甲(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,314
+83,aphids(corn),aphids 蚜虫(玉米),food_crop,corn,玉米,pest,农业有害生物,2456
+84,apple black rot,apple black rot 苹果黑腐病,economic_crop,apple,苹果,disease,植物病害,5003
+85,apple frogeye spot,apple frogeye spot 苹果蛙眼病,economic_crop,apple,苹果,disease,植物病害,427
+86,apple healthy,apple healthy 健康苹果,economic_crop,apple,苹果,healthy,健康,2801
+87,apple scab,apple scab 苹果黑星病,economic_crop,apple,苹果,disease,植物病害,3291
+88,army worm(corn),army worm 黏虫(玉米),food_crop,corn,玉米,pest,农业有害生物,642
+89,asiatic rice borer(rice),asiatic rice borer 二化螟(水稻),food_crop,rice,水稻,pest,农业有害生物,631
+90,beet army worm(beet),beet army worm 甜菜夜蛾(甜菜),economic_crop,beet,甜菜,pest,农业有害生物,962
+91,beet fly(beet),beet fly 甜菜潜叶蝇(甜菜),economic_crop,beet,甜菜,pest,农业有害生物,62
+92,beet spot flies(beet),beet spot flies 甜菜斑潜蝇(甜菜),economic_crop,beet,甜菜,pest,农业有害生物,179
+93,beet weevil(beet),beet weevil 甜菜象甲(甜菜),economic_crop,beet,甜菜,pest,农业有害生物,184
+94,bell pepper bacterial spot,bell pepper bacterial spot 甜椒细菌性斑点病,economic_crop,bell_pepper,甜椒,disease,植物病害,1913
+95,bell pepper healthy,bell pepper healthy 健康甜椒,economic_crop,bell_pepper,甜椒,healthy,健康,3466
+96,black cutworm(corn),black cutworm 小地老虎(玉米),food_crop,corn,玉米,pest,农业有害生物,512
+97,blister beetle(alfalfa),blister beetle 芫菁(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,1983
+98,blueberry healthy,blueberry healthy 健康蓝莓,economic_crop,blueberry,蓝莓,healthy,健康,3318
+99,brown plant hopper(rice),brown plant hopper 褐飞虱(水稻),food_crop,rice,水稻,pest,农业有害生物,500
+100,cabbage army worm(beet),cabbage army worm 甘蓝夜蛾(甜菜),economic_crop,beet,甜菜,pest,农业有害生物,513
+101,cedar apple rust,cedar apple rust 雪松苹果锈病,economic_crop,apple,苹果,disease,植物病害,2875
+102,cerodonta denticornis(wheat),cerodonta denticornis 小麦潜叶蝇(小麦),food_crop,wheat,小麦,pest,农业有害生物,82
+103,cherry healthy,cherry healthy 健康樱桃,economic_crop,cherry,樱桃,healthy,健康,2236
+104,cherry powdery mildew,cherry powdery mildew 樱桃白粉病,economic_crop,cherry,樱桃,disease,植物病害,1736
+105,citrus healthy,citrus healthy 健康柑橘,economic_crop,citrus,柑橘,healthy,健康,480
+106,corn borer(corn),corn borer 玉米螟(玉米),food_crop,corn,玉米,pest,农业有害生物,1018
+107,corn curvularia leaf spot fungus,corn curvularia leaf spot fungus 玉米弯孢叶斑病,food_crop,corn,玉米,disease,植物病害,669
+108,corn healthy,corn healthy 健康玉米,food_crop,corn,玉米,healthy,健康,2233
+109,corn（maize） common rust,corn（maize） common rust 玉米普通锈病（玉米）,food_crop,corn,玉米,disease,植物病害,1907
+110,corn（maize） northern leaf blight,corn（maize） northern leaf blight 玉米大斑病（玉米）,food_crop,corn,玉米,disease,植物病害,1908
+111,flax budworm(alfalfa),flax budworm 苜蓿夜蛾(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,639
+112,flea beetle(potato),flea beetle 跳甲(马铃薯),food_crop,potato,马铃薯,pest,农业有害生物,473
+113,garlic pest and diseases,garlic pest and diseases 大蒜病虫害,economic_crop,garlic,大蒜,disease,植物病害,279
+114,grain spreader thrips(rice),grain spreader thrips 稻管蓟马(水稻),food_crop,rice,水稻,pest,农业有害生物,103
+115,grape black rot（fungus）,grape black rot 葡萄黑腐病（真菌）,economic_crop,grape,葡萄,disease,植物病害,2479
+116,grape esca (black measles)(fungus),grape esca 葡萄轮斑病(black measles 黑麻疹)(真菌),economic_crop,grape,葡萄,disease,植物病害,2541
+117,grape healthy,grape healthy 健康葡萄,economic_crop,grape,葡萄,healthy,健康,1891
+118,grape leaf blight(fungus),grape leaf blight 葡萄叶枯病(真菌),economic_crop,grape,葡萄,disease,植物病害,2171
+119,green bug(wheat),green bug 麦二叉蚜(小麦),food_crop,wheat,小麦,pest,农业有害生物,195
+120,grub(corn),grub 蛴螬(玉米),food_crop,corn,玉米,pest,农业有害生物,516
+121,large cutworm(corn),large cutworm 大地老虎(玉米),food_crop,corn,玉米,pest,农业有害生物,294
+122,large wheat crown and root rot,large wheat crown and root rot 小麦冠根腐病,food_crop,wheat,小麦,disease,植物病害,283
+123,longlegged spider mite(wheat),longlegged spider mite 麦长腿蜘蛛(小麦),food_crop,wheat,小麦,pest,农业有害生物,147
+124,lytta polita(alfalfa),lytta polita 苜蓿芫菁(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,392
+125,maize dwarf mosaic virus,maize dwarf mosaic virus 玉米矮花叶病毒病,food_crop,corn,玉米,disease,植物病害,815
+126,maize grey leaf spot(cercospora zeae-maydis tehon and daniels),maize grey leaf spot 玉米灰斑病(cercospora zeae-maydis tehon and daniels 玉蜀黍尾孢菌),food_crop,corn,玉米,disease,植物病害,1901
+127,meadow moth(beet),meadow moth 草地螟(甜菜),economic_crop,beet,甜菜,pest,农业有害生物,162
+128,mole cricket(corn),mole cricket 蝼蛄(玉米),food_crop,corn,玉米,pest,农业有害生物,989
+129,odontothrips loti(alfalfa),odontothrips loti 苜蓿齿蓟马(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,106
+130,oides decempunctata(vitis),oides decempunctata 葡萄十星叶甲(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,169
+131,orange huanglongbing(citrus greening),orange huanglongbing 柑橘黄龙病(黄龙病),economic_crop,citrus,柑橘,disease,植物病害,10619
+132,paddy stem maggot(rice),paddy stem maggot 稻秆潜蝇(水稻),food_crop,rice,水稻,pest,农业有害生物,156
+133,parathrene regalis(vitis),parathrene regalis 葡萄透翅蛾(葡萄),economic_crop,grape,葡萄,pest,农业有害生物,84
+134,peach bacterial spot,peach bacterial spot 桃细菌性穿孔病,economic_crop,peach,桃,disease,植物病害,5214
+135,peach borer(corn),peach borer 桃蛀螟(玉米),food_crop,corn,玉米,pest,农业有害生物,414
+136,peach healthy,peach healthy 健康桃,economic_crop,peach,桃,healthy,健康,2919
+137,penthaleus major(wheat),penthaleus major 麦圆蜘蛛(小麦),food_crop,wheat,小麦,pest,农业有害生物,139
+138,pepper healthy,pepper healthy 健康辣椒,economic_crop,pepper,辣椒,healthy,健康,1025
+139,pepper scab,pepper scab 辣椒疮痂病,economic_crop,pepper,辣椒,disease,植物病害,664
+140,potato early blight(fungus),potato early blight 马铃薯早疫病(真菌),food_crop,potato,马铃薯,disease,植物病害,3424
+141,potato healthy,potato healthy 健康马铃薯,food_crop,potato,马铃薯,healthy,健康,4215
+142,potato late blight(fungus),potato late blight 马铃薯晚疫病(真菌),food_crop,potato,马铃薯,disease,植物病害,3441
+143,puccinia polysora,puccinia polysora 玉米南方锈病,food_crop,corn,玉米,disease,植物病害,838
+144,raspberry healthy,raspberry healthy 健康树莓,economic_crop,raspberry,树莓,healthy,健康,2781
+145,red spider(corn),red spider 红蜘蛛(玉米),food_crop,corn,玉米,pest,农业有害生物,317
+146,rice bacterial leaf blight,rice bacterial leaf blight 水稻白叶枯病,food_crop,rice,水稻,disease,植物病害,1624
+147,rice blast,rice blast 稻瘟病,food_crop,rice,水稻,disease,植物病害,2219
+148,rice brown spot,rice brown spot 水稻胡麻叶斑病,food_crop,rice,水稻,disease,植物病害,2163
+149,rice gall midge(rice),rice gall midge 稻瘿蚊(水稻),food_crop,rice,水稻,pest,农业有害生物,303
+150,rice healthy,rice healthy 健康水稻,food_crop,rice,水稻,healthy,健康,1488
+151,rice hispa,rice hispa 稻铁甲虫,food_crop,rice,水稻,pest,农业有害生物,565
+152,rice leaf caterpillar(rice),rice leaf caterpillar 稻螟蛉(水稻),food_crop,rice,水稻,pest,农业有害生物,292
+153,rice leaf roller(rice),rice leaf roller 稻纵卷叶螟(水稻),food_crop,rice,水稻,pest,农业有害生物,669
+154,rice leaf smut,rice leaf smut 水稻叶黑粉病,food_crop,rice,水稻,disease,植物病害,40
+155,rice leafhopper(rice),rice leafhopper 稻叶蝉(水稻),food_crop,rice,水稻,pest,农业有害生物,242
+156,rice shell pest(rice),rice shell pest 稻苞虫(水稻),food_crop,rice,水稻,pest,农业有害生物,245
+157,rice stemfly(rice),rice stemfly 稻秆蝇(水稻),food_crop,rice,水稻,pest,农业有害生物,221
+158,rice tungro,rice tungro 水稻东格鲁病,food_crop,rice,水稻,disease,植物病害,1308
+159,rice water weevil(rice),rice water weevil 稻水象甲(水稻),food_crop,rice,水稻,pest,农业有害生物,513
+160,sericaorient alismots chulsky(beet),sericaorient alismots chulsky 东方绢金龟(甜菜),economic_crop,beet,甜菜,pest,农业有害生物,114
+161,small brown plant hopper(rice),small brown plant hopper 灰飞虱(水稻),food_crop,rice,水稻,pest,农业有害生物,331
+162,soybean Crestamento Bacteriano,soybean Crestamento Bacteriano 大豆细菌性疫病,economic_crop,soybean,大豆,disease,植物病害,5
+163,soybean bacterial blight,soybean bacterial blight 大豆细菌性疫病,economic_crop,soybean,大豆,disease,植物病害,88
+164,soybean brown spot,soybean brown spot 大豆褐斑病,economic_crop,soybean,大豆,disease,植物病害,81
+165,soybean ferrugen,soybean ferrugen 大豆锈病,economic_crop,soybean,大豆,disease,植物病害,65
+166,soybean healthy,soybean healthy 健康大豆,economic_crop,soybean,大豆,healthy,健康,7112
+167,soybean mossaic virus,soybean mossaic virus 大豆花叶病毒病,economic_crop,soybean,大豆,disease,植物病害,22
+168,soybean powdery mildew,soybean powdery mildew 大豆白粉病,economic_crop,soybean,大豆,disease,植物病害,137
+169,soybean septoria brown spot,soybean septoria brown spot 大豆壳针孢褐斑病,economic_crop,soybean,大豆,disease,植物病害,21
+170,soybean southern blight,soybean southern blight 大豆白绢病,economic_crop,soybean,大豆,disease,植物病害,62
+171,soybean sudden death syndrone,soybean sudden death syndrone 大豆猝死综合征,economic_crop,soybean,大豆,disease,植物病害,110
+172,soybean yellow mosaic,soybean yellow mosaic 大豆黄花叶病,economic_crop,soybean,大豆,disease,植物病害,260
+173,squash powdery mildew,squash powdery mildew 南瓜白粉病,economic_crop,squash,南瓜,disease,植物病害,3571
+174,strawberry healthy,strawberry healthy 健康草莓,economic_crop,strawberry,草莓,healthy,健康,2945
+175,strawberry leaf scorch,strawberry leaf scorch 草莓叶枯病,economic_crop,strawberry,草莓,disease,植物病害,2319
+176,tarnished plant bug(alfalfa),tarnished plant bug 牧草盲蝽(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,492
+177,therioaphis maculata Buckton(alfalfa),therioaphis maculata Buckton 苜蓿斑点蚜(苜蓿),economic_crop,alfalfa,苜蓿,pest,农业有害生物,156
+178,tomato bacterial spot,tomato bacterial spot 番茄细菌性斑点病,economic_crop,tomato,番茄,disease,植物病害,3829
+179,tomato early blight(fungus),tomato early blight 番茄早疫病(真菌),economic_crop,tomato,番茄,disease,植物病害,2386
+180,tomato healthy,tomato healthy 健康番茄,economic_crop,tomato,番茄,healthy,健康,4445
+181,tomato late blight(water mold),tomato late blight 番茄晚疫病(水霉),economic_crop,tomato,番茄,disease,植物病害,4722
+182,tomato leaf mold(fungus),tomato leaf mold 番茄叶霉病(真菌),economic_crop,tomato,番茄,disease,植物病害,2342
+183,tomato mosaic virus,tomato mosaic virus 番茄花叶病毒病,economic_crop,tomato,番茄,disease,植物病害,1971
+184,tomato powdery mildew,tomato powdery mildew 番茄白粉病,economic_crop,tomato,番茄,disease,植物病害,1285
+185,tomato septoria leaf spot(fungus),tomato septoria leaf spot 番茄斑枯病(真菌),economic_crop,tomato,番茄,disease,植物病害,4342
+186,tomato spider mite(tomato),tomato spider mite 番茄叶螨(番茄),economic_crop,tomato,番茄,pest,农业有害生物,813
+187,tomato target spot(bacteria),tomato target spot 番茄靶斑病(细菌),economic_crop,tomato,番茄,disease,植物病害,1892
+188,tomato two-spotted spider mite(tomato),tomato two-spotted spider mite 番茄二斑叶螨(番茄),economic_crop,tomato,番茄,pest,农业有害生物,3417
+189,tomato yellow leaf curl virus,tomato yellow leaf curl virus 番茄黄化曲叶病毒病,economic_crop,tomato,番茄,disease,植物病害,10568
+190,wheat blossom midge(wheat),wheat blossom midge 麦吸浆虫(小麦),food_crop,wheat,小麦,pest,农业有害生物,291
+191,wheat healthy,wheat healthy 健康小麦,food_crop,wheat,小麦,healthy,健康,671
+192,wheat leaf rust,wheat leaf rust 小麦叶锈病,food_crop,wheat,小麦,disease,植物病害,864
+193,wheat phloeothrips(wheat),wheat phloeothrips 麦管蓟马(小麦),food_crop,wheat,小麦,pest,农业有害生物,175
+194,wheat sawfly(wheat),wheat sawfly 麦叶蜂(小麦),food_crop,wheat,小麦,pest,农业有害生物,203
+195,wheat septoria,wheat septoria 小麦斑枯病,food_crop,wheat,小麦,disease,植物病害,97
+196,wheat stem rust,wheat stem rust 小麦秆锈病,food_crop,wheat,小麦,disease,植物病害,523
+197,wheat stripe rust,wheat stripe rust 小麦条锈病,food_crop,wheat,小麦,disease,植物病害,208
+198,white margined moth(corn),white margined moth 白边地老虎(玉米),food_crop,corn,玉米,pest,农业有害生物,88
+199,white-backed planthopper(rice),white-backed planthopper 白背飞虱(水稻),food_crop,rice,水稻,pest,农业有害生物,535
+200,wireworm(corn),wireworm 金针虫(玉米),food_crop,corn,玉米,pest,农业有害生物,531
+201,yellow cutworm(corn),yellow cutworm 黄地老虎(玉米),food_crop,corn,玉米,pest,农业有害生物,287
+202,yellow rice borer(rice),yellow rice borer 三化螟(水稻),food_crop,rice,水稻,pest,农业有害生物,302

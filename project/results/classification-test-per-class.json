@@ -1,0 +1,2032 @@
+[
+  {
+    "class_id": 0,
+    "name": "Adristyrannus(citrus)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 19,
+    "precision": 0.65,
+    "recall": 0.684211,
+    "f1": 0.666667
+  },
+  {
+    "class_id": 1,
+    "name": "Aleurocanthus spiniferus(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 42,
+    "precision": 0.95122,
+    "recall": 0.928571,
+    "f1": 0.939759
+  },
+  {
+    "class_id": 2,
+    "name": "Ampelophaga rubiginosa（vitis）",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 46,
+    "precision": 0.82,
+    "recall": 0.891304,
+    "f1": 0.854167
+  },
+  {
+    "class_id": 3,
+    "name": "Anticarsia gemmatalis(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.545455,
+    "recall": 0.4,
+    "f1": 0.461538
+  },
+  {
+    "class_id": 4,
+    "name": "Aphids（cotton）",
+    "host_zh": "棉花",
+    "category": "pest",
+    "support": 158,
+    "precision": 0.974684,
+    "recall": 0.974684,
+    "f1": 0.974684
+  },
+  {
+    "class_id": 5,
+    "name": "Aphis citricola Vander Goot(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 21,
+    "precision": 0.56,
+    "recall": 0.666667,
+    "f1": 0.608696
+  },
+  {
+    "class_id": 6,
+    "name": "Apolygus lucorum(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 23,
+    "precision": 0.409091,
+    "recall": 0.782609,
+    "f1": 0.537313
+  },
+  {
+    "class_id": 7,
+    "name": "Army worm（cotton）",
+    "host_zh": "棉花",
+    "category": "pest",
+    "support": 136,
+    "precision": 0.963768,
+    "recall": 0.977941,
+    "f1": 0.970803
+  },
+  {
+    "class_id": 8,
+    "name": "Bacterial blight（cotton）",
+    "host_zh": "棉花",
+    "category": "disease",
+    "support": 100,
+    "precision": 0.915094,
+    "recall": 0.97,
+    "f1": 0.941748
+  },
+  {
+    "class_id": 9,
+    "name": "Bactrocera tsuneonis(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 10,
+    "precision": 0.333333,
+    "recall": 0.3,
+    "f1": 0.315789
+  },
+  {
+    "class_id": 10,
+    "name": "Bemisia argentifolii(tomato)",
+    "host_zh": "番茄",
+    "category": "pest",
+    "support": 84,
+    "precision": 0.954545,
+    "recall": 1.0,
+    "f1": 0.976744
+  },
+  {
+    "class_id": 11,
+    "name": "Bird cherry-oat aphid(wheat)",
+    "host_zh": "小麦",
+    "category": "pest",
+    "support": 43,
+    "precision": 0.431373,
+    "recall": 0.511628,
+    "f1": 0.468085
+  },
+  {
+    "class_id": 12,
+    "name": "Brevipoalpus lewisi McGregor(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 5,
+    "precision": 0.714286,
+    "recall": 1.0,
+    "f1": 0.833333
+  },
+  {
+    "class_id": 13,
+    "name": "Ceroplastes rubens(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 16,
+    "precision": 0.928571,
+    "recall": 0.8125,
+    "f1": 0.866667
+  },
+  {
+    "class_id": 14,
+    "name": "Chinese citrus fly(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 23,
+    "precision": 0.608696,
+    "recall": 0.608696,
+    "f1": 0.608696
+  },
+  {
+    "class_id": 15,
+    "name": "Chlumetia transversa(mango)",
+    "host_zh": "芒果",
+    "category": "pest",
+    "support": 19,
+    "precision": 0.521739,
+    "recall": 0.631579,
+    "f1": 0.571429
+  },
+  {
+    "class_id": 16,
+    "name": "Chrysomphalus aonidum(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 14,
+    "precision": 0.65,
+    "recall": 0.928571,
+    "f1": 0.764706
+  },
+  {
+    "class_id": 17,
+    "name": "Cicadella viridis(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 77,
+    "precision": 0.648936,
+    "recall": 0.792208,
+    "f1": 0.71345
+  },
+  {
+    "class_id": 18,
+    "name": "Cicadellidae(mango)",
+    "host_zh": "芒果",
+    "category": "pest",
+    "support": 344,
+    "precision": 0.916388,
+    "recall": 0.796512,
+    "f1": 0.852255
+  },
+  {
+    "class_id": 19,
+    "name": "Coccinellidae(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.285714,
+    "recall": 0.133333,
+    "f1": 0.181818
+  },
+  {
+    "class_id": 20,
+    "name": "Colomerus vitis(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 11,
+    "precision": 0.461538,
+    "recall": 0.545455,
+    "f1": 0.5
+  },
+  {
+    "class_id": 21,
+    "name": "Cotton curl virus（cotton）",
+    "host_zh": "棉花",
+    "category": "disease",
+    "support": 253,
+    "precision": 0.957529,
+    "recall": 0.980237,
+    "f1": 0.96875
+  },
+  {
+    "class_id": 22,
+    "name": "Dacus dorsalis(Hendel)(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 27,
+    "precision": 0.642857,
+    "recall": 0.666667,
+    "f1": 0.654545
+  },
+  {
+    "class_id": 23,
+    "name": "Dasineura sp(mango)",
+    "host_zh": "芒果",
+    "category": "pest",
+    "support": 31,
+    "precision": 0.53125,
+    "recall": 0.548387,
+    "f1": 0.539683
+  },
+  {
+    "class_id": 24,
+    "name": "Deporaus marginatus Pascoe(mango)",
+    "host_zh": "芒果",
+    "category": "pest",
+    "support": 13,
+    "precision": 0.692308,
+    "recall": 0.692308,
+    "f1": 0.692308
+  },
+  {
+    "class_id": 25,
+    "name": "Diabrotica speciosa(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.354839,
+    "recall": 0.733333,
+    "f1": 0.478261
+  },
+  {
+    "class_id": 26,
+    "name": "Edessa meditabunda(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.384615,
+    "recall": 0.333333,
+    "f1": 0.357143
+  },
+  {
+    "class_id": 27,
+    "name": "English grain aphid(wheat)",
+    "host_zh": "小麦",
+    "category": "pest",
+    "support": 39,
+    "precision": 0.433333,
+    "recall": 0.333333,
+    "f1": 0.376812
+  },
+  {
+    "class_id": 28,
+    "name": "Erythroneura apicalis(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 5,
+    "precision": 0.625,
+    "recall": 1.0,
+    "f1": 0.769231
+  },
+  {
+    "class_id": 29,
+    "name": "Euschistus heros adulto(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.545455,
+    "recall": 0.4,
+    "f1": 0.461538
+  },
+  {
+    "class_id": 30,
+    "name": "Euschistus heros ninfa(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.26087,
+    "recall": 0.4,
+    "f1": 0.315789
+  },
+  {
+    "class_id": 31,
+    "name": "Fusarium wilt（cotton）",
+    "host_zh": "棉花",
+    "category": "disease",
+    "support": 88,
+    "precision": 0.932584,
+    "recall": 0.943182,
+    "f1": 0.937853
+  },
+  {
+    "class_id": 32,
+    "name": "Gastropoda(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.375,
+    "recall": 0.4,
+    "f1": 0.387097
+  },
+  {
+    "class_id": 33,
+    "name": "Healthy（cotton）",
+    "host_zh": "棉花",
+    "category": "healthy",
+    "support": 644,
+    "precision": 0.988959,
+    "recall": 0.973602,
+    "f1": 0.981221
+  },
+  {
+    "class_id": 34,
+    "name": "Helicoverpa armigera(tomato)",
+    "host_zh": "番茄",
+    "category": "pest",
+    "support": 76,
+    "precision": 0.9,
+    "recall": 0.947368,
+    "f1": 0.923077
+  },
+  {
+    "class_id": 35,
+    "name": "Herbicide Growth Damage（cotton）",
+    "host_zh": "棉花",
+    "category": "disorder",
+    "support": 28,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 36,
+    "name": "Icerya purchasi Maskell(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 44,
+    "precision": 0.844444,
+    "recall": 0.863636,
+    "f1": 0.853933
+  },
+  {
+    "class_id": 37,
+    "name": "Lagria villosa(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.222222,
+    "recall": 0.266667,
+    "f1": 0.242424
+  },
+  {
+    "class_id": 38,
+    "name": "Lawana imitata Melichar(mango)",
+    "host_zh": "芒果",
+    "category": "pest",
+    "support": 35,
+    "precision": 0.861111,
+    "recall": 0.885714,
+    "f1": 0.873239
+  },
+  {
+    "class_id": 39,
+    "name": "Leaf Redding（cotton）",
+    "host_zh": "棉花",
+    "category": "disorder",
+    "support": 58,
+    "precision": 0.935484,
+    "recall": 1.0,
+    "f1": 0.966667
+  },
+  {
+    "class_id": 40,
+    "name": "Leaf Variegation（cotton）",
+    "host_zh": "棉花",
+    "category": "disorder",
+    "support": 12,
+    "precision": 1.0,
+    "recall": 0.916667,
+    "f1": 0.956522
+  },
+  {
+    "class_id": 41,
+    "name": "Limacodidae(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 84,
+    "precision": 0.951807,
+    "recall": 0.940476,
+    "f1": 0.946108
+  },
+  {
+    "class_id": 42,
+    "name": "Locustoidea(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 84,
+    "precision": 0.953488,
+    "recall": 0.97619,
+    "f1": 0.964706
+  },
+  {
+    "class_id": 43,
+    "name": "Lycorma delicatula(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 319,
+    "precision": 0.941818,
+    "recall": 0.811912,
+    "f1": 0.872054
+  },
+  {
+    "class_id": 44,
+    "name": "Mango flat beak leafhopper(mango)",
+    "host_zh": "芒果",
+    "category": "pest",
+    "support": 6,
+    "precision": 0.166667,
+    "recall": 0.333333,
+    "f1": 0.222222
+  },
+  {
+    "class_id": 45,
+    "name": "Miridae(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 305,
+    "precision": 0.861423,
+    "recall": 0.754098,
+    "f1": 0.804196
+  },
+  {
+    "class_id": 46,
+    "name": "Myzus persicae(tomato)",
+    "host_zh": "番茄",
+    "category": "pest",
+    "support": 91,
+    "precision": 0.89899,
+    "recall": 0.978022,
+    "f1": 0.936842
+  },
+  {
+    "class_id": 47,
+    "name": "Nezara viridula adulto(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.388889,
+    "recall": 0.466667,
+    "f1": 0.424242
+  },
+  {
+    "class_id": 48,
+    "name": "Nezara viridula ninfa(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.304348,
+    "recall": 0.466667,
+    "f1": 0.368421
+  },
+  {
+    "class_id": 49,
+    "name": "Nipaecoccus vastalor(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 6,
+    "precision": 0.333333,
+    "recall": 0.333333,
+    "f1": 0.333333
+  },
+  {
+    "class_id": 50,
+    "name": "Panonchus citri McGregor(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 23,
+    "precision": 0.580645,
+    "recall": 0.782609,
+    "f1": 0.666667
+  },
+  {
+    "class_id": 51,
+    "name": "Papilio xuthus(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 27,
+    "precision": 0.896552,
+    "recall": 0.962963,
+    "f1": 0.928571
+  },
+  {
+    "class_id": 52,
+    "name": "Parlatoria zizyphus Lucus(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 5,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 53,
+    "name": "Phyllocnistis citrella Stainton(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 25,
+    "precision": 0.708333,
+    "recall": 0.68,
+    "f1": 0.693878
+  },
+  {
+    "class_id": 54,
+    "name": "Phyllocoptes oleiverus ashmead(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 11,
+    "precision": 0.733333,
+    "recall": 1.0,
+    "f1": 0.846154
+  },
+  {
+    "class_id": 55,
+    "name": "Pieris canidia(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 28,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 56,
+    "name": "Polyphagotars onemus latus(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 5,
+    "precision": 0.6,
+    "recall": 0.6,
+    "f1": 0.6
+  },
+  {
+    "class_id": 57,
+    "name": "Powdery mildew（cotton）",
+    "host_zh": "棉花",
+    "category": "disease",
+    "support": 135,
+    "precision": 0.992537,
+    "recall": 0.985185,
+    "f1": 0.988848
+  },
+  {
+    "class_id": 58,
+    "name": "Prodenia litura(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 78,
+    "precision": 0.6,
+    "recall": 0.538462,
+    "f1": 0.567568
+  },
+  {
+    "class_id": 59,
+    "name": "Protaetia brevitarsis(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 34,
+    "precision": 0.885714,
+    "recall": 0.911765,
+    "f1": 0.898551
+  },
+  {
+    "class_id": 60,
+    "name": "Pseudococcus comstocki Kuwana(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 19,
+    "precision": 0.64,
+    "recall": 0.842105,
+    "f1": 0.727273
+  },
+  {
+    "class_id": 61,
+    "name": "Rhammatocerus schistocercoides(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.176471,
+    "recall": 0.2,
+    "f1": 0.1875
+  },
+  {
+    "class_id": 62,
+    "name": "Rhytidodera bowrinii white(mango)",
+    "host_zh": "芒果",
+    "category": "pest",
+    "support": 34,
+    "precision": 0.621622,
+    "recall": 0.676471,
+    "f1": 0.647887
+  },
+  {
+    "class_id": 63,
+    "name": "Salurnis marginella Guerr(mango)",
+    "host_zh": "芒果",
+    "category": "pest",
+    "support": 30,
+    "precision": 0.8,
+    "recall": 0.8,
+    "f1": 0.8
+  },
+  {
+    "class_id": 64,
+    "name": "Scirtothrips dorsalis Hood(mango)",
+    "host_zh": "芒果",
+    "category": "pest",
+    "support": 49,
+    "precision": 0.72549,
+    "recall": 0.755102,
+    "f1": 0.74
+  },
+  {
+    "class_id": 65,
+    "name": "Spodoptera albula(soybean)",
+    "host_zh": "大豆",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.5,
+    "recall": 0.266667,
+    "f1": 0.347826
+  },
+  {
+    "class_id": 66,
+    "name": "Spodoptera exigua(tomato)",
+    "host_zh": "番茄",
+    "category": "pest",
+    "support": 53,
+    "precision": 0.890909,
+    "recall": 0.924528,
+    "f1": 0.907407
+  },
+  {
+    "class_id": 67,
+    "name": "Spodoptera litura(tomato)",
+    "host_zh": "番茄",
+    "category": "pest",
+    "support": 68,
+    "precision": 0.969697,
+    "recall": 0.941176,
+    "f1": 0.955224
+  },
+  {
+    "class_id": 68,
+    "name": "Sternochetus frigidus(mango)",
+    "host_zh": "芒果",
+    "category": "pest",
+    "support": 28,
+    "precision": 0.73913,
+    "recall": 0.607143,
+    "f1": 0.666667
+  },
+  {
+    "class_id": 69,
+    "name": "Target spot（cotton）",
+    "host_zh": "棉花",
+    "category": "disease",
+    "support": 136,
+    "precision": 0.963768,
+    "recall": 0.977941,
+    "f1": 0.970803
+  },
+  {
+    "class_id": 70,
+    "name": "Tetranychus urticae(tomato)",
+    "host_zh": "番茄",
+    "category": "pest",
+    "support": 52,
+    "precision": 0.912281,
+    "recall": 1.0,
+    "f1": 0.954128
+  },
+  {
+    "class_id": 71,
+    "name": "Thrips palmi(tomato)",
+    "host_zh": "番茄",
+    "category": "pest",
+    "support": 17,
+    "precision": 0.85,
+    "recall": 1.0,
+    "f1": 0.918919
+  },
+  {
+    "class_id": 72,
+    "name": "Thrips(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 53,
+    "precision": 0.4,
+    "recall": 0.377358,
+    "f1": 0.38835
+  },
+  {
+    "class_id": 73,
+    "name": "Toxoptera aurantii(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 14,
+    "precision": 0.461538,
+    "recall": 0.428571,
+    "f1": 0.444444
+  },
+  {
+    "class_id": 74,
+    "name": "Toxoptera citricidus(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 12,
+    "precision": 0.35,
+    "recall": 0.583333,
+    "f1": 0.4375
+  },
+  {
+    "class_id": 75,
+    "name": "Trialeurodes vaporariorum(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 42,
+    "precision": 0.8,
+    "recall": 0.857143,
+    "f1": 0.827586
+  },
+  {
+    "class_id": 76,
+    "name": "Unaspis yanonensis(citru)",
+    "host_zh": "柑橘",
+    "category": "pest",
+    "support": 25,
+    "precision": 0.73913,
+    "recall": 0.68,
+    "f1": 0.708333
+  },
+  {
+    "class_id": 77,
+    "name": "Viteus vitifoliae(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 22,
+    "precision": 0.59375,
+    "recall": 0.863636,
+    "f1": 0.703704
+  },
+  {
+    "class_id": 78,
+    "name": "Xylotrechus(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 69,
+    "precision": 0.842857,
+    "recall": 0.855072,
+    "f1": 0.848921
+  },
+  {
+    "class_id": 79,
+    "name": "Zeugodacus cucurbitae(tomato)",
+    "host_zh": "番茄",
+    "category": "pest",
+    "support": 30,
+    "precision": 0.9375,
+    "recall": 1.0,
+    "f1": 0.967742
+  },
+  {
+    "class_id": 80,
+    "name": "alfalfa plant bug(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 40,
+    "precision": 0.367347,
+    "recall": 0.45,
+    "f1": 0.404494
+  },
+  {
+    "class_id": 81,
+    "name": "alfalfa seed chalcid(Bruchophagus roddi)(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 11,
+    "precision": 0.454545,
+    "recall": 0.454545,
+    "f1": 0.454545
+  },
+  {
+    "class_id": 82,
+    "name": "alfalfa weevil(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 32,
+    "precision": 0.560976,
+    "recall": 0.71875,
+    "f1": 0.630137
+  },
+  {
+    "class_id": 83,
+    "name": "aphids(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 246,
+    "precision": 0.820388,
+    "recall": 0.686992,
+    "f1": 0.747788
+  },
+  {
+    "class_id": 84,
+    "name": "apple black rot",
+    "host_zh": "苹果",
+    "category": "disease",
+    "support": 500,
+    "precision": 0.866856,
+    "recall": 0.612,
+    "f1": 0.717468
+  },
+  {
+    "class_id": 85,
+    "name": "apple frogeye spot",
+    "host_zh": "苹果",
+    "category": "disease",
+    "support": 43,
+    "precision": 0.56,
+    "recall": 0.976744,
+    "f1": 0.711864
+  },
+  {
+    "class_id": 86,
+    "name": "apple healthy",
+    "host_zh": "苹果",
+    "category": "healthy",
+    "support": 280,
+    "precision": 0.978648,
+    "recall": 0.982143,
+    "f1": 0.980392
+  },
+  {
+    "class_id": 87,
+    "name": "apple scab",
+    "host_zh": "苹果",
+    "category": "disease",
+    "support": 329,
+    "precision": 0.628378,
+    "recall": 0.848024,
+    "f1": 0.721863
+  },
+  {
+    "class_id": 88,
+    "name": "army worm(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 64,
+    "precision": 0.59375,
+    "recall": 0.59375,
+    "f1": 0.59375
+  },
+  {
+    "class_id": 89,
+    "name": "asiatic rice borer(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 63,
+    "precision": 0.528302,
+    "recall": 0.444444,
+    "f1": 0.482759
+  },
+  {
+    "class_id": 90,
+    "name": "beet army worm(beet)",
+    "host_zh": "甜菜",
+    "category": "pest",
+    "support": 96,
+    "precision": 0.543478,
+    "recall": 0.520833,
+    "f1": 0.531915
+  },
+  {
+    "class_id": 91,
+    "name": "beet fly(beet)",
+    "host_zh": "甜菜",
+    "category": "pest",
+    "support": 7,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+  },
+  {
+    "class_id": 92,
+    "name": "beet spot flies(beet)",
+    "host_zh": "甜菜",
+    "category": "pest",
+    "support": 18,
+    "precision": 0.736842,
+    "recall": 0.777778,
+    "f1": 0.756757
+  },
+  {
+    "class_id": 93,
+    "name": "beet weevil(beet)",
+    "host_zh": "甜菜",
+    "category": "pest",
+    "support": 19,
+    "precision": 0.576923,
+    "recall": 0.789474,
+    "f1": 0.666667
+  },
+  {
+    "class_id": 94,
+    "name": "bell pepper bacterial spot",
+    "host_zh": "甜椒",
+    "category": "disease",
+    "support": 191,
+    "precision": 1.0,
+    "recall": 0.947644,
+    "f1": 0.973118
+  },
+  {
+    "class_id": 95,
+    "name": "bell pepper healthy",
+    "host_zh": "甜椒",
+    "category": "healthy",
+    "support": 346,
+    "precision": 0.991124,
+    "recall": 0.968208,
+    "f1": 0.979532
+  },
+  {
+    "class_id": 96,
+    "name": "black cutworm(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 52,
+    "precision": 0.591837,
+    "recall": 0.557692,
+    "f1": 0.574257
+  },
+  {
+    "class_id": 97,
+    "name": "blister beetle(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 198,
+    "precision": 0.91411,
+    "recall": 0.752525,
+    "f1": 0.825485
+  },
+  {
+    "class_id": 98,
+    "name": "blueberry healthy",
+    "host_zh": "蓝莓",
+    "category": "healthy",
+    "support": 332,
+    "precision": 0.996988,
+    "recall": 0.996988,
+    "f1": 0.996988
+  },
+  {
+    "class_id": 99,
+    "name": "brown plant hopper(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 50,
+    "precision": 0.54,
+    "recall": 0.54,
+    "f1": 0.54
+  },
+  {
+    "class_id": 100,
+    "name": "cabbage army worm(beet)",
+    "host_zh": "甜菜",
+    "category": "pest",
+    "support": 52,
+    "precision": 0.462963,
+    "recall": 0.480769,
+    "f1": 0.471698
+  },
+  {
+    "class_id": 101,
+    "name": "cedar apple rust",
+    "host_zh": "苹果",
+    "category": "disease",
+    "support": 288,
+    "precision": 0.993103,
+    "recall": 1.0,
+    "f1": 0.99654
+  },
+  {
+    "class_id": 102,
+    "name": "cerodonta denticornis(wheat)",
+    "host_zh": "小麦",
+    "category": "pest",
+    "support": 9,
+    "precision": 0.642857,
+    "recall": 1.0,
+    "f1": 0.782609
+  },
+  {
+    "class_id": 103,
+    "name": "cherry healthy",
+    "host_zh": "樱桃",
+    "category": "healthy",
+    "support": 224,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 104,
+    "name": "cherry powdery mildew",
+    "host_zh": "樱桃",
+    "category": "disease",
+    "support": 174,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 105,
+    "name": "citrus healthy",
+    "host_zh": "柑橘",
+    "category": "healthy",
+    "support": 48,
+    "precision": 0.972973,
+    "recall": 0.75,
+    "f1": 0.847059
+  },
+  {
+    "class_id": 106,
+    "name": "corn borer(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 102,
+    "precision": 0.688172,
+    "recall": 0.627451,
+    "f1": 0.65641
+  },
+  {
+    "class_id": 107,
+    "name": "corn curvularia leaf spot fungus",
+    "host_zh": "玉米",
+    "category": "disease",
+    "support": 67,
+    "precision": 0.633663,
+    "recall": 0.955224,
+    "f1": 0.761905
+  },
+  {
+    "class_id": 108,
+    "name": "corn healthy",
+    "host_zh": "玉米",
+    "category": "healthy",
+    "support": 223,
+    "precision": 0.97549,
+    "recall": 0.892377,
+    "f1": 0.932084
+  },
+  {
+    "class_id": 109,
+    "name": "corn（maize） common rust",
+    "host_zh": "玉米",
+    "category": "disease",
+    "support": 191,
+    "precision": 0.988636,
+    "recall": 0.910995,
+    "f1": 0.948229
+  },
+  {
+    "class_id": 110,
+    "name": "corn（maize） northern leaf blight",
+    "host_zh": "玉米",
+    "category": "disease",
+    "support": 191,
+    "precision": 0.95122,
+    "recall": 0.816754,
+    "f1": 0.878873
+  },
+  {
+    "class_id": 111,
+    "name": "flax budworm(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 64,
+    "precision": 0.444444,
+    "recall": 0.5,
+    "f1": 0.470588
+  },
+  {
+    "class_id": 112,
+    "name": "flea beetle(potato)",
+    "host_zh": "马铃薯",
+    "category": "pest",
+    "support": 48,
+    "precision": 0.810345,
+    "recall": 0.979167,
+    "f1": 0.886792
+  },
+  {
+    "class_id": 113,
+    "name": "garlic pest and diseases",
+    "host_zh": "大蒜",
+    "category": "disease",
+    "support": 28,
+    "precision": 0.848485,
+    "recall": 1.0,
+    "f1": 0.918033
+  },
+  {
+    "class_id": 114,
+    "name": "grain spreader thrips(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 11,
+    "precision": 0.8,
+    "recall": 0.727273,
+    "f1": 0.761905
+  },
+  {
+    "class_id": 115,
+    "name": "grape black rot（fungus）",
+    "host_zh": "葡萄",
+    "category": "disease",
+    "support": 248,
+    "precision": 1.0,
+    "recall": 0.995968,
+    "f1": 0.99798
+  },
+  {
+    "class_id": 116,
+    "name": "grape esca (black measles)(fungus)",
+    "host_zh": "葡萄",
+    "category": "disease",
+    "support": 254,
+    "precision": 0.996078,
+    "recall": 1.0,
+    "f1": 0.998035
+  },
+  {
+    "class_id": 117,
+    "name": "grape healthy",
+    "host_zh": "葡萄",
+    "category": "healthy",
+    "support": 189,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 118,
+    "name": "grape leaf blight(fungus)",
+    "host_zh": "葡萄",
+    "category": "disease",
+    "support": 217,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 119,
+    "name": "green bug(wheat)",
+    "host_zh": "小麦",
+    "category": "pest",
+    "support": 20,
+    "precision": 0.387097,
+    "recall": 0.6,
+    "f1": 0.470588
+  },
+  {
+    "class_id": 120,
+    "name": "grub(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 52,
+    "precision": 0.833333,
+    "recall": 0.865385,
+    "f1": 0.849057
+  },
+  {
+    "class_id": 121,
+    "name": "large cutworm(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 30,
+    "precision": 0.264706,
+    "recall": 0.3,
+    "f1": 0.28125
+  },
+  {
+    "class_id": 122,
+    "name": "large wheat crown and root rot",
+    "host_zh": "小麦",
+    "category": "disease",
+    "support": 29,
+    "precision": 0.842105,
+    "recall": 0.551724,
+    "f1": 0.666667
+  },
+  {
+    "class_id": 123,
+    "name": "longlegged spider mite(wheat)",
+    "host_zh": "小麦",
+    "category": "pest",
+    "support": 15,
+    "precision": 0.363636,
+    "recall": 0.266667,
+    "f1": 0.307692
+  },
+  {
+    "class_id": 124,
+    "name": "lytta polita(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 40,
+    "precision": 0.52,
+    "recall": 0.65,
+    "f1": 0.577778
+  },
+  {
+    "class_id": 125,
+    "name": "maize dwarf mosaic virus",
+    "host_zh": "玉米",
+    "category": "disease",
+    "support": 82,
+    "precision": 0.762376,
+    "recall": 0.939024,
+    "f1": 0.84153
+  },
+  {
+    "class_id": 126,
+    "name": "maize grey leaf spot(cercospora zeae-maydis tehon and daniels)",
+    "host_zh": "玉米",
+    "category": "disease",
+    "support": 190,
+    "precision": 0.98913,
+    "recall": 0.957895,
+    "f1": 0.973262
+  },
+  {
+    "class_id": 127,
+    "name": "meadow moth(beet)",
+    "host_zh": "甜菜",
+    "category": "pest",
+    "support": 16,
+    "precision": 0.65,
+    "recall": 0.8125,
+    "f1": 0.722222
+  },
+  {
+    "class_id": 128,
+    "name": "mole cricket(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 99,
+    "precision": 0.969072,
+    "recall": 0.949495,
+    "f1": 0.959184
+  },
+  {
+    "class_id": 129,
+    "name": "odontothrips loti(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 11,
+    "precision": 0.75,
+    "recall": 0.818182,
+    "f1": 0.782609
+  },
+  {
+    "class_id": 130,
+    "name": "oides decempunctata(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 17,
+    "precision": 0.944444,
+    "recall": 1.0,
+    "f1": 0.971429
+  },
+  {
+    "class_id": 131,
+    "name": "orange huanglongbing(citrus greening)",
+    "host_zh": "柑橘",
+    "category": "disease",
+    "support": 1060,
+    "precision": 0.999057,
+    "recall": 0.999057,
+    "f1": 0.999057
+  },
+  {
+    "class_id": 132,
+    "name": "paddy stem maggot(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 16,
+    "precision": 0.1,
+    "recall": 0.125,
+    "f1": 0.111111
+  },
+  {
+    "class_id": 133,
+    "name": "parathrene regalis(vitis)",
+    "host_zh": "葡萄",
+    "category": "pest",
+    "support": 9,
+    "precision": 0.666667,
+    "recall": 0.666667,
+    "f1": 0.666667
+  },
+  {
+    "class_id": 134,
+    "name": "peach bacterial spot",
+    "host_zh": "桃",
+    "category": "disease",
+    "support": 521,
+    "precision": 0.998069,
+    "recall": 0.992322,
+    "f1": 0.995188
+  },
+  {
+    "class_id": 135,
+    "name": "peach borer(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 42,
+    "precision": 0.815789,
+    "recall": 0.738095,
+    "f1": 0.775
+  },
+  {
+    "class_id": 136,
+    "name": "peach healthy",
+    "host_zh": "桃",
+    "category": "healthy",
+    "support": 292,
+    "precision": 0.996575,
+    "recall": 0.996575,
+    "f1": 0.996575
+  },
+  {
+    "class_id": 137,
+    "name": "penthaleus major(wheat)",
+    "host_zh": "小麦",
+    "category": "pest",
+    "support": 14,
+    "precision": 0.545455,
+    "recall": 0.857143,
+    "f1": 0.666667
+  },
+  {
+    "class_id": 138,
+    "name": "pepper healthy",
+    "host_zh": "辣椒",
+    "category": "healthy",
+    "support": 103,
+    "precision": 0.863248,
+    "recall": 0.980583,
+    "f1": 0.918182
+  },
+  {
+    "class_id": 139,
+    "name": "pepper scab",
+    "host_zh": "辣椒",
+    "category": "disease",
+    "support": 67,
+    "precision": 0.848101,
+    "recall": 1.0,
+    "f1": 0.917808
+  },
+  {
+    "class_id": 140,
+    "name": "potato early blight(fungus)",
+    "host_zh": "马铃薯",
+    "category": "disease",
+    "support": 342,
+    "precision": 0.997067,
+    "recall": 0.994152,
+    "f1": 0.995608
+  },
+  {
+    "class_id": 141,
+    "name": "potato healthy",
+    "host_zh": "马铃薯",
+    "category": "healthy",
+    "support": 421,
+    "precision": 0.944444,
+    "recall": 0.969121,
+    "f1": 0.956624
+  },
+  {
+    "class_id": 142,
+    "name": "potato late blight(fungus)",
+    "host_zh": "马铃薯",
+    "category": "disease",
+    "support": 344,
+    "precision": 0.991124,
+    "recall": 0.973837,
+    "f1": 0.982405
+  },
+  {
+    "class_id": 143,
+    "name": "puccinia polysora",
+    "host_zh": "玉米",
+    "category": "disease",
+    "support": 84,
+    "precision": 0.828283,
+    "recall": 0.97619,
+    "f1": 0.896175
+  },
+  {
+    "class_id": 144,
+    "name": "raspberry healthy",
+    "host_zh": "树莓",
+    "category": "healthy",
+    "support": 278,
+    "precision": 0.982332,
+    "recall": 1.0,
+    "f1": 0.991087
+  },
+  {
+    "class_id": 145,
+    "name": "red spider(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 32,
+    "precision": 0.615385,
+    "recall": 0.5,
+    "f1": 0.551724
+  },
+  {
+    "class_id": 146,
+    "name": "rice bacterial leaf blight",
+    "host_zh": "水稻",
+    "category": "disease",
+    "support": 162,
+    "precision": 0.993865,
+    "recall": 1.0,
+    "f1": 0.996923
+  },
+  {
+    "class_id": 147,
+    "name": "rice blast",
+    "host_zh": "水稻",
+    "category": "disease",
+    "support": 222,
+    "precision": 0.952607,
+    "recall": 0.905405,
+    "f1": 0.928406
+  },
+  {
+    "class_id": 148,
+    "name": "rice brown spot",
+    "host_zh": "水稻",
+    "category": "disease",
+    "support": 216,
+    "precision": 0.990385,
+    "recall": 0.953704,
+    "f1": 0.971698
+  },
+  {
+    "class_id": 149,
+    "name": "rice gall midge(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 31,
+    "precision": 0.6875,
+    "recall": 0.709677,
+    "f1": 0.698413
+  },
+  {
+    "class_id": 150,
+    "name": "rice healthy",
+    "host_zh": "水稻",
+    "category": "healthy",
+    "support": 149,
+    "precision": 0.844444,
+    "recall": 0.765101,
+    "f1": 0.802817
+  },
+  {
+    "class_id": 151,
+    "name": "rice hispa",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 57,
+    "precision": 0.522222,
+    "recall": 0.824561,
+    "f1": 0.639456
+  },
+  {
+    "class_id": 152,
+    "name": "rice leaf caterpillar(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 29,
+    "precision": 0.344828,
+    "recall": 0.344828,
+    "f1": 0.344828
+  },
+  {
+    "class_id": 153,
+    "name": "rice leaf roller(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 67,
+    "precision": 0.721311,
+    "recall": 0.656716,
+    "f1": 0.6875
+  },
+  {
+    "class_id": 154,
+    "name": "rice leaf smut",
+    "host_zh": "水稻",
+    "category": "disease",
+    "support": 4,
+    "precision": 0.666667,
+    "recall": 1.0,
+    "f1": 0.8
+  },
+  {
+    "class_id": 155,
+    "name": "rice leafhopper(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 24,
+    "precision": 0.457143,
+    "recall": 0.666667,
+    "f1": 0.542373
+  },
+  {
+    "class_id": 156,
+    "name": "rice shell pest(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 25,
+    "precision": 0.4,
+    "recall": 0.64,
+    "f1": 0.492308
+  },
+  {
+    "class_id": 157,
+    "name": "rice stemfly(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 22,
+    "precision": 0.363636,
+    "recall": 0.363636,
+    "f1": 0.363636
+  },
+  {
+    "class_id": 158,
+    "name": "rice tungro",
+    "host_zh": "水稻",
+    "category": "disease",
+    "support": 131,
+    "precision": 0.992424,
+    "recall": 1.0,
+    "f1": 0.996198
+  },
+  {
+    "class_id": 159,
+    "name": "rice water weevil(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 52,
+    "precision": 0.744681,
+    "recall": 0.673077,
+    "f1": 0.707071
+  },
+  {
+    "class_id": 160,
+    "name": "sericaorient alismots chulsky(beet)",
+    "host_zh": "甜菜",
+    "category": "pest",
+    "support": 12,
+    "precision": 0.785714,
+    "recall": 0.916667,
+    "f1": 0.846154
+  },
+  {
+    "class_id": 161,
+    "name": "small brown plant hopper(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 33,
+    "precision": 0.394737,
+    "recall": 0.454545,
+    "f1": 0.422535
+  },
+  {
+    "class_id": 162,
+    "name": "soybean Crestamento Bacteriano",
+    "host_zh": "大豆",
+    "category": "disease",
+    "support": 1,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 163,
+    "name": "soybean bacterial blight",
+    "host_zh": "大豆",
+    "category": "disease",
+    "support": 9,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 164,
+    "name": "soybean brown spot",
+    "host_zh": "大豆",
+    "category": "disease",
+    "support": 8,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 165,
+    "name": "soybean ferrugen",
+    "host_zh": "大豆",
+    "category": "disease",
+    "support": 7,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 166,
+    "name": "soybean healthy",
+    "host_zh": "大豆",
+    "category": "healthy",
+    "support": 710,
+    "precision": 0.987088,
+    "recall": 0.969014,
+    "f1": 0.977967
+  },
+  {
+    "class_id": 167,
+    "name": "soybean mossaic virus",
+    "host_zh": "大豆",
+    "category": "disease",
+    "support": 3,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 168,
+    "name": "soybean powdery mildew",
+    "host_zh": "大豆",
+    "category": "disease",
+    "support": 14,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 169,
+    "name": "soybean septoria brown spot",
+    "host_zh": "大豆",
+    "category": "disease",
+    "support": 2,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 170,
+    "name": "soybean southern blight",
+    "host_zh": "大豆",
+    "category": "disease",
+    "support": 7,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 171,
+    "name": "soybean sudden death syndrone",
+    "host_zh": "大豆",
+    "category": "disease",
+    "support": 11,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 172,
+    "name": "soybean yellow mosaic",
+    "host_zh": "大豆",
+    "category": "disease",
+    "support": 26,
+    "precision": 1.0,
+    "recall": 0.423077,
+    "f1": 0.594595
+  },
+  {
+    "class_id": 173,
+    "name": "squash powdery mildew",
+    "host_zh": "南瓜",
+    "category": "disease",
+    "support": 357,
+    "precision": 0.979452,
+    "recall": 0.40056,
+    "f1": 0.568588
+  },
+  {
+    "class_id": 174,
+    "name": "strawberry healthy",
+    "host_zh": "草莓",
+    "category": "healthy",
+    "support": 294,
+    "precision": 1.0,
+    "recall": 0.982993,
+    "f1": 0.991424
+  },
+  {
+    "class_id": 175,
+    "name": "strawberry leaf scorch",
+    "host_zh": "草莓",
+    "category": "disease",
+    "support": 232,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 176,
+    "name": "tarnished plant bug(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 49,
+    "precision": 0.491228,
+    "recall": 0.571429,
+    "f1": 0.528302
+  },
+  {
+    "class_id": 177,
+    "name": "therioaphis maculata Buckton(alfalfa)",
+    "host_zh": "苜蓿",
+    "category": "pest",
+    "support": 16,
+    "precision": 0.25,
+    "recall": 0.1875,
+    "f1": 0.214286
+  },
+  {
+    "class_id": 178,
+    "name": "tomato bacterial spot",
+    "host_zh": "番茄",
+    "category": "disease",
+    "support": 383,
+    "precision": 0.963636,
+    "recall": 0.968668,
+    "f1": 0.966146
+  },
+  {
+    "class_id": 179,
+    "name": "tomato early blight(fungus)",
+    "host_zh": "番茄",
+    "category": "disease",
+    "support": 239,
+    "precision": 0.933884,
+    "recall": 0.945607,
+    "f1": 0.939709
+  },
+  {
+    "class_id": 180,
+    "name": "tomato healthy",
+    "host_zh": "番茄",
+    "category": "healthy",
+    "support": 444,
+    "precision": 1.0,
+    "recall": 0.970721,
+    "f1": 0.985143
+  },
+  {
+    "class_id": 181,
+    "name": "tomato late blight(water mold)",
+    "host_zh": "番茄",
+    "category": "disease",
+    "support": 472,
+    "precision": 0.960334,
+    "recall": 0.974576,
+    "f1": 0.967403
+  },
+  {
+    "class_id": 182,
+    "name": "tomato leaf mold(fungus)",
+    "host_zh": "番茄",
+    "category": "disease",
+    "support": 234,
+    "precision": 0.978723,
+    "recall": 0.982906,
+    "f1": 0.98081
+  },
+  {
+    "class_id": 183,
+    "name": "tomato mosaic virus",
+    "host_zh": "番茄",
+    "category": "disease",
+    "support": 197,
+    "precision": 0.98995,
+    "recall": 1.0,
+    "f1": 0.994949
+  },
+  {
+    "class_id": 184,
+    "name": "tomato powdery mildew",
+    "host_zh": "番茄",
+    "category": "disease",
+    "support": 129,
+    "precision": 0.370588,
+    "recall": 0.976744,
+    "f1": 0.537313
+  },
+  {
+    "class_id": 185,
+    "name": "tomato septoria leaf spot(fungus)",
+    "host_zh": "番茄",
+    "category": "disease",
+    "support": 434,
+    "precision": 0.983568,
+    "recall": 0.965438,
+    "f1": 0.974419
+  },
+  {
+    "class_id": 186,
+    "name": "tomato spider mite(tomato)",
+    "host_zh": "番茄",
+    "category": "pest",
+    "support": 82,
+    "precision": 0.916667,
+    "recall": 0.939024,
+    "f1": 0.927711
+  },
+  {
+    "class_id": 187,
+    "name": "tomato target spot(bacteria)",
+    "host_zh": "番茄",
+    "category": "disease",
+    "support": 189,
+    "precision": 0.866337,
+    "recall": 0.925926,
+    "f1": 0.895141
+  },
+  {
+    "class_id": 188,
+    "name": "tomato two-spotted spider mite(tomato)",
+    "host_zh": "番茄",
+    "category": "pest",
+    "support": 342,
+    "precision": 0.982507,
+    "recall": 0.98538,
+    "f1": 0.983942
+  },
+  {
+    "class_id": 189,
+    "name": "tomato yellow leaf curl virus",
+    "host_zh": "番茄",
+    "category": "disease",
+    "support": 1056,
+    "precision": 1.0,
+    "recall": 0.993371,
+    "f1": 0.996675
+  },
+  {
+    "class_id": 190,
+    "name": "wheat blossom midge(wheat)",
+    "host_zh": "小麦",
+    "category": "pest",
+    "support": 29,
+    "precision": 0.833333,
+    "recall": 0.862069,
+    "f1": 0.847458
+  },
+  {
+    "class_id": 191,
+    "name": "wheat healthy",
+    "host_zh": "小麦",
+    "category": "healthy",
+    "support": 67,
+    "precision": 0.935484,
+    "recall": 0.865672,
+    "f1": 0.899225
+  },
+  {
+    "class_id": 192,
+    "name": "wheat leaf rust",
+    "host_zh": "小麦",
+    "category": "disease",
+    "support": 87,
+    "precision": 0.890244,
+    "recall": 0.83908,
+    "f1": 0.863905
+  },
+  {
+    "class_id": 193,
+    "name": "wheat phloeothrips(wheat)",
+    "host_zh": "小麦",
+    "category": "pest",
+    "support": 18,
+    "precision": 0.52381,
+    "recall": 0.611111,
+    "f1": 0.564103
+  },
+  {
+    "class_id": 194,
+    "name": "wheat sawfly(wheat)",
+    "host_zh": "小麦",
+    "category": "pest",
+    "support": 21,
+    "precision": 0.826087,
+    "recall": 0.904762,
+    "f1": 0.863636
+  },
+  {
+    "class_id": 195,
+    "name": "wheat septoria",
+    "host_zh": "小麦",
+    "category": "disease",
+    "support": 10,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "class_id": 196,
+    "name": "wheat stem rust",
+    "host_zh": "小麦",
+    "category": "disease",
+    "support": 53,
+    "precision": 0.755556,
+    "recall": 0.641509,
+    "f1": 0.693878
+  },
+  {
+    "class_id": 197,
+    "name": "wheat stripe rust",
+    "host_zh": "小麦",
+    "category": "disease",
+    "support": 21,
+    "precision": 0.913043,
+    "recall": 1.0,
+    "f1": 0.954545
+  },
+  {
+    "class_id": 198,
+    "name": "white margined moth(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 9,
+    "precision": 0.363636,
+    "recall": 0.444444,
+    "f1": 0.4
+  },
+  {
+    "class_id": 199,
+    "name": "white-backed planthopper(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 54,
+    "precision": 0.607843,
+    "recall": 0.574074,
+    "f1": 0.590476
+  },
+  {
+    "class_id": 200,
+    "name": "wireworm(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 53,
+    "precision": 0.916667,
+    "recall": 0.830189,
+    "f1": 0.871287
+  },
+  {
+    "class_id": 201,
+    "name": "yellow cutworm(corn)",
+    "host_zh": "玉米",
+    "category": "pest",
+    "support": 29,
+    "precision": 0.435897,
+    "recall": 0.586207,
+    "f1": 0.5
+  },
+  {
+    "class_id": 202,
+    "name": "yellow rice borer(rice)",
+    "host_zh": "水稻",
+    "category": "pest",
+    "support": 31,
+    "precision": 0.6,
+    "recall": 0.774194,
+    "f1": 0.676056
+  }
+]
